@@ -18,6 +18,16 @@ function onLocationFound(e) {
         .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
     L.circle(e.latlng, radius).addTo(map);
+
+    console.log(e.latlng)
+
+    if (e.latlng) {
+        $.getJSON("./common/countryBorders.geo.json", (obj)=> {
+            console.log(obj)
+            L.geoJSON(obj).addTo(map);
+        })
+    }
+    
 }
 
 map.on('locationfound', onLocationFound);
@@ -27,4 +37,3 @@ function onLocationError(e) {
 }
 
 map.on('locationerror', onLocationError);
-
