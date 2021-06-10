@@ -19,12 +19,18 @@ function onLocationFound(e) {
 
     L.circle(e.latlng, radius).addTo(map);
 
-    console.log(e.latlng)
-
     if (e.latlng) {
         $.getJSON("./common/countryBorders.geo.json", (obj)=> {
-            console.log(obj)
             L.geoJSON(obj).addTo(map);
+
+            let code = "ZA"
+
+            for (let i=0; i<obj.features.length; i++) {
+                if (obj.features[i].properties.iso_a2 == code) {
+                    console.log(obj.features[i].geometry.coordinates)
+                    break;
+                }
+            }
         })
     }
     
