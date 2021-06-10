@@ -18,7 +18,7 @@ function onLocationFound(e) {
     L.circle(e.latlng, radius).addTo(map);
 
     if (e.latlng) {
-        $.getJSON("./common/countryBorders.geo.json", (data)=> {
+        $.getJSON("./common/countries.geo.json", (data)=> {
             $.ajax(
                 {
                     url: "./php/getCountryInfo.php",
@@ -31,10 +31,9 @@ function onLocationFound(e) {
         
                     success: (res)=> {
                         if (res.status.name == "ok") {
-                            country = res.data.results[0].components["ISO_3166-1_alpha-2"]
-
+                            country = res.data.results[0].components["ISO_3166-1_alpha-3"]
                             for (let i=0; i<data.features.length; i++) {
-                                if (data.features[i].properties.iso_a2 == country) {
+                                if (data.features[i].properties.ISO_A3 == country) {
                                     let countryBorder = data.features[i];
                                     L.geoJSON(countryBorder).addTo(map);
                                     break;
@@ -48,7 +47,6 @@ function onLocationFound(e) {
                     }
                 }
             )
-
         })
     }
     
