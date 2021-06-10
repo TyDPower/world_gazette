@@ -9,36 +9,6 @@ const worldMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
 
 worldMap.addTo(map);
 
-var getCountryInfo = (lat, lang) => {
-
-    $.ajax(
-
-        {
-            url: "../php/getCountryInfo.php",
-            type: "post",
-            dataType: "json",
-            data: {
-                lat: lat,
-                lang: lang
-            },
-
-            success: (res)=> {
-
-                let data = JSON.stringify(res);
-
-                if (res.status.code == "ok") {
-                    console.log("Success");
-                    console.log(data)
-                }
-            },
-
-            error: (err)=> {
-                console.log(err);
-            }
-        }
-    )
-}
-
 map.locate({setView: true, maxZoom: 16});
 
 function onLocationFound(e) {
@@ -51,17 +21,35 @@ function onLocationFound(e) {
 
     if (e.latlng) {
         $.getJSON("./common/countryBorders.geo.json", (data)=> {
+            $.ajax(
+                {
+                    url: "./php/getCountryInfo.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        lat: e.latlng.lat,
+                        lng: e.latlng.lng
+                    },
+        
+                    success: (res)=> {
+                        if (res.status.name == "ok") {
+                            country = res.data.results[0].components["ISO_3166-1_alpha-2"]
 
-
-
-
-            for (let i=0; i<data.features.length; i++) {
-                if (data.features[i].properties.iso_a2 == code) {
-                    let countryBorder = data.features[i];
-                    L.geoJSON(countryBorder).addTo(map)
-                    break;
+                            for (let i=0; i<data.features.length; i++) {
+                                if (data.features[i].properties.iso_a2 == country) {
+                                    let countryBorder = data.features[i];
+                                    L.geoJSON(countryBorder).addTo(map);
+                                    break;
+                                }
+                            }
+                        }
+                    },
+        
+                    error: (err)=> {
+                        console.log(err);
+                    }
                 }
-            }
+            )
 
         })
     }
