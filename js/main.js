@@ -1,3 +1,4 @@
+//Initial World map tiles
 var map = L.map('map').fitWorld();
 
 const worldMap = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
@@ -7,6 +8,7 @@ const worldMap = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x
 
 worldMap.addTo(map);
 
+//Grab user location with marker and country select
 map.locate({setView: true, maxZoom: 16});
 
 function onLocationFound(e) {
@@ -59,3 +61,20 @@ function onLocationError(e) {
 }
 
 map.on('locationerror', onLocationError);
+
+//Select new country with html drop bow menu
+$("#countryList").change(()=> {
+    let countryCode = $("#countryList").val();
+
+    $.getJSON("./common/countries.geo.json", (data)=> {
+        for (let i=0; i<data.features.length; i++) {
+            if (data.features[i].properties.ISO_A3 == countryCode) {
+                let countryBorder = data.features[i];
+                $(".leaflet-interactive")[1].remove();
+                L.geoJSON(countryBorder).addTo(map);
+                break;
+            }
+        }
+    })
+
+})
