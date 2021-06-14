@@ -1,3 +1,18 @@
+$(document).ready(()=> {
+    //Selected Country/City Parameters
+var placeParams = {
+    isoCodeA3: $("#countryList").val().slice(7, 10),
+    isoCodeA2: $("#countryList").val().slice(19, 21),
+    borders: null,
+    loaded: false,
+    name: null,
+    latLng: []
+}
+
+//Selected Country/City Parameters change values function
+
+
+
 //Initial World map tiles
 var map = L.map('map').fitWorld();
 const worldMap = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
@@ -59,21 +74,19 @@ map.on('locationerror', onLocationError);
 //Select new country with html drop down menu
 $("#countryList").change(()=> {
 
-    var placeParams = {
-        isoCode: $("#countryList").val(),
-        borders: null,
-        loaded: false,
-        name: null,
-        latLng: []
-    }
+    console.log("change is happening")
 
     $.getJSON("./common/countries.geo.json", (data)=> {
         for (let i=0; i<data.features.length; i++) {
-            if (data.features[i].properties.ISO_A3 == placeParams.isoCode) {
+            if (data.features[i].properties.ISO_A3 == placeParams.isoCodeA3) {
                 placeParams.borders = data.features[i];
                 placeParams.name = data.features[i].properties.ADMIN
                 $(".leaflet-interactive")[1].remove();
                 L.geoJSON(placeParams.borders).addTo(map);
+
+                console.log(placeParams.name)
+                console.log(placeParams.isoCodeA3)
+                console.log(placeParams.isoCodeA2)
 
                 $.ajax(
                     {
@@ -81,12 +94,15 @@ $("#countryList").change(()=> {
                         type: "post",
                         dataType: "json",
                         data: {
-                            placename: placeParams.name
+                            isoCode: placeParams.isoCodeA2,
+                            countryName: placeParams.name.replace(/\s+/g, "_")
                         },
             
                         success: (res)=> {
                             if (res.status.name == "ok") {
-                                placeParams.latLng = [res.data.results[0].geometry.lat, res.data.results[0].geometry.lng];
+                                var results = res.data.results[0].geometry
+                                placeParams.latLng = [results.lat, results.lng];
+                                console.log(placeParams.latLng)
                                 map.panTo([placeParams.latLng[0], placeParams.latLng[1]]).setZoom(5)
                                 setTimeout(()=> {
                                     $(".modal").show();
@@ -108,5 +124,7 @@ $("#countryList").change(()=> {
             }
         }
     })
+
+})
 
 })
