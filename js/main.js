@@ -58,6 +58,7 @@ map.on('locationerror', onLocationError);
 
 //Select new country with html drop down menu
 //Garbage code, fix!
+//Not consistent with panning to selected countries!!!!!
 $("#countryList").change(()=> {
 
     var countryparams = {
