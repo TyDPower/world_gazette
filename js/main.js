@@ -20,7 +20,7 @@ const onLocationFound = (e) => {
         $.getJSON("./common/countries.geo.json", (data)=> {
             $.ajax(
                 {
-                    url: "./php/getCountryInfo.php",
+                    url: "./php/getUserCountryInfo.php",
                     type: "post",
                     dataType: "json",
                     data: {
