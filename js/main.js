@@ -57,64 +57,53 @@ const onLocationError = (e) => {
 map.on('locationerror', onLocationError);
 
 //Select new country with html drop down menu
-//Garbage code, fix!
-//Not consistent with panning to selected countries!!!!!
 $("#countryList").change(()=> {
 
-    var countryparams = {
+    var placeParams = {
         isoCode: $("#countryList").val(),
         borders: null,
         loaded: false,
-        name: null
+        name: null,
+        latLng: []
     }
 
     $.getJSON("./common/countries.geo.json", (data)=> {
         for (let i=0; i<data.features.length; i++) {
-            if (data.features[i].properties.ISO_A3 == countryparams.isoCode) {
-                countryparams.borders = data.features[i];
-                countryparams.name = data.features[i].properties.ADMIN
+            if (data.features[i].properties.ISO_A3 == placeParams.isoCode) {
+                placeParams.borders = data.features[i];
+                placeParams.name = data.features[i].properties.ADMIN
                 $(".leaflet-interactive")[1].remove();
-                L.geoJSON(countryparams.borders).addTo(map);
+                L.geoJSON(placeParams.borders).addTo(map);
 
-                var bounds = {
-                    initial: countryparams.borders.geometry.coordinates,
-                    shallow: [],
-                    deep: []
-                }
-
-                bounds.initial.forEach(res=> bounds.shallow.push(res[0]))
-                bounds.shallow.forEach(res=> bounds.deep.push(res[0]))
-
-                if (Array.isArray(bounds.initial[0][0][0])) {
-                    var borders = L.bounds(bounds.deep)
-                    var center = borders.getCenter()
-                    map.panTo([center.y, center.x]).setZoom(5)
-                    countryLoaded = true;
-
-                    setTimeout(()=> {
-                        $(".modal").show();
-                    }, 1000)
-
-                    $("#closeBtn").click(()=> {
-                        $(".modal").hide();
-                    })
-
-                    
-                } else {
-                    var borders = L.bounds(bounds.initial[0])
-                    var center = borders.getCenter()
-                    map.panTo([center.y, center.x]).setZoom(5)
-                    countryLoaded = true;
-
-                    setTimeout(()=> {
-                        $(".modal").show();
-                    }, 1000)
-
-                    $("#closeBtn").click(()=> {
-                        $(".modal").hide();
-                    })
-                    
-                }
+                $.ajax(
+                    {
+                        url: "./php/getPlaceInfo.php",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            placename: placeParams.name
+                        },
+            
+                        success: (res)=> {
+                            if (res.status.name == "ok") {
+                                placeParams.latLng = [res.data.results[0].geometry.lat, res.data.results[0].geometry.lng];
+                                map.panTo([placeParams.latLng[0], placeParams.latLng[1]]).setZoom(5)
+                                setTimeout(()=> {
+                                    $(".modal").show();
+                                }, 1000)
+            
+                                $("#closeBtn").click(()=> {
+                                    $(".modal").hide();
+                                })
+                                countryLoaded = true;
+                            }
+                        },
+            
+                        error: (err)=> {
+                            console.log(err);
+                        }
+                    }
+                )
 
             }
         }
