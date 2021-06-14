@@ -91,12 +91,29 @@ $("#countryList").change(()=> {
                     map.panTo([center.y, center.x]).setZoom(5)
                     countryLoaded = true;
 
+                    setTimeout(()=> {
+                        $(".modal").show();
+                    }, 1000)
+
+                    $("#closeBtn").click(()=> {
+                        $(".modal").hide();
+                    })
+
                     
                 } else {
                     var borders = L.bounds(bounds.initial[0])
                     var center = borders.getCenter()
                     map.panTo([center.y, center.x]).setZoom(5)
                     countryLoaded = true;
+
+                    setTimeout(()=> {
+                        $(".modal").show();
+                    }, 1000)
+
+                    $("#closeBtn").click(()=> {
+                        $(".modal").hide();
+                    })
+                    
                 }
 
             }
