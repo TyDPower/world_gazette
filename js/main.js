@@ -57,37 +57,48 @@ const onLocationError = (e) => {
 map.on('locationerror', onLocationError);
 
 //Select new country with html drop bow menu
+//Garbage code, fix!
 $("#countryList").change(()=> {
-    let countryCode = $("#countryList").val();
-    let countryBorder;
+    var countryCode = $("#countryList").val();
+    var countryBorder;
+    var countryLoaded = false;
+    var countryName;
 
     $.getJSON("./common/countries.geo.json", (data)=> {
         for (let i=0; i<data.features.length; i++) {
             if (data.features[i].properties.ISO_A3 == countryCode) {
                 countryBorder = data.features[i];
+                countryName = data.features[i].properties.ADMIN
                 $(".leaflet-interactive")[1].remove();
                 L.geoJSON(countryBorder).addTo(map);
-                console.log(countryBorder.geometry.coordinates.length)
 
-                for (let i=0; i<countryBorder.geometry.coordinates.length; i++) {
-                    let coords = [countryBorder.geometry.coordinates[i]]
-                    //console.log(coords)
-                    let bounds = L.bounds(coords);
-                    console.log(bounds.max.x + " " + bounds.max.y)
+                let boundsArray = countryBorder.geometry.coordinates
+                let boundsShallowArray = [];
+                let boundsDeepArray = [];
+
+                boundsArray.forEach(res=> boundsShallowArray.push(res[0]))
+                boundsShallowArray.forEach(res=> boundsDeepArray.push(res[0]))
+
+                const ltLngArr = boundsArray.map((latLng)=> {
+                    return latLng
+                })
+
+                if (Array.isArray(boundsArray[0][0][0])) {
+                    var bounds = L.bounds(boundsDeepArray)
+                    var center = bounds.getCenter()
+                    map.panTo([center.y, center.x]).setZoom(5)
+                    countryLoaded = true;
+
+                    
+                } else {
+                    var bounds = L.bounds(boundsArray[0])
+                    var center = bounds.getCenter()
+                    map.panTo([center.y, center.x]).setZoom(5)
+                    countryLoaded = true;
                 }
-                //map.panTo([-28.265682390146466, 23.9501953125]);
-                //let bounds = L.bounds([1, 3], [4, 5], [9, 3], [1, 3], [1, 3]);
-                //console.log(bounds);
-                break;
+
             }
         }
-
-        /*for (let i=0; i<data.features.length; i++) {
-            for (let f=0; f<data.features[i].geometry.coordinates.length; f++) {
-                console.log(i + " " + data.features[i].geometry.coordinates[f]);
-            }
-        }*/
-
     })
 
 })
