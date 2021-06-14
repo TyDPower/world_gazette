@@ -5,7 +5,7 @@
 
     $startTime = microtime(true);
 
-    $url="https://api.opencagedata.com/geocode/v1/json?q=" . $_REQUEST["placename"] . "&key=efbd5efcc6254578986dc2d63c0edb90"
+    $url="https://api.opencagedata.com/geocode/v1/json?q=" . $_REQUEST["placename"] . "&key=efbd5efcc6254578986dc2d63c0edb90";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -21,7 +21,7 @@
     $output["status"]["code"] = "200";
     $output["status"]["name"] = "ok";
     $output["status"]["description"] = "success";
-    $output["data"] = $decode["geonames"];
+    $output["data"] = json_decode($result, true);
 
     header("Content-Type: application/json; charset=UTF-8");
 
