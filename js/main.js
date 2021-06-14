@@ -56,43 +56,44 @@ const onLocationError = (e) => {
 }
 map.on('locationerror', onLocationError);
 
-//Select new country with html drop bow menu
+//Select new country with html drop down menu
 //Garbage code, fix!
 $("#countryList").change(()=> {
-    var countryCode = $("#countryList").val();
-    var countryBorder;
-    var countryLoaded = false;
-    var countryName;
+
+    var countryparams = {
+        isoCode: $("#countryList").val(),
+        borders: null,
+        loaded: false,
+        name: null
+    }
 
     $.getJSON("./common/countries.geo.json", (data)=> {
         for (let i=0; i<data.features.length; i++) {
-            if (data.features[i].properties.ISO_A3 == countryCode) {
-                countryBorder = data.features[i];
-                countryName = data.features[i].properties.ADMIN
+            if (data.features[i].properties.ISO_A3 == countryparams.isoCode) {
+                countryparams.borders = data.features[i];
+                countryparams.name = data.features[i].properties.ADMIN
                 $(".leaflet-interactive")[1].remove();
-                L.geoJSON(countryBorder).addTo(map);
+                L.geoJSON(countryparams.borders).addTo(map);
 
-                let boundsArray = countryBorder.geometry.coordinates
-                let boundsShallowArray = [];
-                let boundsDeepArray = [];
+                var bounds = {
+                    initial: countryparams.borders.geometry.coordinates,
+                    shallow: [],
+                    deep: []
+                }
 
-                boundsArray.forEach(res=> boundsShallowArray.push(res[0]))
-                boundsShallowArray.forEach(res=> boundsDeepArray.push(res[0]))
+                bounds.initial.forEach(res=> bounds.shallow.push(res[0]))
+                bounds.shallow.forEach(res=> bounds.deep.push(res[0]))
 
-                const ltLngArr = boundsArray.map((latLng)=> {
-                    return latLng
-                })
-
-                if (Array.isArray(boundsArray[0][0][0])) {
-                    var bounds = L.bounds(boundsDeepArray)
-                    var center = bounds.getCenter()
+                if (Array.isArray(bounds.initial[0][0][0])) {
+                    var borders = L.bounds(bounds.deep)
+                    var center = borders.getCenter()
                     map.panTo([center.y, center.x]).setZoom(5)
                     countryLoaded = true;
 
                     
                 } else {
-                    var bounds = L.bounds(boundsArray[0])
-                    var center = bounds.getCenter()
+                    var borders = L.bounds(bounds.initial[0])
+                    var center = borders.getCenter()
                     map.panTo([center.y, center.x]).setZoom(5)
                     countryLoaded = true;
                 }
