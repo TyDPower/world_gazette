@@ -107,7 +107,7 @@ $(document).ready(()=> {
                                         dst: results.annotations.timezone.now_in_dst
                                     }
 
-                                    location.updatCountryInfo(countryData);
+                                    location.updateCountryInfo(countryData);
 
                                     setTimeout(()=> {
                                         map.panTo([location.updateCountryCoords("lat"), location.updateCountryCoords("lng")]).setZoom(5)
@@ -121,7 +121,7 @@ $(document).ready(()=> {
                                         $(".modal").hide();
                                     })
                                     location.updateCountryLoaded(true);
-                                    modal.heading(location.updateCountryName());
+                                    modal.countryInfo(location.updateCountryInfo());
 
                                 }
                             },
