@@ -72,17 +72,47 @@ export const updateCountryCoords = (latLng) => {
     }
 }
 
-export const updatCountryInfo = (dataObj) => {
-    placeObj._countryName = dataObj.name;
-    placeObj._countryCoords = dataObj.coords;
-    placeObj._continent = dataObj.continent;
-    placeObj._flag = dataObj.flag;
-    placeObj.currencyInfo._unitName = dataObj.currencyName;
-    placeObj.currencyInfo._subunitName = dataObj.currencySubunitName;
-    placeObj.currencyInfo._symbol = dataObj.currencySymbol;
-    placeObj.currencyInfo._symbolPosition = dataObj.symbolPos;
-    placeObj.roadInfo._driveSide = dataObj.driveSide;
-    placeObj.roadInfo._speedUnit = dataObj.speedUnit;
-    placeObj.timezoneInfo._name = dataObj.timezoneName;
-    placeObj.timezoneInfo._nowInDst = dataObj.dst;
+export const updateCountryInfo = (dataObj) => {
+    if (dataObj) {
+
+        placeObj._countryName = dataObj.name;
+        placeObj._countryCoords = dataObj.coords;
+        placeObj._continent = dataObj.continent;
+        placeObj._flag = dataObj.flag;
+        placeObj.currencyInfo._unitName = dataObj.currencyName;
+        placeObj.currencyInfo._subunitName = dataObj.currencySubunitName;
+        placeObj.currencyInfo._symbol = dataObj.currencySymbol;
+        placeObj.currencyInfo._symbolPosition = dataObj.symbolPos;
+        placeObj.roadInfo._driveSide = dataObj.driveSide;
+        placeObj.roadInfo._speedUnit = dataObj.speedUnit;
+        placeObj.timezoneInfo._name = dataObj.timezoneName;
+        placeObj.timezoneInfo._nowInDst = dataObj.dst;
+
+    } else {
+        
+        var modalPlaceObj = {
+            name: placeObj._countryName,
+            coordsoords: placeObj._countryCoords,
+            continent: placeObj._continent,
+            flag: placeObj._flag,
+            currencyInfo: {
+                name: placeObj.currencyInfo._unitName,
+                subunit: placeObj.currencyInfo._subunitName,
+                symbol: placeObj.currencyInfo._symbol,
+                symbolPos:placeObj.currencyInfo._symbolPosition,
+            },
+            roadInfo: {
+                driveSide: placeObj.roadInfo._driveSide,
+                speedUnit: placeObj.roadInfo._speedUnit,
+            },
+            timezoneInfo: {
+                name: placeObj.timezoneInfo._name,
+                dst: placeObj.timezoneInfo._nowInDst,
+            }
+        }
+
+        return modalPlaceObj
+
+    }
+
 }
