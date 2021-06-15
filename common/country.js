@@ -70,6 +70,8 @@ export const updateCountryCoords = (latLng) => {
     if (Array.isArray(latLng)) {
         placeObj._countryCoords = latLng;
     }
+
+    return placeObj._countryCoords
 }
 
 export const updateCountryInfo = (dataObj) => {
