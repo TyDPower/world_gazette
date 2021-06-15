@@ -107,6 +107,7 @@ $(document).ready(()=> {
                                         $(".modal").hide();
                                     })
                                     location.updateCountryLoaded(true);
+                                    modal.updateCountry(location.updateCountryName());
 
                                 }
                             },
