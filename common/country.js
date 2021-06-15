@@ -10,7 +10,6 @@ export var placeObj = {
     currencyInfo: {
         _unitName: null,
         _subunitName: null,
-        _smallest: null,
         _symbol: null,
         _symbolPosition: null,
     },
@@ -78,10 +77,9 @@ export const updatCountryInfo = (dataObj) => {
     placeObj._countryCoords = dataObj.coords;
     placeObj._continent = dataObj.continent;
     placeObj._flag = dataObj.flag;
-    placeObj.currencyInfo._unitName = dataObj.unitName;
-    placeObj.currencyInfo._subunitName = dataObj.subunitName;
-    placeObj.currencyInfo._smallest = dataObj.smallest;
-    placeObj.currencyInfo._symbol = dataObj.symbol;
+    placeObj.currencyInfo._unitName = dataObj.currencyName;
+    placeObj.currencyInfo._subunitName = dataObj.currencySubunitName;
+    placeObj.currencyInfo._symbol = dataObj.currencySymbol;
     placeObj.currencyInfo._symbolPosition = dataObj.symbolPos;
     placeObj.roadInfo._driveSide = dataObj.driveSide;
     placeObj.roadInfo._speedUnit = dataObj.speedUnit;
