@@ -1,4 +1,4 @@
-import * as info from "../common/place.js";
+import * as info from "../common/info.js";
 
 $(document).ready(()=> {
 
