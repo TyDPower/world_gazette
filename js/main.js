@@ -1,5 +1,5 @@
 import * as location from "../common/country.js";
-import * as modal from "../common/modal.js "
+import * as modal from "../common/modal.js";
 
 $(document).ready(()=> {
 
@@ -92,7 +92,6 @@ $(document).ready(()=> {
                                 if (res.status.name == "ok") {
                                     var results = res.data.results[0].geometry
                                     location.updateRawData(res.data.results[0]);
-                                    console.log(location.placeObj._rawData)
                                     location.updateCountryCoords([results.lat, results.lng])
 
                                     setTimeout(()=> {
@@ -107,7 +106,7 @@ $(document).ready(()=> {
                                         $(".modal").hide();
                                     })
                                     location.updateCountryLoaded(true);
-                                    modal.updateCountry(location.updateCountryName());
+                                    modal.heading(location.updateCountryName());
 
                                 }
                             },
