@@ -1,4 +1,5 @@
 import * as location from "../common/country.js";
+import * as modal from "../common/modal.js"
 
 $(document).ready(()=> {
 
