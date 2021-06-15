@@ -91,10 +91,13 @@ $(document).ready(()=> {
                                 if (res.status.name == "ok") {
                                     var results = res.data.results[0].geometry
                                     info.updateLatLng([results.lat, results.lng])
-                                    map.panTo([info.updateLatLng("lat"), info.updateLatLng("lng")]).setZoom(5)
+                                    setTimeout(()=> {
+                                        map.panTo([info.updateLatLng("lat"), info.updateLatLng("lng")]).setZoom(5)
+                                    }, 100);
+                                    
                                     setTimeout(()=> {
                                         $(".modal").show();
-                                    }, 1000)
+                                    }, 1000);
                 
                                     $("#closeBtn").click(()=> {
                                         $(".modal").hide();
