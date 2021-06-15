@@ -1,6 +1,8 @@
+import * as info from "../common/place.js";
+
 $(document).ready(()=> {
 
-    var _placeParams = {
+    /*var _placeParams = {
         _isoCodeA3: null,
         _isoCodeA2: null,
         _borders: null,
@@ -56,9 +58,7 @@ $(document).ready(()=> {
         if (Array.isArray(latLng)) {
             _placeParams._latLng = latLng;
         }
-    }
-
-    
+    }*/
 
     //Initial World map tiles
     var map = L.map('map').fitWorld();
@@ -92,7 +92,7 @@ $(document).ready(()=> {
             
                         success: (res)=> {
                             if (res.status.name == "ok") {
-                                country = res.data.results[0].components["ISO_3166-1_alpha-3"]
+                                var country = res.data.results[0].components["ISO_3166-1_alpha-3"]
                                 for (let i=0; i<data.features.length; i++) {
                                     if (data.features[i].properties.ISO_A3 == country) {
                                         let countryBorder = data.features[i];
@@ -124,17 +124,16 @@ $(document).ready(()=> {
         var codeA3 = $("#countryList").val().slice(7, 10);
         var codeA2 = $("#countryList").val().slice(19, 21);
 
-        updateIsoA3(codeA3);
-        updateIsoA2(codeA2);
-
+        info.updateIsoA3(codeA3);
+        info.updateIsoA2(codeA2);
 
         $.getJSON("./common/countries.geo.json", (data)=> {
             for (let i=0; i<data.features.length; i++) {
-                if (data.features[i].properties.ISO_A3 == updateIsoA3()) {
-                    updateBorders(data.features[i]);
-                    updateName(data.features[i].properties.ADMIN);
+                if (data.features[i].properties.ISO_A3 == info.updateIsoA3()) {
+                    info.updateBorders(data.features[i]);
+                    info.updateName(data.features[i].properties.ADMIN);
                     $(".leaflet-interactive")[1].remove();
-                    L.geoJSON(updateBorders()).addTo(map);
+                    L.geoJSON(info.updateBorders()).addTo(map);
 
                     $.ajax(
                         {
@@ -142,15 +141,15 @@ $(document).ready(()=> {
                             type: "post",
                             dataType: "json",
                             data: {
-                                isoCode: updateIsoA2(),
-                                countryName: updateName().replace(/\s+/g, "_")
+                                isoCode: info.updateIsoA2(),
+                                countryName: info.updateName().replace(/\s+/g, "_")
                             },
                 
                             success: (res)=> {
                                 if (res.status.name == "ok") {
                                     var results = res.data.results[0].geometry
-                                    updateLatLng([results.lat, results.lng])
-                                    map.panTo([updateLatLng("lat"), updateLatLng("lng")]).setZoom(5)
+                                    info.updateLatLng([results.lat, results.lng])
+                                    map.panTo([info.updateLatLng("lat"), info.updateLatLng("lng")]).setZoom(5)
                                     setTimeout(()=> {
                                         $(".modal").show();
                                     }, 1000)
@@ -158,7 +157,7 @@ $(document).ready(()=> {
                                     $("#closeBtn").click(()=> {
                                         $(".modal").hide();
                                     })
-                                    updateIsLoaded(true);
+                                    info.updateIsLoaded(true);
 
                                 }
                             },
