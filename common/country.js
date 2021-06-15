@@ -5,7 +5,23 @@ export var placeObj = {
     _countryLoaded: false,
     _countryName: null,
     _countryCoords: [],
-    _rawData: null
+    _continent: null,
+    _flag: null,
+    currencyInfo: {
+        _unitName: null,
+        _subunitName: null,
+        _smallest: null,
+        _symbol: null,
+        _symbolPosition: null,
+    },
+    roadInfo: {
+        driveSide: null,
+        speedIn: null,
+    },
+    timezoneInfo: {
+        name: null,
+        nowInDst: null,
+    }
 }
 
 export const updateIsoA3 = (isoA3) => {
@@ -55,8 +71,4 @@ export const updateCountryCoords = (latLng) => {
     if (Array.isArray(latLng)) {
         placeObj._countryCoords = latLng;
     }
-}
-
-export const updateRawData = (data) => {
-    placeObj._rawData = data
 }
