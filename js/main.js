@@ -90,11 +90,30 @@ $(document).ready(()=> {
                 
                             success: (res)=> {
                                 if (res.status.name == "ok") {
-                                    var results = res.data.results[0].geometry
-                                    location.updateCountryCoords([results.lat, results.lng])
+                                    var results = res.data.results[0]
+                                    //Update Country coords via updateCountryInfo Function
+                                    //location.updateCountryCoords([results.geometry.lat, results.geometry.lng])
+
+                                    var countryData = {
+                                        name: results.formatted,
+                                        coords: [results.geometry.lat, results.geometry.lng],
+                                        continent: results.components.continent,
+                                        flag: results.annotations.flag,
+                                        currencyName: results.annotations.currency.name,
+                                        currencySubunitName: results.annotations.currency.subunit,
+                                        currencySymbol: results.annotations.currency.symbol,
+                                        driveSide: results.annotations.roadinfo.drive_on,
+                                        speedUnit: results.annotations.roadinfo.speed_in,
+                                        timezoneName: results.annotations.timezone.name,
+                                        dst: results.annotations.timezone.now_in_dst
+                                    }
+
+                                    location.updatCountryInfo(countryData);
 
                                     setTimeout(()=> {
                                         map.panTo([location.updateCountryCoords("lat"), location.updateCountryCoords("lng")]).setZoom(5)
+
+                                        console.log(location.placeObj);
                                     }, 100);
                                     
                                     setTimeout(()=> {
