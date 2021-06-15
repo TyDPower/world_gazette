@@ -91,7 +91,6 @@ $(document).ready(()=> {
                             success: (res)=> {
                                 if (res.status.name == "ok") {
                                     var results = res.data.results[0].geometry
-                                    location.updateRawData(res.data.results[0]);
                                     location.updateCountryCoords([results.lat, results.lng])
 
                                     setTimeout(()=> {
