@@ -75,7 +75,24 @@ $(document).ready(()=> {
                 if (data.features[i].properties.ISO_A3 == location.updateIsoA3()) {
                     location.updateCountryBorders(data.features[i]);
                     location.updateCountryName(data.features[i].properties.ADMIN);
-                    $(".leaflet-interactive")[1].remove();
+
+                    const removeBorderAndMarker = () => {
+
+                        var border = $(".leaflet-interactive")[1];
+                        var marker = $(".leaflet-marker-icon")[1];
+                        var shoadow = $(".leaflet-marker-shadow")[1]
+
+                        if (!marker) {
+                            border.remove();
+                        } else {
+                            border.remove();
+                            marker.remove();
+                            shoadow.remove();
+                        }
+                    }
+
+                    removeBorderAndMarker();
+                    
                     L.geoJSON(location.updateCountryBorders()).addTo(map);
 
                     $.ajax(
@@ -120,8 +137,10 @@ $(document).ready(()=> {
                                     $("#closeBtn").click(()=> {
                                         $(".modal").hide();
                                     })
+
                                     location.updateCountryLoaded(true);
                                     modal.countryInfo(location.updateCountryInfo());
+                                    L.marker(location.updateCountryCoords()).addTo(map);
 
                                 }
                             },
