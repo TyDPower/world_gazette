@@ -15,12 +15,12 @@ export var placeObj = {
         _symbolPosition: null,
     },
     roadInfo: {
-        driveSide: null,
-        speedIn: null,
+        _driveSide: null,
+        _speedUnit: null,
     },
     timezoneInfo: {
-        name: null,
-        nowInDst: null,
+        _name: null,
+        _nowInDst: null,
     }
 }
 
@@ -71,4 +71,20 @@ export const updateCountryCoords = (latLng) => {
     if (Array.isArray(latLng)) {
         placeObj._countryCoords = latLng;
     }
+}
+
+export const updatCountryInfo = (dataObj) => {
+    placeObj._countryName = dataObj.name;
+    placeObj._countryCoords = dataObj.coords;
+    placeObj._continent = dataObj.continent;
+    placeObj._flag = dataObj.flag;
+    placeObj.currencyInfo._unitName = dataObj.unitName;
+    placeObj.currencyInfo._subunitName = dataObj.subunitName;
+    placeObj.currencyInfo._smallest = dataObj.smallest;
+    placeObj.currencyInfo._symbol = dataObj.symbol;
+    placeObj.currencyInfo._symbolPosition = dataObj.symbolPos;
+    placeObj.roadInfo._driveSide = dataObj.driveSide;
+    placeObj.roadInfo._speedUnit = dataObj.speedUnit;
+    placeObj.timezoneInfo._name = dataObj.timezoneName;
+    placeObj.timezoneInfo._nowInDst = dataObj.dst;
 }
