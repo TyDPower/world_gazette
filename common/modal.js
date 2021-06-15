@@ -1,3 +1,3 @@
-export const updateModalCountry = (name) => {
+export const updateCountry = (name) => {
     $("$modalHeading").html(name);
 }
