@@ -157,4 +157,34 @@ $(document).ready(()=> {
 
     })
 
+    $("#naturalEvents").change(()=> {
+
+        var period = 365;
+
+        $.ajax({
+            url: "./php/getNaturalEvents.php",
+            type: "post",
+            dataType: "json",
+            data: {
+                period: period
+            },
+
+            success: (res)=> {
+
+                if (res.status.name == "ok") {
+                    var results = res.data.events
+
+                    console.log(results);
+                }
+
+            },
+
+            error: (err)=> {
+                console.log(err);
+            }
+
+        })
+
+    })
+
 })
