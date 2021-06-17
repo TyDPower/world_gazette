@@ -64,7 +64,7 @@ $(document).ready(()=> {
     }
     map.on('locationerror', onLocationError); 
 
-    naturalEvents.onLoad()
+    naturalEvents.onPageLoad()
 
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
@@ -161,49 +161,34 @@ $(document).ready(()=> {
 
     })
 
+    //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
 
-        /*const clearNaturalEventMarkers = () => {
-            naturalEvents.naturalEvents.layerGroups.volcanosGroup.clearLayers()
-            naturalEvents.naturalEvents.layerGroups.wildfiresGroup.clearLayers()
-            naturalEvents.naturalEvents.layerGroups.earthquakesGroup.clearLayers()
-            naturalEvents.naturalEvents.layerGroups.icebergsGroup.clearLayers()
-            naturalEvents.naturalEvents.layerGroups.severeStormsGroup.clearLayers()
-        }*/
-
-        //clearNaturalEventMarkers()
-
-        naturalEvents.naturalEvents.clearMarkers();
-
+        naturalEvents.obj.clearMarkers();
 
         if ($("#naturalEvents").val() === "wildfires") {
-            
-            naturalEvents.naturalEvents.events.wildfiresArr.forEach(res=> {
-                naturalEvents.naturalEvents.layerGroups.wildfiresGroup.addLayer(L.marker(res)).addTo(map);
+            naturalEvents.obj.events.wildfiresArr.forEach(res=> {
+                naturalEvents.obj.layerGroups.wildfiresGroup.addLayer(L.marker(res)).addTo(map);
             })
 
         } else if ($("#naturalEvents").val() === "volcanos") {
-            
-            naturalEvents.naturalEvents.events.volcanosArr.forEach(res=> {
-                naturalEvents.naturalEvents.layerGroups.volcanosGroup.addLayer(L.marker(res)).addTo(map);
+            naturalEvents.obj.events.volcanosArr.forEach(res=> {
+                naturalEvents.obj.layerGroups.volcanosGroup.addLayer(L.marker(res)).addTo(map);
             })
 
         } else if ($("#naturalEvents").val() === "severeStorms") {
-
-            naturalEvents.naturalEvents.events.severeStormsArr.forEach(res=> {
-                naturalEvents.naturalEvents.layerGroups.severeStormsGroup.addLayer(L.marker(res)).addTo(map);
+            naturalEvents.obj.events.severeStormsArr.forEach(res=> {
+                naturalEvents.obj.layerGroups.severeStormsGroup.addLayer(L.marker(res)).addTo(map);
             })
 
         } else if ($("#naturalEvents").val() === "earthquakes") {
-
-            naturalEvents.naturalEvents.events.earthquakesArr.forEach(res=> {
-                naturalEvents.naturalEvents.layerGroups.earthquakesGroup.addLayer(L.marker(res)).addTo(map);
+            naturalEvents.obj.events.earthquakesArr.forEach(res=> {
+                naturalEvents.obj.layerGroups.earthquakesGroup.addLayer(L.marker(res)).addTo(map);
             })
 
         } else {
-            
-            naturalEvents.naturalEvents.events.icebergsArr.forEach(res=> {
-                naturalEvents.naturalEvents.layerGroups.icebergsGroup.addLayer(L.marker(res)).addTo(map);
+            naturalEvents.obj.events.icebergsArr.forEach(res=> {
+                naturalEvents.obj.layerGroups.icebergsGroup.addLayer(L.marker(res)).addTo(map);
             })
 
         }
