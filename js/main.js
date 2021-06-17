@@ -141,7 +141,6 @@ $(document).ready(()=> {
                                     location.updateCountryLoaded(true);
                                     modal.countryInfo(location.updateCountryInfo());
                                     L.marker(location.updateCountryCoords()).addTo(map);
-
                                 }
                             },
                 
@@ -160,7 +159,7 @@ $(document).ready(()=> {
     $("#naturalEvents").change(()=> {
 
         var naturalEvents = {
-            period: 365,
+            period: 7,
             events: {
                 wildFiresArr: [],
                 earthquakesArr: [],
@@ -187,31 +186,46 @@ $(document).ready(()=> {
 
                     for (let i=0; i<results.length; i++) {
                         if (results[i].categories[0].title === "Wildfires") {
-                            naturalEvents.events.wildFiresArr.push(results[i]);
+                            var lat = results[i].geometries[0].coordinates[1]
+                            var lng = results[i].geometries[0].coordinates[0]
+                            naturalEvents.events.wildFiresArr.push([lat, lng]);
                         }
-
                         if (results[i].categories[0].title === "Severe Storms") {
+                            var lat = results[i].geometries[0].coordinates[1]
+                            var lng = results[i].geometries[0].coordinates[0]
                             naturalEvents.events.severeStormsArr.push(results[i]);
                         }
-
                         if (results[i].categories[0].title === "Sea and Lake Ice") {
+                            var lat = results[i].geometries[0].coordinates[1]
+                            var lng = results[i].geometries[0].coordinates[0]
                             naturalEvents.events.icebergsArr.push(results[i]);
                         }
-
                         if (results[i].categories[0].title === "Volcanoes") {
+                            var lat = results[i].geometries[0].coordinates[1]
+                            var lng = results[i].geometries[0].coordinates[0]
                             naturalEvents.events.volcanosArr.push(results[i]);
                         }
-
                         if (results[i].categories[0].title === "Earthquakes") {
+                            var lat = results[i].geometries[0].coordinates[1]
+                            var lng = results[i].geometries[0].coordinates[0]
                             naturalEvents.events.earthquakesArr.push(results[i]);
                         }
                     }
 
-                    Object.keys(naturalEvents).forEach(key=> {
-                        console.log(key, naturalEvents[key])
-                    })
-
                     $(".leaflet-interactive")[1].remove();
+
+                    //var wildfiresGroup = L.layerGroup([L.marker([39.81695, -111.21329]), L.marker([45.18695, -108.37149])]).addTo(map)
+
+                    //var wildfiresGroup = L.layerGroup([naturalEvents.events.wildFiresArr.forEach(res => L.marker(res))]);
+
+                    var wildFiresGroup = L.layerGroup().addTo(map);
+                    for (let i=0; i<naturalEvents.events.wildFiresArr.length; i++) {
+                        var markers = L.marker(naturalEvents.events.wildFiresArr[i]);
+                        wildFiresGroup.addLayer(markers);
+                    }
+
+
+
                 }
 
             },
