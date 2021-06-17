@@ -159,14 +159,25 @@ $(document).ready(()=> {
 
     $("#naturalEvents").change(()=> {
 
-        var period = 365;
+        var naturalEvents = {
+            period: 365,
+            events: {
+                wildFiresArr: [],
+                earthquakesArr: [],
+                volcanosArr: [],
+                severeStormsArr: [],
+                icebergsArr: []
+
+            }
+        }
+        
 
         $.ajax({
             url: "./php/getNaturalEvents.php",
             type: "post",
             dataType: "json",
             data: {
-                period: period
+                period: naturalEvents.period
             },
 
             success: (res)=> {
@@ -174,7 +185,33 @@ $(document).ready(()=> {
                 if (res.status.name == "ok") {
                     var results = res.data.events
 
-                    console.log(results);
+                    for (let i=0; i<results.length; i++) {
+                        if (results[i].categories[0].title === "Wildfires") {
+                            naturalEvents.events.wildFiresArr.push(results[i]);
+                        }
+
+                        if (results[i].categories[0].title === "Severe Storms") {
+                            naturalEvents.events.severeStormsArr.push(results[i]);
+                        }
+
+                        if (results[i].categories[0].title === "Sea and Lake Ice") {
+                            naturalEvents.events.icebergsArr.push(results[i]);
+                        }
+
+                        if (results[i].categories[0].title === "Volcanoes") {
+                            naturalEvents.events.volcanosArr.push(results[i]);
+                        }
+
+                        if (results[i].categories[0].title === "Earthquakes") {
+                            naturalEvents.events.earthquakesArr.push(results[i]);
+                        }
+                    }
+
+                    Object.keys(naturalEvents).forEach(key=> {
+                        console.log(key, naturalEvents[key])
+                    })
+
+                    $(".leaflet-interactive")[1].remove();
                 }
 
             },
