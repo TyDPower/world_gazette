@@ -1,4 +1,4 @@
-export var naturalEvents = {
+export var obj = {
     period: 365,
     events: {
         wildfiresArr: [],
@@ -15,19 +15,19 @@ export var naturalEvents = {
         icebergsGroup: L.layerGroup()
     },
     clearMarkers: () => {
-        Object.keys(naturalEvents.layerGroups).forEach(key => {
-            naturalEvents.layerGroups[key].clearLayers()
+        Object.keys(obj.layerGroups).forEach(key => {
+            obj.layerGroups[key].clearLayers()
         })
     }
 }
 
-export const onLoad = () => {
+export const onPageLoad = () => {
     $.ajax({
         url: "./php/getNaturalEvents.php",
         type: "post",
         dataType: "json",
         data: {
-            period: naturalEvents.period
+            period: obj.period
         },
 
         success: (res)=> {
@@ -41,15 +41,15 @@ export const onLoad = () => {
                     var lng = results[i].geometries[0].coordinates[0]
 
                     if (results[i].categories[0].title === "Wildfires") {
-                        naturalEvents.events.wildfiresArr.push([lat, lng]);
+                        obj.events.wildfiresArr.push([lat, lng]);
                     } else if (results[i].categories[0].title === "Severe Storms") {
-                        naturalEvents.events.severeStormsArr.push([lat, lng]);
+                        obj.events.severeStormsArr.push([lat, lng]);
                     } else if (results[i].categories[0].title === "Sea and Lake Ice") {
-                        naturalEvents.events.icebergsArr.push([lat, lng]);
+                        obj.events.icebergsArr.push([lat, lng]);
                     } else if (results[i].categories[0].title === "Volcanoes") {
-                        naturalEvents.events.volcanosArr.push([lat, lng]);
+                        obj.events.volcanosArr.push([lat, lng]);
                     } else {
-                        naturalEvents.events.earthquakesArr.push([lat, lng]);
+                        obj.events.earthquakesArr.push([lat, lng]);
                     }
                 }
 
