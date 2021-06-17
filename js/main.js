@@ -1,6 +1,8 @@
 import * as location from "../common/country.js";
 import * as modal from "../common/modal.js";
 
+
+
 $(document).ready(()=> {
 
     //Initial World map tiles
@@ -60,6 +62,108 @@ $(document).ready(()=> {
         alert(e.message);
     }
     map.on('locationerror', onLocationError);
+
+    var naturalEvents = {
+        period: 365,
+        events: {
+            wildfiresArr: [],
+            earthquakesArr: [],
+            volcanosArr: [],
+            severeStormsArr: [],
+            icebergsArr: []
+    
+        },
+        layerGroups: {
+            wildfiresGroup: L.layerGroup().addTo(map),
+            earthquakesGroup: L.layerGroup().addTo(map),
+            volcanosGroup: L.layerGroup().addTo(map),
+            severeStormsGroup: L.layerGroup().addTo(map),
+            icebergsGroup: L.layerGroup().addTo(map)
+        }
+    }
+    
+    
+    var onLoad = () => {
+        $.ajax({
+            url: "./php/getNaturalEvents.php",
+            type: "post",
+            dataType: "json",
+            data: {
+                period: naturalEvents.period
+            },
+    
+            success: (res)=> {
+    
+                if (res.status.name == "ok") {
+                    var results = res.data.events
+                    //$(".leaflet-interactive")[1].remove();
+    
+                    for (let i=0; i<results.length; i++) {
+    
+                        var lat = results[i].geometries[0].coordinates[1]
+                        var lng = results[i].geometries[0].coordinates[0]
+    
+                        if (results[i].categories[0].title === "Wildfires") {
+                            naturalEvents.events.wildfiresArr.push([lat, lng]);
+                        } else if (results[i].categories[0].title === "Severe Storms") {
+                            naturalEvents.events.severeStormsArr.push([lat, lng]);
+                        } else if (results[i].categories[0].title === "Sea and Lake Ice") {
+                            naturalEvents.events.icebergsArr.push([lat, lng]);
+                        } else if (results[i].categories[0].title === "Volcanoes") {
+                            naturalEvents.events.volcanosArr.push([lat, lng]);
+                        } else {
+                            naturalEvents.events.earthquakesArr.push([lat, lng]);
+                        }
+                    }
+    
+                    /*if ($("#naturalEvents").val() === "wildfires") {
+    
+                        naturalEvents.events.wildfiresArr.forEach(res=> {
+                            naturalEvents.layerGroups.wildfiresGroup.addLayer(L.marker(res));
+                        })
+    
+                        console.log(naturalEvents.layerGroups.wildfiresGroup.getLayers())
+    
+                    } else if ($("#naturalEvents").val() === "volcanos") {
+    
+                        naturalEvents.events.volcanosArr.forEach(res=> {
+                            naturalEvents.layerGroups.volcanosGroup.addLayer(L.marker(res));
+                        })
+    
+                        console.log(naturalEvents.layerGroups.volcanosGroup.getLayers())
+    
+                    } else if ($("#naturalEvents").val() === "severeStorms") {
+    
+                        naturalEvents.events.severeStormsArr.forEach(res=> {
+                            naturalEvents.layerGroups.severeStormsGroup.addLayer(L.marker(res));
+                        })
+    
+                    } else if ($("#naturalEvents").val() === "earthquakes") {
+    
+                        naturalEvents.events.earthquakesArr.forEach(res=> {
+                            naturalEvents.layerGroups.earthquakesGroup.addLayer(L.marker(res));
+                        })
+    
+                    } else {
+    
+                        naturalEvents.events.icebergsArr.forEach(res=> {
+                            naturalEvents.layerGroups.icebergsGroup.addLayer(L.marker(res));
+                        })
+    
+                    }*/
+    
+                }
+    
+            },
+    
+            error: (err)=> {
+                console.log(err);
+            }
+    
+        })
+    } 
+
+    onLoad()
 
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
@@ -158,103 +262,49 @@ $(document).ready(()=> {
 
     $("#naturalEvents").change(()=> {
 
-        var naturalEvents = {
-            period: 365,
-            events: {
-                wildfiresArr: [],
-                earthquakesArr: [],
-                volcanosArr: [],
-                severeStormsArr: [],
-                icebergsArr: []
+        const clearNaturalEventMarkers = () => {
 
-            },
-            layerGroups: {
-                wildfiresGroup: L.layerGroup().addTo(map),
-                earthquakesGroup: L.layerGroup().addTo(map),
-                volcanosGroup: L.layerGroup().addTo(map),
-                severeStormsGroup: L.layerGroup().addTo(map),
-                icebergsGroup: L.layerGroup().addTo(map)
-            }
+            naturalEvents.layerGroups.volcanosGroup.clearLayers()
+            naturalEvents.layerGroups.wildfiresGroup.clearLayers()
+            naturalEvents.layerGroups.earthquakesGroup.clearLayers()
+            naturalEvents.layerGroups.icebergsGroup.clearLayers()
+            naturalEvents.layerGroups.severeStormsGroup.clearLayers()
+
         }
-        
 
-        $.ajax({
-            url: "./php/getNaturalEvents.php",
-            type: "post",
-            dataType: "json",
-            data: {
-                period: naturalEvents.period
-            },
+        clearNaturalEventMarkers()
 
-            success: (res)=> {
+        if ($("#naturalEvents").val() === "wildfires") {
 
-                if (res.status.name == "ok") {
-                    var results = res.data.events
-                    //$(".leaflet-interactive")[1].remove();
+            naturalEvents.events.wildfiresArr.forEach(res=> {
+                naturalEvents.layerGroups.wildfiresGroup.addLayer(L.marker(res));
+            })
 
-                    for (let i=0; i<results.length; i++) {
+        } else if ($("#naturalEvents").val() === "volcanos") {
 
-                        var lat = results[i].geometries[0].coordinates[1]
-                        var lng = results[i].geometries[0].coordinates[0]
+            naturalEvents.events.volcanosArr.forEach(res=> {
+                naturalEvents.layerGroups.volcanosGroup.addLayer(L.marker(res));
+            })
 
-                        if (results[i].categories[0].title === "Wildfires") {
-                            naturalEvents.events.wildfiresArr.push([lat, lng]);
-                        } else if (results[i].categories[0].title === "Severe Storms") {
-                            naturalEvents.events.severeStormsArr.push([lat, lng]);
-                        } else if (results[i].categories[0].title === "Sea and Lake Ice") {
-                            naturalEvents.events.icebergsArr.push([lat, lng]);
-                        } else if (results[i].categories[0].title === "Volcanoes") {
-                            naturalEvents.events.volcanosArr.push([lat, lng]);
-                        } else {
-                            naturalEvents.events.earthquakesArr.push([lat, lng]);
-                        }
-                    }
+        } else if ($("#naturalEvents").val() === "severeStorms") {
 
-                    if ($("#naturalEvents").val() === "wildfires") {
+            naturalEvents.events.severeStormsArr.forEach(res=> {
+                naturalEvents.layerGroups.severeStormsGroup.addLayer(L.marker(res));
+            })
 
-                        naturalEvents.events.wildfiresArr.forEach(res=> {
-                            naturalEvents.layerGroups.wildfiresGroup.addLayer(L.marker(res));
-                        })
+        } else if ($("#naturalEvents").val() === "earthquakes") {
 
-                        console.log(naturalEvents.layerGroups.wildfiresGroup.getLayers())
+            naturalEvents.events.earthquakesArr.forEach(res=> {
+                naturalEvents.layerGroups.earthquakesGroup.addLayer(L.marker(res));
+            })
 
-                    } else if ($("#naturalEvents").val() === "volcanos") {
+        } else {
 
-                        naturalEvents.events.volcanosArr.forEach(res=> {
-                            naturalEvents.layerGroups.volcanosGroup.addLayer(L.marker(res));
-                        })
+            naturalEvents.events.icebergsArr.forEach(res=> {
+                naturalEvents.layerGroups.icebergsGroup.addLayer(L.marker(res));
+            })
 
-                        console.log(naturalEvents.layerGroups.volcanosGroup.getLayers())
-
-                    } else if ($("#naturalEvents").val() === "severeStorms") {
-
-                        naturalEvents.events.severeStormsArr.forEach(res=> {
-                            naturalEvents.layerGroups.severeStormsGroup.addLayer(L.marker(res));
-                        })
-
-                    } else if ($("#naturalEvents").val() === "earthquakes") {
-
-                        naturalEvents.events.earthquakesArr.forEach(res=> {
-                            naturalEvents.layerGroups.earthquakesGroup.addLayer(L.marker(res));
-                        })
-
-                    } else {
-
-                        naturalEvents.events.icebergsArr.forEach(res=> {
-                            naturalEvents.layerGroups.icebergsGroup.addLayer(L.marker(res));
-                        })
-
-                    }
-
-                }
-
-            },
-
-            error: (err)=> {
-                console.log(err);
-            }
-
-        })
+        }
 
     })
 
