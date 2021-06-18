@@ -165,7 +165,7 @@ $(document).ready(()=> {
     $("#naturalEvents").change(()=> {
 
         naturalEvents.obj.clearMarkers();
-        
+
         let panToCenter = () => {
             map.panTo([0, 0])
             if (map.getZoom() > 2) {
@@ -173,37 +173,46 @@ $(document).ready(()=> {
             }
         }
 
-        if ($("#naturalEvents").val() === "wildfires") {
-            naturalEvents.obj.events.wildfiresArr.forEach(res=> {
-                naturalEvents.obj.layerGroups.wildfiresGroup.addLayer(L.marker(res)).addTo(map);
-                panToCenter();
-            })
+        let events = naturalEvents.obj.events;
+        let layers = naturalEvents.obj.layerGroups;
 
-        } else if ($("#naturalEvents").val() === "volcanos") {
-            naturalEvents.obj.events.volcanosArr.forEach(res=> {
-                naturalEvents.obj.layerGroups.volcanosGroup.addLayer(L.marker(res)).addTo(map);
+        switch ($("#naturalEvents").val()) {
+            case "wildfires":
+                events.wildfiresArr.forEach(res=> {
+                    layers.wildfiresGroup.addLayer(L.marker(res)).addTo(map);
+                })
                 panToCenter();
-            })
+                break;
+            
+                case "volcanos":
+                    events.volcanosArr.forEach(res=> {
+                        layers.volcanosGroup.addLayer(L.marker(res)).addTo(map);
+                    })
+                    panToCenter();
+                    break;
 
-        } else if ($("#naturalEvents").val() === "severeStorms") {
-            naturalEvents.obj.events.severeStormsArr.forEach(res=> {
-                naturalEvents.obj.layerGroups.severeStormsGroup.addLayer(L.marker(res)).addTo(map);
-                panToCenter();
-            })
+                case "severeStorms":
+                    events.severeStormsArr.forEach(res=> {
+                        layers.severeStormsGroup.addLayer(L.marker(res)).addTo(map);
+                    })
+                    panToCenter();
+                    break;
 
-        } else if ($("#naturalEvents").val() === "earthquakes") {
-            naturalEvents.obj.events.earthquakesArr.forEach(res=> {
-                naturalEvents.obj.layerGroups.earthquakesGroup.addLayer(L.marker(res)).addTo(map);
-                panToCenter();
-            })
+                case "earthquakes":
+                    events.earthquakesArr.forEach(res=> {
+                        layers.earthquakesGroup.addLayer(L.marker(res)).addTo(map);
+                    })
+                    panToCenter();
+                    break;
 
-        } else {
-            naturalEvents.obj.events.icebergsArr.forEach(res=> {
-                naturalEvents.obj.layerGroups.icebergsGroup.addLayer(L.marker(res)).addTo(map);
-                panToCenter();
-            })
-
+                default:
+                    events.icebergsArr.forEach(res=> {
+                        layers.icebergsGroup.addLayer(L.marker(res)).addTo(map);
+                    })
+                    panToCenter();
         }
+
+
 
     })
 
