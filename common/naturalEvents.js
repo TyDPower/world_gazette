@@ -1,5 +1,4 @@
 export var obj = {
-    period: 365,
     events: {
         wildfiresArr: [],
         earthquakesArr: [],
@@ -41,45 +40,53 @@ export var obj = {
     }
 }
 
-export const onPageLoad = () => {
-    $.ajax({
-        url: "./php/getNaturalEvents.php",
-        type: "post",
-        dataType: "json",
-        data: {
-            period: obj.period
-        },
+export const loadNaturalEventsData = (period) => {
 
-        success: (res)=> {
-
-            if (res.status.name == "ok") {
-                var results = res.data.events
-
-                for (let i=0; i<results.length; i++) {
-
-                    var lat = results[i].geometries[0].coordinates[1]
-                    var lng = results[i].geometries[0].coordinates[0]
-
-                    if (results[i].categories[0].title === "Wildfires") {
-                        obj.events.wildfiresArr.push([lat, lng]);
-                    } else if (results[i].categories[0].title === "Severe Storms") {
-                        obj.events.severeStormsArr.push([lat, lng]);
-                    } else if (results[i].categories[0].title === "Sea and Lake Ice") {
-                        obj.events.icebergsArr.push([lat, lng]);
-                    } else if (results[i].categories[0].title === "Volcanoes") {
-                        obj.events.volcanosArr.push([lat, lng]);
-                    } else {
-                        obj.events.earthquakesArr.push([lat, lng]);
+    return new Promise((resolve, rej)=> {
+        $.ajax({
+            url: "./php/getNaturalEvents.php",
+            type: "post",
+            dataType: "json",
+            data: {
+                period: period
+            },
+    
+            success: (res)=> {
+    
+                if (res.status.name == "ok") {
+                    var results = res.data.events
+    
+                    for (let i=0; i<results.length; i++) {
+    
+                        var lat = results[i].geometries[0].coordinates[1]
+                        var lng = results[i].geometries[0].coordinates[0]
+    
+                        if (results[i].categories[0].title === "Wildfires") {
+                            obj.events.wildfiresArr.push([lat, lng]);
+                        } else if (results[i].categories[0].title === "Severe Storms") {
+                            obj.events.severeStormsArr.push([lat, lng]);
+                        } else if (results[i].categories[0].title === "Sea and Lake Ice") {
+                            obj.events.icebergsArr.push([lat, lng]);
+                        } else if (results[i].categories[0].title === "Volcanoes") {
+                            obj.events.volcanosArr.push([lat, lng]);
+                        } else {
+                            obj.events.earthquakesArr.push([lat, lng]);
+                        }
                     }
+
+                    resolve()
+    
                 }
-
+    
+            },
+    
+            error: (err)=> {
+                rej(err)
             }
-
-        },
-
-        error: (err)=> {
-            console.log(err);
-        }
+    
+        })
 
     })
+    
+
 }

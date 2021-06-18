@@ -64,7 +64,7 @@ $(document).ready(()=> {
     }
     map.on('locationerror', onLocationError); 
 
-    naturalEvents.onPageLoad()
+    //naturalEvents.loadNaturalEventsData()
 
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
@@ -175,44 +175,64 @@ $(document).ready(()=> {
         let events = naturalEvents.obj.events;
         let layers = naturalEvents.obj.layerGroups;
         let markers = naturalEvents.obj.markers;
+        let period = $("input[name=naturalEvents]:checked").val()
 
-        switch ($("#naturalEvents").val()) {
-            case "wildfires":
-                events.wildfiresArr.forEach(res=> {
-                    layers.wildfiresGroup.addLayer(L.marker(res, {icon: markers.wildfires})).addTo(map);
-                })
-                panToCenter();
-                break;
-            
-                case "volcanos":
-                    events.volcanosArr.forEach(res=> {
-                        layers.volcanosGroup.addLayer(L.marker(res, {icon: markers.volcanos})).addTo(map);
-                    })
-                    panToCenter();
-                    break;
+        if (!period) {
 
-                case "severeStorms":
-                    events.severeStormsArr.forEach(res=> {
-                        layers.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
-                    })
-                    panToCenter();
-                    break;
+            alert("Please select a period")
 
-                case "earthquakes":
-                    events.earthquakesArr.forEach(res=> {
-                        layers.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
-                    })
-                    panToCenter();
-                    break;
+        } else {
 
-                default:
-                    events.icebergsArr.forEach(res=> {
-                        layers.icebergsGroup.addLayer(L.marker(res, {icon: markers.icebergs})).addTo(map);
-                    })
-                    panToCenter();
+            let periodInDays = parseInt(period)
+            const userRequest = naturalEvents.loadNaturalEventsData(periodInDays)
+
+            const handleSuccess = () => {
+                switch ($("#naturalEvents").val()) {
+                    case "wildfires":
+                        events.wildfiresArr.forEach(res=> {
+                            layers.wildfiresGroup.addLayer(L.marker(res, {icon: markers.wildfires})).addTo(map);
+                        })
+                        panToCenter();
+                        break;
+                    
+                        case "volcanos":
+                            events.volcanosArr.forEach(res=> {
+                                layers.volcanosGroup.addLayer(L.marker(res, {icon: markers.volcanos})).addTo(map);
+                            })
+                            panToCenter();
+                            break;
+        
+                        case "severeStorms":
+                            events.severeStormsArr.forEach(res=> {
+                                layers.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
+                            })
+                            panToCenter();
+                            break;
+        
+                        case "earthquakes":
+                            events.earthquakesArr.forEach(res=> {
+                                layers.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
+                            })
+                            panToCenter();
+                            break;
+        
+                        default:
+                            events.icebergsArr.forEach(res=> {
+                                layers.icebergsGroup.addLayer(L.marker(res, {icon: markers.icebergs})).addTo(map);
+                            })
+                            panToCenter();
+                }
+                
+            }
+
+            const handleErr = (err) => {
+                console.log(err)
+            }
+
+            userRequest
+            .then(handleSuccess)
+            .catch(handleErr)
         }
-
-
 
     })
 
