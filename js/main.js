@@ -166,6 +166,29 @@ $(document).ready(()=> {
 
         naturalEvents.obj.clearMarkers();
 
+        var markers = {
+            wildfires: L.icon({
+                iconUrl: "./images/wildfireMarker.svg",
+                iconSize: [38, 95]
+            }),
+            severeStorms: L.icon({
+                iconUrl: "./images/severeStormMarker.svg",
+                iconSize: [38, 95]
+            }),
+            earthquakes: L.icon({
+                iconUrl: "./images/earthquakeMarker.svg",
+                iconSize: [38, 95]
+            }),
+            icebergs: L.icon({
+                iconUrl: "./images/icebergMarker.svg",
+                iconSize: [38, 95]
+            }),
+            volcanos: L.icon({
+                iconUrl: "./images/volcanoMarker.svg",
+                iconSize: [38, 95]
+            }),
+        } 
+
         let panToCenter = () => {
             map.panTo([0, 0])
             if (map.getZoom() > 2) {
@@ -179,35 +202,35 @@ $(document).ready(()=> {
         switch ($("#naturalEvents").val()) {
             case "wildfires":
                 events.wildfiresArr.forEach(res=> {
-                    layers.wildfiresGroup.addLayer(L.marker(res)).addTo(map);
+                    layers.wildfiresGroup.addLayer(L.marker(res, {icon: markers.wildfires})).addTo(map);
                 })
                 panToCenter();
                 break;
             
                 case "volcanos":
                     events.volcanosArr.forEach(res=> {
-                        layers.volcanosGroup.addLayer(L.marker(res)).addTo(map);
+                        layers.volcanosGroup.addLayer(L.marker(res, {icon: markers.volcanos})).addTo(map);
                     })
                     panToCenter();
                     break;
 
                 case "severeStorms":
                     events.severeStormsArr.forEach(res=> {
-                        layers.severeStormsGroup.addLayer(L.marker(res)).addTo(map);
+                        layers.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
                     })
                     panToCenter();
                     break;
 
                 case "earthquakes":
                     events.earthquakesArr.forEach(res=> {
-                        layers.earthquakesGroup.addLayer(L.marker(res)).addTo(map);
+                        layers.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
                     })
                     panToCenter();
                     break;
 
                 default:
                     events.icebergsArr.forEach(res=> {
-                        layers.icebergsGroup.addLayer(L.marker(res)).addTo(map);
+                        layers.icebergsGroup.addLayer(L.marker(res, {icon: markers.icebergs})).addTo(map);
                     })
                     panToCenter();
         }
