@@ -165,30 +165,42 @@ $(document).ready(()=> {
     $("#naturalEvents").change(()=> {
 
         naturalEvents.obj.clearMarkers();
+        
+        let panToCenter = () => {
+            map.panTo([0, 0])
+            if (map.getZoom() > 2) {
+                map.setZoom(2);
+            }
+        }
 
         if ($("#naturalEvents").val() === "wildfires") {
             naturalEvents.obj.events.wildfiresArr.forEach(res=> {
                 naturalEvents.obj.layerGroups.wildfiresGroup.addLayer(L.marker(res)).addTo(map);
+                panToCenter();
             })
 
         } else if ($("#naturalEvents").val() === "volcanos") {
             naturalEvents.obj.events.volcanosArr.forEach(res=> {
                 naturalEvents.obj.layerGroups.volcanosGroup.addLayer(L.marker(res)).addTo(map);
+                panToCenter();
             })
 
         } else if ($("#naturalEvents").val() === "severeStorms") {
             naturalEvents.obj.events.severeStormsArr.forEach(res=> {
                 naturalEvents.obj.layerGroups.severeStormsGroup.addLayer(L.marker(res)).addTo(map);
+                panToCenter();
             })
 
         } else if ($("#naturalEvents").val() === "earthquakes") {
             naturalEvents.obj.events.earthquakesArr.forEach(res=> {
                 naturalEvents.obj.layerGroups.earthquakesGroup.addLayer(L.marker(res)).addTo(map);
+                panToCenter();
             })
 
         } else {
             naturalEvents.obj.events.icebergsArr.forEach(res=> {
                 naturalEvents.obj.layerGroups.icebergsGroup.addLayer(L.marker(res)).addTo(map);
+                panToCenter();
             })
 
         }
