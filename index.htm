@@ -272,22 +272,22 @@
                 <option value="{'a3':'ZWE', 'a2':'ZW'}">Zimbabwe</option>
             </select>
             <select id="naturalEvents">
-                <option>Select a natural event</option>
+                <option value="false">Select a natural event</option>
                 <option value="wildfires">Wildfires</option>
                 <option value="volcanos">Volcanos</option>
                 <option value="severeStorms">Severe storms</option>
                 <option value="earthquakes">Earthquakes</option>
                 <option value="icebergs">Sea and lake icebergs</option>
             </select>
-            <form>
+            <form id="periodSelector">
                 <label for="currentNaturalEvent">Today</label>
-                <input id="currentNaturalEvent" type="radio" name="naturalEvents" value=1 checked><br>
+                <input id="currentNaturalEvent" type="radio" name="naturalEvents" value="1"><br>
                 <label for="weekNaturalEvent">Week</label>
-                <input id="weekNaturalEvent" type="radio" name="naturalEvents" value=7><br>
+                <input id="weekNaturalEvent" type="radio" name="naturalEvents" value="7"><br>
                 <label for="monthNaturalEvent">Month</label>
-                <input id="monthNaturalEvent" type="radio" name="naturalEvents" value=31><br>
+                <input id="monthNaturalEvent" type="radio" name="naturalEvents" value="31"><br>
                 <label for="yearNaturalEvent">Year</label>
-                <input id="yearNaturalEvent" type="radio" name="naturalEvents" value=365><br>
+                <input id="yearNaturalEvent" type="radio" name="naturalEvents" value="365"><br>
             </form>
 
         </header>
