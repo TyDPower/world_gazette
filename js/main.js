@@ -164,30 +164,7 @@ $(document).ready(()=> {
     //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
 
-        naturalEvents.obj.clearMarkers();
-
-        var markers = {
-            wildfires: L.icon({
-                iconUrl: "./images/wildfireMarker.svg",
-                iconSize: [38, 95]
-            }),
-            severeStorms: L.icon({
-                iconUrl: "./images/severeStormMarker.svg",
-                iconSize: [38, 95]
-            }),
-            earthquakes: L.icon({
-                iconUrl: "./images/earthquakeMarker.svg",
-                iconSize: [38, 95]
-            }),
-            icebergs: L.icon({
-                iconUrl: "./images/icebergMarker.svg",
-                iconSize: [38, 95]
-            }),
-            volcanos: L.icon({
-                iconUrl: "./images/volcanoMarker.svg",
-                iconSize: [38, 95]
-            }),
-        } 
+        naturalEvents.obj.clearMarkers(); 
 
         let panToCenter = () => {
             map.panTo([0, 0])
@@ -195,9 +172,9 @@ $(document).ready(()=> {
                 map.setZoom(2);
             }
         }
-
         let events = naturalEvents.obj.events;
         let layers = naturalEvents.obj.layerGroups;
+        let markers = naturalEvents.obj.markers;
 
         switch ($("#naturalEvents").val()) {
             case "wildfires":

@@ -7,6 +7,28 @@ export var obj = {
         severeStormsArr: [],
         icebergsArr: []
     },
+    markers: {
+        wildfires: L.icon({
+            iconUrl: "./images/wildfireMarker.svg",
+            iconSize: [38, 95]
+        }),
+        severeStorms: L.icon({
+            iconUrl: "./images/severeStormMarker.svg",
+            iconSize: [38, 95]
+        }),
+        earthquakes: L.icon({
+            iconUrl: "./images/earthquakeMarker.svg",
+            iconSize: [38, 95]
+        }),
+        icebergs: L.icon({
+            iconUrl: "./images/icebergMarker.svg",
+            iconSize: [38, 95]
+        }),
+        volcanos: L.icon({
+            iconUrl: "./images/volcanoMarker.svg",
+            iconSize: [38, 95]
+        }),
+    },
     layerGroups: {
         wildfiresGroup: L.layerGroup(),
         earthquakesGroup: L.layerGroup(),
