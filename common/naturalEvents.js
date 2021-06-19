@@ -36,7 +36,7 @@ export var obj = {
         icebergsGroup: L.layerGroup()
     },
     clearMarkers: () => {
-        Object.values(obj.layerGroups).forEach(val => val.clearLayers())
+        Object.values(obj.layerGroups).forEach(val => val.clearLayers());
     }
 }
 
