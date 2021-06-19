@@ -2,6 +2,10 @@ import * as location from "../common/country.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
 
+var countryGroup = {
+    other: L.layerGroup()
+}
+
 
 
 $(document).ready(()=> {
@@ -64,8 +68,6 @@ $(document).ready(()=> {
     }
     map.on('locationerror', onLocationError); 
 
-    //naturalEvents.loadNaturalEventsData()
-
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
 
@@ -97,8 +99,10 @@ $(document).ready(()=> {
                     }
 
                     removeBorderAndMarker();
+
                     
                     L.geoJSON(location.updateCountryBorders()).addTo(map);
+                    countryGroup.other.addLayer(L.geoJSON(location.updateCountryBorders())).addTo(map);
 
                     $.ajax(
                         {
@@ -143,9 +147,10 @@ $(document).ready(()=> {
                                         $(".modal").hide();
                                     })
 
-                                    location.updateCountryLoaded(true);
-                                    modal.countryInfo(location.updateCountryInfo());
-                                    L.marker(location.updateCountryCoords()).addTo(map);
+                                    //location.updateCountryLoaded(true);
+                                    //modal.countryInfo(location.updateCountryInfo());
+                                    countryGroup.other.addLayer(L.marker(location.updateCountryCoords())).addTo(map);
+                                    //L.marker(location.updateCountryCoords()).addTo(map);
                                 }
                             },
                 
@@ -161,6 +166,11 @@ $(document).ready(()=> {
 
     })
 
+    var clearCountryMarkers= () => {
+        Object.values(countryGroup).forEach(val => val.clearLayers());
+        //countryGroup.other.clearLayers()
+    }
+
     //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
 
@@ -173,7 +183,7 @@ $(document).ready(()=> {
             }
         }
         let events = naturalEvents.obj.events;
-        let layers = naturalEvents.obj.layerGroups;
+        let layerGroup = naturalEvents.obj.layerGroups;
         let markers = naturalEvents.obj.markers;
         let period = $("input[name=naturalEvents]:checked").val()
 
@@ -184,41 +194,44 @@ $(document).ready(()=> {
         } else {
 
             let periodInDays = parseInt(period)
-            const userRequest = naturalEvents.loadNaturalEventsData(periodInDays)
+            const userRequest = naturalEvents.loadNaturalEventsData(periodInDays) 
 
             const handleSuccess = () => {
+
+                clearCountryMarkers()
+
                 switch ($("#naturalEvents").val()) {
                     case "wildfires":
                         events.wildfiresArr.forEach(res=> {
-                            layers.wildfiresGroup.addLayer(L.marker(res, {icon: markers.wildfires})).addTo(map);
+                            layerGroup.wildfiresGroup.addLayer(L.marker(res, {icon: markers.wildfires})).addTo(map);
                         })
                         panToCenter();
                         break;
                     
                         case "volcanos":
                             events.volcanosArr.forEach(res=> {
-                                layers.volcanosGroup.addLayer(L.marker(res, {icon: markers.volcanos})).addTo(map);
+                                layerGroup.volcanosGroup.addLayer(L.marker(res, {icon: markers.volcanos})).addTo(map);
                             })
                             panToCenter();
                             break;
         
                         case "severeStorms":
                             events.severeStormsArr.forEach(res=> {
-                                layers.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
+                                layerGroup.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
                             })
                             panToCenter();
                             break;
         
                         case "earthquakes":
                             events.earthquakesArr.forEach(res=> {
-                                layers.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
+                                layerGroup.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
                             })
                             panToCenter();
                             break;
         
                         default:
                             events.icebergsArr.forEach(res=> {
-                                layers.icebergsGroup.addLayer(L.marker(res, {icon: markers.icebergs})).addTo(map);
+                                layerGroup.icebergsGroup.addLayer(L.marker(res, {icon: markers.icebergs})).addTo(map);
                             })
                             panToCenter();
                 }
