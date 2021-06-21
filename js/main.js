@@ -69,17 +69,18 @@ $(document).ready(()=> {
 
         const codeA3 = $("#countryList").val().slice(7, 10);
         const codeA2 = $("#countryList").val().slice(19, 21);
-
         
 
         const goToCountry = () => {
-            var popup = L.popup()
+            var data = `${country.obj.name}<br>
+                        ${country.obj.continent}<br>
+                        ${country.obj.flag}`;
+            L.popup()
                     .setLatLng(country.obj.coords)
-                    .setContent(country.obj.name)
+                    .setContent(data)
                     .openOn(map);
             map.panTo(country.obj.coords);
             country.obj.layerGroups.addLayer(L.marker(country.obj.coords)).addTo(map);
-            Map.openPopup(popup);
             if (map.getZoom() > 5) {
                 map.setZoom(5)
             }
