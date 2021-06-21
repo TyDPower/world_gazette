@@ -1,4 +1,4 @@
-import * as countryInfo from "../common/country.js";
+import * as country from "../common/country.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
 
@@ -67,79 +67,29 @@ $(document).ready(()=> {
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
 
-        var codeA3 = $("#countryList").val().slice(7, 10);
-        var codeA2 = $("#countryList").val().slice(19, 21);
+        const codeA3 = $("#countryList").val().slice(7, 10);
+        const codeA2 = $("#countryList").val().slice(19, 21);
 
-        countryInfo.updateIsoA3(codeA3);
-        countryInfo.updateIsoA2(codeA2);
-
-        $.getJSON("./common/countries.geo.json", (data)=> {
-            for (let i=0; i<data.features.length; i++) {
-                if (data.features[i].properties.ISO_A3 == countryInfo.updateIsoA3()) {
-                    countryInfo.updateCountryBorders(data.features[i]);
-                    countryInfo.updateCountryName(data.features[i].properties.ADMIN);
-
-                    countryInfo.obj.layerGroups.clearLayers();
-                    naturalEvents.obj.clearMarkers();
-
-                    countryInfo.obj.layerGroups.addLayer(L.geoJSON(countryInfo.updateCountryBorders())).addTo(map);
-
-                    $.ajax(
-                        {
-                            url: "./php/getPlaceInfo.php",
-                            type: "post",
-                            dataType: "json",
-                            data: {
-                                isoCode: countryInfo.updateIsoA2(),
-                                countryName: countryInfo.updateCountryName().replace(/\s+/g, "_")
-                            },
-                
-                            success: (res)=> {
-                                if (res.status.name == "ok") {
-                                    var results = res.data.results[0]
-
-                                    var countryData = {
-                                        name: results.components.country,
-                                        coords: [results.geometry.lat, results.geometry.lng],
-                                        continent: results.components.continent,
-                                        flag: results.annotations.flag,
-                                        currencyName: results.annotations.currency.name,
-                                        currencySubunitName: results.annotations.currency.subunit,
-                                        currencySymbol: results.annotations.currency.symbol,
-                                        symbolPos: results.annotations.currency.symbol_first,
-                                        driveSide: results.annotations.roadinfo.drive_on,
-                                        speedUnit: results.annotations.roadinfo.speed_in,
-                                        timezoneName: results.annotations.timezone.name,
-                                        dst: results.annotations.timezone.now_in_dst
-                                    }
-
-                                    countryInfo.updateCountryInfo(countryData);
-
-                                    setTimeout(()=> {
-                                        map.panTo([countryInfo.updateCountryCoords("lat"), countryInfo.updateCountryCoords("lng")]).setZoom(5)
-                                    }, 100);
-                                    
-                                    setTimeout(()=> {
-                                        $(".modal").show();
-                                    }, 1000);
-                
-                                    $("#closeBtn").click(()=> {
-                                        $(".modal").hide();
-                                    })
-
-                                    modal.countryInfo(countryInfo.updateCountryInfo());
-                                    countryInfo.obj.layerGroups.addLayer(L.marker(countryInfo.updateCountryCoords())).addTo(map);
-                                }
-                            },
-                
-                            error: (err)=> {
-                                console.log(err);
-                            }
-                        }
-                    )
-
-                }
+        const goToCountry = () => {
+            map.panTo(country.obj.countryCoords);
+            country.obj.layerGroups.addLayer(L.marker(country.obj.countryCoords)).addTo(map);
+            if (map.getZoom() > 5) {
+                map.setZoom(5)
             }
+        }
+
+        country.obj.layerGroups.clearLayers();
+        naturalEvents.obj.clearMarkers();
+
+        country.obj.getBorders(codeA3)
+        .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
+        .then(()=>country.obj.getCountryInfo(codeA2))
+        .then(()=>goToCountry())
+        .then(()=>modal.countryInfo(country.updateCountryInfo()))
+        .catch((val)=>console.log(val))
+
+        $("#closeBtn").click(()=> {
+            $(".modal").hide();
         })
 
     })
@@ -155,6 +105,7 @@ $(document).ready(()=> {
                 map.setZoom(2);
             }
         }
+
         let events = naturalEvents.obj.events;
         let layerGroup = naturalEvents.obj.layerGroups;
         let markers = naturalEvents.obj.markers;
@@ -171,7 +122,7 @@ $(document).ready(()=> {
 
             const handleSuccess = () => {
 
-                countryInfo.obj.layerGroups.clearLayers();
+                country.obj.layerGroups.clearLayers();
 
                 switch ($("#naturalEvents").val()) {
                     case "wildfires":
@@ -181,32 +132,32 @@ $(document).ready(()=> {
                         panToCenter();
                         break;
                     
-                        case "volcanos":
-                            events.volcanosArr.forEach(res=> {
-                                layerGroup.volcanosGroup.addLayer(L.marker(res, {icon: markers.volcanos})).addTo(map);
-                            })
-                            panToCenter();
-                            break;
+                    case "volcanos":
+                        events.volcanosArr.forEach(res=> {
+                            layerGroup.volcanosGroup.addLayer(L.marker(res,{icon: markers.volcanos})).addTo(map);
+                        })
+                        panToCenter();
+                        break;
         
-                        case "severeStorms":
-                            events.severeStormsArr.forEach(res=> {
-                                layerGroup.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
-                            })
-                            panToCenter();
-                            break;
-        
-                        case "earthquakes":
-                            events.earthquakesArr.forEach(res=> {
-                                layerGroup.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
-                            })
-                            panToCenter();
-                            break;
-        
-                        default:
-                            events.icebergsArr.forEach(res=> {
-                                layerGroup.icebergsGroup.addLayer(L.marker(res, {icon: markers.icebergs})).addTo(map);
-                            })
-                            panToCenter();
+                    case "severeStorms":
+                        events.severeStormsArr.forEach(res=> {
+                            layerGroup.severeStormsGroup.addLayer(L.marke(res, {icon: markers.severeStorms})).addTo(map);
+                        })
+                        panToCenter();
+                        break;
+    
+                    case "earthquakes":
+                        events.earthquakesArr.forEach(res=> {
+                            layerGroup.earthquakesGroup.addLayer(L.marke(res, {icon: markers.earthquakes})).addTo(map);
+                        })
+                        panToCenter();
+                        break;
+    
+                    default:
+                        events.icebergsArr.forEach(res=> {
+                            layerGroup.icebergsGroup.addLayer(L.marker(res,{icon: markers.icebergs})).addTo(map);
+                        })
+                        panToCenter();
                 }
                 
             }
