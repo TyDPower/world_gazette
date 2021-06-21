@@ -1,10 +1,9 @@
 export var obj = {
     isoCodeA3: null,
     isoCodeA2: null,
-    countryBorders: null,
-    countryLoaded: false,
-    countryName: null,
-    countryCoords: [],
+    borders: null,
+    name: null,
+    coords: [],
     continent: null,
     flag: null,
     currencyInfo: {
@@ -27,11 +26,11 @@ export var obj = {
             $.getJSON("./common/countries.geo.json", (data)=> {
                 for (let i=0; i<data.features.length; i++) {
                     if (data.features[i].properties.ISO_A3 === code) {
-                        obj.countryBorders = data.features[i]
-                        obj.countryName = data.features[i].properties.ADMIN
+                        obj.borders = data.features[i]
+                        obj.name = data.features[i].properties.ADMIN
 
-                        if (this.countryBorders) {
-                            resolve(this.countryBorders)
+                        if (this.borders) {
+                            resolve(this.borders)
                         } else {
                             reject("error");
                         }
@@ -49,7 +48,7 @@ export var obj = {
                     dataType: "json",
                     data: {
                         isoCode: code,
-                        countryName: this.countryName.replace(/\s+/g, "_")
+                        countryName: this.name.replace(/\s+/g, "_")
                     },
 
                     success: (response)=> {
@@ -94,8 +93,8 @@ export var obj = {
 export const updateCountryInfo = (dataObj) => {
     if (dataObj) {
 
-        obj.countryName = dataObj.name;
-        obj.countryCoords = dataObj.coords;
+        obj.name = dataObj.name;
+        obj.coords = dataObj.coords;
         obj.continent = dataObj.continent;
         obj.flag = dataObj.flag;
         obj.marker = dataObj.flag;
@@ -111,8 +110,8 @@ export const updateCountryInfo = (dataObj) => {
     } else {
         
         var modalPlaceObj = {
-            name: obj.countryName,
-            coordsoords: obj.countryCoords,
+            name: obj.name,
+            coordsoords: obj.coords,
             continent: obj.continent,
             flag: obj.flag,
             currencyInfo: {
