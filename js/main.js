@@ -1,10 +1,6 @@
-import * as location from "../common/country.js";
+import * as countryInfo from "../common/country.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
-
-var countryGroup = {
-    other: L.layerGroup()
-}
 
 
 
@@ -74,35 +70,19 @@ $(document).ready(()=> {
         var codeA3 = $("#countryList").val().slice(7, 10);
         var codeA2 = $("#countryList").val().slice(19, 21);
 
-        location.updateIsoA3(codeA3);
-        location.updateIsoA2(codeA2);
+        countryInfo.updateIsoA3(codeA3);
+        countryInfo.updateIsoA2(codeA2);
 
         $.getJSON("./common/countries.geo.json", (data)=> {
             for (let i=0; i<data.features.length; i++) {
-                if (data.features[i].properties.ISO_A3 == location.updateIsoA3()) {
-                    location.updateCountryBorders(data.features[i]);
-                    location.updateCountryName(data.features[i].properties.ADMIN);
+                if (data.features[i].properties.ISO_A3 == countryInfo.updateIsoA3()) {
+                    countryInfo.updateCountryBorders(data.features[i]);
+                    countryInfo.updateCountryName(data.features[i].properties.ADMIN);
 
-                    const removeBorderAndMarker = () => {
+                    countryInfo.obj.layerGroups.clearLayers();
+                    naturalEvents.obj.clearMarkers();
 
-                        var border = $(".leaflet-interactive")[1];
-                        var marker = $(".leaflet-marker-icon")[1];
-                        var shoadow = $(".leaflet-marker-shadow")[1]
-
-                        if (!marker) {
-                            border.remove();
-                        } else {
-                            border.remove();
-                            marker.remove();
-                            shoadow.remove();
-                        }
-                    }
-
-                    removeBorderAndMarker();
-
-                    
-                    L.geoJSON(location.updateCountryBorders()).addTo(map);
-                    countryGroup.other.addLayer(L.geoJSON(location.updateCountryBorders())).addTo(map);
+                    countryInfo.obj.layerGroups.addLayer(L.geoJSON(countryInfo.updateCountryBorders())).addTo(map);
 
                     $.ajax(
                         {
@@ -110,8 +90,8 @@ $(document).ready(()=> {
                             type: "post",
                             dataType: "json",
                             data: {
-                                isoCode: location.updateIsoA2(),
-                                countryName: location.updateCountryName().replace(/\s+/g, "_")
+                                isoCode: countryInfo.updateIsoA2(),
+                                countryName: countryInfo.updateCountryName().replace(/\s+/g, "_")
                             },
                 
                             success: (res)=> {
@@ -133,10 +113,10 @@ $(document).ready(()=> {
                                         dst: results.annotations.timezone.now_in_dst
                                     }
 
-                                    location.updateCountryInfo(countryData);
+                                    countryInfo.updateCountryInfo(countryData);
 
                                     setTimeout(()=> {
-                                        map.panTo([location.updateCountryCoords("lat"), location.updateCountryCoords("lng")]).setZoom(5)
+                                        map.panTo([countryInfo.updateCountryCoords("lat"), countryInfo.updateCountryCoords("lng")]).setZoom(5)
                                     }, 100);
                                     
                                     setTimeout(()=> {
@@ -147,10 +127,8 @@ $(document).ready(()=> {
                                         $(".modal").hide();
                                     })
 
-                                    //location.updateCountryLoaded(true);
-                                    //modal.countryInfo(location.updateCountryInfo());
-                                    countryGroup.other.addLayer(L.marker(location.updateCountryCoords())).addTo(map);
-                                    //L.marker(location.updateCountryCoords()).addTo(map);
+                                    modal.countryInfo(countryInfo.updateCountryInfo());
+                                    countryInfo.obj.layerGroups.addLayer(L.marker(countryInfo.updateCountryCoords())).addTo(map);
                                 }
                             },
                 
@@ -165,11 +143,6 @@ $(document).ready(()=> {
         })
 
     })
-
-    var clearCountryMarkers= () => {
-        Object.values(countryGroup).forEach(val => val.clearLayers());
-        //countryGroup.other.clearLayers()
-    }
 
     //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
@@ -198,7 +171,7 @@ $(document).ready(()=> {
 
             const handleSuccess = () => {
 
-                clearCountryMarkers()
+                countryInfo.obj.layerGroups.clearLayers();
 
                 switch ($("#naturalEvents").val()) {
                     case "wildfires":
