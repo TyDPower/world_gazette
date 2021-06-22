@@ -22,7 +22,7 @@ export var obj = {
         nowInDst: null,
     },
     layerGroups: L.layerGroup(),
-    updateCountryInfo(dataObj) {
+    updateInfo(dataObj) {
         if (dataObj) {
     
             obj.countryName = dataObj.name;
@@ -85,7 +85,7 @@ export var obj = {
             })
         })
     },
-    getCountryInfo(code) {
+    getInfo(code) {
         return new Promise((resolve, reject)=> {
             $.ajax(
                 {
@@ -132,6 +132,9 @@ export var obj = {
                 }
             )
         })
+
+    },
+    getCrimeIndex() {
 
     }
 }

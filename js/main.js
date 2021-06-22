@@ -83,9 +83,9 @@ $(document).ready(()=> {
 
         country.obj.getBorders(codeA3)
         .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
-        .then(()=>country.obj.getCountryInfo(codeA2))
+        .then(()=>country.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>modal.countryInfo(country.obj.updateCountryInfo()))
+        .then(()=>modal.countryInfo(country.obj.updateInfo()))
         .catch((val)=>console.log(val))
 
         $("#closeBtn").click(()=> {
