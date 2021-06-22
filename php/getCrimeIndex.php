@@ -5,7 +5,11 @@
 
     $startTime = microtime(true);
 
-    $url="https//www.numbeo.com/api/" . $_REQUEST["searchTerm"] . "?api_key=" . $_REQUEST["apiKey"] . "&country=" . $_REQUEST["countryName"];
+    //$url="https//www.numbeo.com/api/" . $_REQUEST["searchTerm"] . "?api_key=" . $_REQUEST["apiKey"] . "&country=" . $_REQUEST["countryName"];
+
+    $apiKey = "wvlo2tz1pwdnha";
+
+    $url="https//www.numbeo.com/api/country_crime?api_key=" . $apiKey;
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -13,13 +17,14 @@
     curl_setopt($curl, CURLOPT_URL, $url);
 
     $result = curl_exec($curl);
+    $result = json_decode($result, true);
 
     curl_close($curl);
 
     $output["status"]["code"] = "200";
     $output["status"]["name"] = "ok";
     $output["status"]["description"] = "success";
-    $output["data"] = json_decode($result, true);
+    $output["data"] = $result;
 
     header("Content-Type: application/json; charset=UTF-8");
 
