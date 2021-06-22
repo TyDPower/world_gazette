@@ -135,33 +135,29 @@ export var obj = {
     },
     getCrimeIndex(countryName, searchTerm, apiKey) {
 
-        return new Promise((resolve, reject)=> {
+        $.ajax({
+            url: "./php/getCrimeIndex.php",
+            type: "post",
+            dataType: "json",
+            data: {
+                apikey: apiKey,
+                searchTerm: searchTerm,
+                countryName: countryName,
+            },
 
-            $.ajax({
-                url: "./php/getCrimeIndex.php",
-                type: "post",
-                dataType: "json",
-                data: {
-                    apikey: apiKey,
-                    searchTerm: searchTerm,
-                    countryName: countryName,
-                },
-
-                success: (res)=> {
-                    if (res.status.name == "ok") {
-                        var rawData = res.data
-
-                        console.log(rawData)
-                    }
-
-                },
-
-                error: (err)=> {
-                    console.log(err)
+            success: (res)=> {
+                if (res.status.name == "ok") {
+                    var rawData = res.data
+                    console.log(rawData)
+                } else {
                 }
-            })
-        })
 
+            },
+
+            error: (err)=> {
+                console.log(err)
+            }
+        })
     }
 }
 
