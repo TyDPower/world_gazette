@@ -21,6 +21,51 @@ export var obj = {
         nowInDst: null,
     },
     layerGroups: L.layerGroup(),
+    updateInfo(dataObj) {
+        if (dataObj) {
+    
+            obj.countryName = dataObj.name;
+            obj.countryCoords = dataObj.coords;
+            obj.continent = dataObj.continent;
+            obj.flag = dataObj.flag;
+            obj.marker = dataObj.flag;
+            obj.currencyInfo.unitName = dataObj.currencyName;
+            obj.currencyInfo.subunitName = dataObj.currencySubunitName;
+            obj.currencyInfo.symbol = dataObj.currencySymbol;
+            obj.currencyInfo.symbolPosition = dataObj.symbolPos;
+            obj.roadInfo.driveSide = dataObj.driveSide;
+            obj.roadInfo.speedUnit = dataObj.speedUnit;
+            obj.timezoneInfo.name = dataObj.timezoneName;
+            obj.timezoneInfo.nowInDst = dataObj.dst;
+    
+        } else {
+            
+            var modalPlaceObj = {
+                name: obj.countryName,
+                coordsoords: obj.countryCoords,
+                continent: obj.continent,
+                flag: obj.flag,
+                currencyInfo: {
+                    name: obj.currencyInfo.unitName,
+                    subunit: obj.currencyInfo.subunitName,
+                    symbol: obj.currencyInfo.symbol,
+                    symbolPos:obj.currencyInfo.symbolPosition,
+                },
+                roadInfo: {
+                    driveSide: obj.roadInfo.driveSide,
+                    speedUnit: obj.roadInfo.speedUnit,
+                },
+                timezoneInfo: {
+                    name: obj.timezoneInfo.name,
+                    dst: obj.timezoneInfo.nowInDst,
+                }
+            }
+    
+            return modalPlaceObj
+    
+        }
+    
+    },
     getBorders(code) {
         return new Promise((resolve, reject)=> {
             $.getJSON("./common/countries.geo.json", (data)=> {
@@ -39,7 +84,7 @@ export var obj = {
             })
         })
     },
-    getCountryInfo(code) {
+    getInfo(code) {
         return new Promise((resolve, reject)=> {
             $.ajax(
                 {
@@ -70,7 +115,7 @@ export var obj = {
                                 dst: results.annotations.timezone.now_in_dst
                             };
 
-                            updateCountryInfo(countryData);
+                            this.updateInfo(countryData);
 
                             if (this.flag) {
                                 resolve()
@@ -87,51 +132,36 @@ export var obj = {
             )
         })
 
+    },
+    getCrimeIndex(countryName, searchTerm, apiKey) {
+
+        return new Promise((resolve, reject)=> {
+
+            $.ajax({
+                url: "./php/getCrimeIndex.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    apikey: apiKey,
+                    searchTerm: searchTerm,
+                    countryName: countryName,
+                },
+
+                success: (res)=> {
+                    if (res.status.name == "ok") {
+                        var rawData = res.data
+
+                        console.log(rawData)
+                    }
+
+                },
+
+                error: (err)=> {
+                    console.log(err)
+                }
+            })
+        })
+
     }
 }
 
-export const updateCountryInfo = (dataObj) => {
-    if (dataObj) {
-
-        obj.name = dataObj.name;
-        obj.coords = dataObj.coords;
-        obj.continent = dataObj.continent;
-        obj.flag = dataObj.flag;
-        obj.marker = dataObj.flag;
-        obj.currencyInfo.unitName = dataObj.currencyName;
-        obj.currencyInfo.subunitName = dataObj.currencySubunitName;
-        obj.currencyInfo.symbol = dataObj.currencySymbol;
-        obj.currencyInfo.symbolPosition = dataObj.symbolPos;
-        obj.roadInfo.driveSide = dataObj.driveSide;
-        obj.roadInfo.speedUnit = dataObj.speedUnit;
-        obj.timezoneInfo.name = dataObj.timezoneName;
-        obj.timezoneInfo.nowInDst = dataObj.dst;
-
-    } else {
-        
-        var modalPlaceObj = {
-            name: obj.name,
-            coordsoords: obj.coords,
-            continent: obj.continent,
-            flag: obj.flag,
-            currencyInfo: {
-                name: obj.currencyInfo.unitName,
-                subunit: obj.currencyInfo.subunitName,
-                symbol: obj.currencyInfo.symbol,
-                symbolPos:obj.currencyInfo.symbolPosition,
-            },
-            roadInfo: {
-                driveSide: obj.roadInfo.driveSide,
-                speedUnit: obj.roadInfo.speedUnit,
-            },
-            timezoneInfo: {
-                name: obj.timezoneInfo.name,
-                dst: obj.timezoneInfo.nowInDst,
-            }
-        }
-
-        return modalPlaceObj
-
-    }
-
-}

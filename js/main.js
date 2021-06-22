@@ -1,6 +1,7 @@
 import * as country from "../common/country.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
+import * as api from "../common/apiKeys.js"
 
 
 
@@ -90,16 +91,18 @@ $(document).ready(()=> {
         naturalEvents.obj.clearMarkers();
 
         country.obj.getBorders(codeA3)
-        .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders))
-        .addTo(map))
-        .then(()=>country.obj.getCountryInfo(codeA2))
+        .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
+        .then(()=>country.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>modal.countryInfo(country.updateCountryInfo()))
+        .then(()=>modal.countryInfo(country.obj.updateInfo()))
         .catch((val)=>console.log(val))
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
         })
+
+        const search = "country_crime"
+        country.obj.getCrimeIndex(codeA2, search, api.keys.numbeo);
 
     })
 
