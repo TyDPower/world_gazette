@@ -5,7 +5,7 @@
 
     $startTime = microtime(true);
 
-    $url="https://eonet.sci.gsfc.nasa.gov/api/v2.1/events?&days=" . $_REQUEST["period"];
+    $url="https//www.numbeo.com/api/" . $_REQUEST["searchTerm"] . "?api_key=" . $_REQUEST["apiKey"] . "&country=" . $_REQUEST["countryName"];
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
