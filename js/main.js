@@ -101,8 +101,7 @@ $(document).ready(()=> {
             $(".modal").hide();
         })
 
-        const search = "country_crime"
-        country.obj.getCrimeIndex(codeA2, search, api.keys.numbeo);
+        country.obj.getCrimeIndex();
 
     })
 
