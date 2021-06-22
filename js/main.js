@@ -94,7 +94,7 @@ $(document).ready(()=> {
         .addTo(map))
         .then(()=>country.obj.getCountryInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>modal.countryInfo(country.updateCountryInfo()))
+        .then(()=>modal.countryInfo(country.obj.updateInfo()))
         .catch((val)=>console.log(val))
 
         $("#closeBtn").click(()=> {
