@@ -1,6 +1,7 @@
 import * as country from "../common/country.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
+import * as api from "../common/apiKeys.js"
 
 
 
@@ -91,6 +92,9 @@ $(document).ready(()=> {
         $("#closeBtn").click(()=> {
             $(".modal").hide();
         })
+
+        const search = "country_crime"
+        country.obj.getCrimeIndex(codeA2, search, api.keys.numbeo);
 
     })
 
