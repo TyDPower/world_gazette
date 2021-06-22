@@ -22,6 +22,51 @@ export var obj = {
         nowInDst: null,
     },
     layerGroups: L.layerGroup(),
+    updateCountryInfo(dataObj) {
+        if (dataObj) {
+    
+            obj.countryName = dataObj.name;
+            obj.countryCoords = dataObj.coords;
+            obj.continent = dataObj.continent;
+            obj.flag = dataObj.flag;
+            obj.marker = dataObj.flag;
+            obj.currencyInfo.unitName = dataObj.currencyName;
+            obj.currencyInfo.subunitName = dataObj.currencySubunitName;
+            obj.currencyInfo.symbol = dataObj.currencySymbol;
+            obj.currencyInfo.symbolPosition = dataObj.symbolPos;
+            obj.roadInfo.driveSide = dataObj.driveSide;
+            obj.roadInfo.speedUnit = dataObj.speedUnit;
+            obj.timezoneInfo.name = dataObj.timezoneName;
+            obj.timezoneInfo.nowInDst = dataObj.dst;
+    
+        } else {
+            
+            var modalPlaceObj = {
+                name: obj.countryName,
+                coordsoords: obj.countryCoords,
+                continent: obj.continent,
+                flag: obj.flag,
+                currencyInfo: {
+                    name: obj.currencyInfo.unitName,
+                    subunit: obj.currencyInfo.subunitName,
+                    symbol: obj.currencyInfo.symbol,
+                    symbolPos:obj.currencyInfo.symbolPosition,
+                },
+                roadInfo: {
+                    driveSide: obj.roadInfo.driveSide,
+                    speedUnit: obj.roadInfo.speedUnit,
+                },
+                timezoneInfo: {
+                    name: obj.timezoneInfo.name,
+                    dst: obj.timezoneInfo.nowInDst,
+                }
+            }
+    
+            return modalPlaceObj
+    
+        }
+    
+    },
     getBorders(code) {
         return new Promise((resolve, reject)=> {
             $.getJSON("./common/countries.geo.json", (data)=> {
@@ -91,48 +136,3 @@ export var obj = {
     }
 }
 
-export const updateCountryInfo = (dataObj) => {
-    if (dataObj) {
-
-        obj.countryName = dataObj.name;
-        obj.countryCoords = dataObj.coords;
-        obj.continent = dataObj.continent;
-        obj.flag = dataObj.flag;
-        obj.marker = dataObj.flag;
-        obj.currencyInfo.unitName = dataObj.currencyName;
-        obj.currencyInfo.subunitName = dataObj.currencySubunitName;
-        obj.currencyInfo.symbol = dataObj.currencySymbol;
-        obj.currencyInfo.symbolPosition = dataObj.symbolPos;
-        obj.roadInfo.driveSide = dataObj.driveSide;
-        obj.roadInfo.speedUnit = dataObj.speedUnit;
-        obj.timezoneInfo.name = dataObj.timezoneName;
-        obj.timezoneInfo.nowInDst = dataObj.dst;
-
-    } else {
-        
-        var modalPlaceObj = {
-            name: obj.countryName,
-            coordsoords: obj.countryCoords,
-            continent: obj.continent,
-            flag: obj.flag,
-            currencyInfo: {
-                name: obj.currencyInfo.unitName,
-                subunit: obj.currencyInfo.subunitName,
-                symbol: obj.currencyInfo.symbol,
-                symbolPos:obj.currencyInfo.symbolPosition,
-            },
-            roadInfo: {
-                driveSide: obj.roadInfo.driveSide,
-                speedUnit: obj.roadInfo.speedUnit,
-            },
-            timezoneInfo: {
-                name: obj.timezoneInfo.name,
-                dst: obj.timezoneInfo.nowInDst,
-            }
-        }
-
-        return modalPlaceObj
-
-    }
-
-}
