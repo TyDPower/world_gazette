@@ -80,7 +80,7 @@ $(document).ready(()=> {
                     .setContent(data)
                     .openOn(map);
             map.panTo(country.obj.coords);
-            country.obj.layerGroups.addLayer(L.marker(country.obj.coords)).addTo(map);
+            //country.obj.layerGroups.addLayer(L.marker(country.obj.coords)).addTo(map);
             if (map.getZoom() > 5) {
                 map.setZoom(5)
             }
@@ -90,7 +90,8 @@ $(document).ready(()=> {
         naturalEvents.obj.clearMarkers();
 
         country.obj.getBorders(codeA3)
-        .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
+        .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders))
+        .addTo(map))
         .then(()=>country.obj.getCountryInfo(codeA2))
         .then(()=>goToCountry())
         .then(()=>modal.countryInfo(country.updateCountryInfo()))
