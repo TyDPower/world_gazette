@@ -24,8 +24,8 @@ export var obj = {
     updateInfo(dataObj) {
         if (dataObj) {
     
-            obj.countryName = dataObj.name;
-            obj.countryCoords = dataObj.coords;
+            obj.name = dataObj.name;
+            obj.coords = dataObj.coords;
             obj.continent = dataObj.continent;
             obj.flag = dataObj.flag;
             obj.marker = dataObj.flag;
@@ -41,8 +41,8 @@ export var obj = {
         } else {
             
             var modalPlaceObj = {
-                name: obj.countryName,
-                coordsoords: obj.countryCoords,
+                name: obj.name,
+                coordsoords: obj.coords,
                 continent: obj.continent,
                 flag: obj.flag,
                 currencyInfo: {

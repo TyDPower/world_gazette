@@ -18,6 +18,6 @@ export const countryInfo = (data) => {
     $("#speedUnit").html(data.roadInfo.speedUnit);
     $("#timezoneName").html(data.timezoneInfo.name);
     $("#timezoneDst").html(checkDST(data.timezoneInfo.dst));
-    //$(".modal").show();
+    $(".modal").show();
     
 }
