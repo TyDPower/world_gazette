@@ -116,7 +116,7 @@ export var obj = {
                                 dst: results.annotations.timezone.now_in_dst
                             };
 
-                            updateCountryInfo(countryData);
+                            this.updateInfo(countryData);
 
                             if (this.flag) {
                                 resolve()
@@ -134,7 +134,34 @@ export var obj = {
         })
 
     },
-    getCrimeIndex() {
+    getCrimeIndex(countryName, searchTerm, apiKey) {
+
+        return new Promise((resolve, reject)=> {
+
+            $.ajax({
+                url: "./php/getCrimeIndex.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    apikey: apiKey,
+                    searchTerm: searchTerm,
+                    countryName: countryName,
+                },
+
+                success: (res)=> {
+                    if (res.status.name == "ok") {
+                        var rawData = res.data
+
+                        console.log(rawData)
+                    }
+
+                },
+
+                error: (err)=> {
+                    console.log(err)
+                }
+            })
+        })
 
     }
 }
