@@ -11,7 +11,8 @@ export var obj = {
         subunitName: null,
         symbol: null,
         symbolPosition: null,
-        code: null
+        code: null,
+        compare: [null, null],
     },
     roadInfo: {
         driveSide: null,
@@ -178,6 +179,49 @@ export var obj = {
                         i.isLoaded = true
                         
                         if (i.isLoaded) {
+                            resolve()
+                        } else {
+                            reject()
+                        }
+
+                    }
+    
+                },
+    
+                error: (err)=> {
+                    console.log(err)
+                }
+            })
+        })
+    },
+    getCurrencyExchange(selectedCurrency, myCurrency) {
+
+        return new Promise((resolve, reject)=> {
+
+            var currenciesCombined;
+
+            if (myCurrency) {
+                currenciesCombined =  myCurrency + "_" + selectedCurrency;
+            } else {
+                currenciesCombined = selectedCurrency + "_USD";
+            }
+
+            $.ajax({
+                url: "./php/getCurrencyExchange.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    currencies: currenciesCombined,
+                },
+    
+                success: (res)=> {
+
+                    if (res.status.name == "ok") {
+
+                        this.currencyInfo.compare[0] = currenciesCombined
+                        this.currencyInfo.compare[1] = res.data[currenciesCombined].toFixed(4);
+                        
+                        if (currenciesCombined) {
                             resolve()
                         } else {
                             reject()
