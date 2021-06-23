@@ -67,21 +67,36 @@ $(document).ready(()=> {
 
         const codeA3 = $("#countryList").val().slice(7, 10);
         const codeA2 = $("#countryList").val().slice(19, 21);
-        
+
+        let countryInfo = country.obj;        
 
         const goToCountry = () => {
-            var data = `${country.obj.name}<br>
-                        ${country.obj.continent}<br>
-                        ${country.obj.flag}`;
-            L.popup()
-                    .setLatLng(country.obj.coords)
-                    .setContent(data)
-                    .openOn(map);
             map.panTo(country.obj.coords);
-            //country.obj.layerGroups.addLayer(L.marker(country.obj.coords)).addTo(map);
+            country.obj.layerGroups.addLayer(
+                L.popup()
+                    .setLatLng(country.obj.coords)
+                    .setContent("Loading...")
+                    .openOn(map)
+            );
             if (map.getZoom() > 5) {
                 map.setZoom(5)
             }
+        }
+
+        const countryPopup = () => {
+            var data = `${countryInfo.name}<br>
+                        Crime: ${countryInfo.indexes.crime}<br>
+                        Health: ${countryInfo.indexes.health}<br>
+                        Traffic: ${countryInfo.indexes.traffic}<br>
+                        Pollution: ${countryInfo.indexes.pollution}<br>
+                        ${countryInfo.flag}`;
+            country.obj.layerGroups.addLayer(
+                L.popup()
+                    .setLatLng(country.obj.coords)
+                    .setContent(data)
+                    .openOn(map)
+            );
+
         }
 
         country.obj.layerGroups.clearLayers();
@@ -91,21 +106,27 @@ $(document).ready(()=> {
         .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
         .then(()=>country.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>modal.countryInfo(country.obj.updateInfo()))
+
+        countryInfo.getCrimeIndex(codeA2)
+        .then(()=>countryInfo.getHealthIndex(codeA2))
+        .then(()=>countryInfo.getTrafficIndex(codeA2))
+        .then(()=>countryInfo.getPollutionIndex(codeA2))
+        .then(()=>countryPopup())
         .catch((val)=>console.log(val))
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
         })
 
-        country.obj.getAllIndexes("us").then(()=> console.log(country.obj.indexes))
+
 
     })
 
     //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
 
-        naturalEvents.obj.clearMarkers(); 
+        naturalEvents.obj.clearMarkers();
+        country.obj.layerGroups.clearLayers();
 
         let panToCenter = () => {
             map.panTo([0, 0])
