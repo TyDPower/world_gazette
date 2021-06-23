@@ -85,10 +85,9 @@ $(document).ready(()=> {
 
         const countryInfoPopup = () => {
             var data = `${countryInfo.name}<br>
-                        Crime: ${countryInfo.indexes.crime}<br>
-                        Health: ${countryInfo.indexes.health}<br>
-                        Traffic: ${countryInfo.indexes.traffic}<br>
-                        Pollution: ${countryInfo.indexes.pollution}<br>
+                        Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
+                        Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
+                        Exchange Rate: ??<br>
                         ${countryInfo.flag}`;
             country.obj.layerGroups.addLayer(
                 L.popup()
