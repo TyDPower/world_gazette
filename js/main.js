@@ -83,7 +83,7 @@ $(document).ready(()=> {
             }
         }
 
-        const countryPopup = () => {
+        const countryInfoPopup = () => {
             var data = `${countryInfo.name}<br>
                         Crime: ${countryInfo.indexes.crime}<br>
                         Health: ${countryInfo.indexes.health}<br>
@@ -106,13 +106,8 @@ $(document).ready(()=> {
         .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
         .then(()=>country.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-
-        countryInfo.getCrimeIndex(codeA2)
-        .then(()=>countryInfo.getHealthIndex(codeA2))
-        .then(()=>countryInfo.getTrafficIndex(codeA2))
-        .then(()=>countryInfo.getPollutionIndex(codeA2))
-        .then(()=>countryPopup())
-        .catch((val)=>console.log(val))
+        .then(()=>country.obj.getCountryIndices(codeA2))        
+        .then(()=> countryInfoPopup())
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
