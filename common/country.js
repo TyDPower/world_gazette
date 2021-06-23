@@ -28,6 +28,9 @@ export var obj = {
         costOfLiving: null,
         rentIndex: null,
         groceriesIndex: null,
+        traffic: null,
+        pollution: null,
+        isLoaded: false,
     },
     layerGroups: L.layerGroup(),
     updateInfo(dataObj) {
@@ -146,7 +149,7 @@ export var obj = {
 
         return new Promise((resolve, reject)=> {
             $.ajax({
-                url: "./php/getCrimeIndex.php",
+                url: "./php/getCountryIndices.php",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -167,12 +170,17 @@ export var obj = {
                         i.costOfLiving = d.contributors_cost_of_living;
                         i.rentIndex = d.rent_index;
                         i.groceriesIndex = d.groceries_index;
+                        i.traffic = d.traffic_index;
+                        i.pollution = d.pollution_index
+                        i.isLoaded = true
+
+                        console.log(d)
 
                         
-                        if (i.crime && i.saftey && i.health && i.qualityOfLife && i.costOfLiving && i.rentIndex && i.groceriesIndex) {
-                            resolve()
+                        if (i.isLoaded) {
+                            resolve(console.log(i))
                         } else {
-                            reject("Indexes are null!")
+                            reject(console.log(i))
                         }
 
                     }
