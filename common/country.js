@@ -22,7 +22,8 @@ export var obj = {
     },
     indexes: {
         crime: null,
-        saftey: null
+        saftey: null,
+        health: null
     },
     layerGroups: L.layerGroup(),
     updateInfo(dataObj) {
@@ -169,6 +170,125 @@ export var obj = {
                     console.log(err)
                 }
             })
+        })
+    },
+    getHealthIndex(isoCodeA2) {
+
+        return new Promise((resolve, reject)=> {
+            $.ajax({
+                url: "./php/getHealthIndex.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    isoCodeA2: isoCodeA2,
+                },
+    
+                success: (res)=> {
+
+                    if (res.status.name == "ok") {
+
+                        this.indexes.health = res.data.index_healthcare;
+                        
+                        if (this.indexes.health) {
+                            resolve()
+                        } else {
+                            reject("Indexes are null!")
+                        }
+
+                    }
+    
+                },
+    
+                error: (err)=> {
+                    console.log(err)
+                }
+            })
+        })
+    },
+    getPollutionIndex(isoCodeA2) {
+
+        return new Promise((resolve, reject)=> {
+            $.ajax({
+                url: "./php/getPollutionIndex.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    isoCodeA2: isoCodeA2,
+                },
+    
+                success: (res)=> {
+
+                    if (res.status.name == "ok") {
+
+                        this.indexes.pollution = res.data.index_pollution;
+                        
+                        if (this.indexes.pollution) {
+                            resolve()
+                        } else {
+                            reject("Indexes are null!")
+                        }
+
+                    }
+    
+                },
+    
+                error: (err)=> {
+                    console.log(err)
+                }
+            })
+        })
+    },
+    getTrafficIndex(isoCodeA2) {
+
+        return new Promise((resolve, reject)=> {
+            $.ajax({
+                url: "./php/getTrafficIndex.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    isoCodeA2: isoCodeA2,
+                },
+    
+                success: (res)=> {
+
+                    if (res.status.name == "ok") {
+
+                        this.indexes.traffic = res.data.index_traffic;
+                        
+                        if (this.indexes.traffic) {
+                            resolve()
+                        } else {
+                            reject(console.log(this.indexes))
+                        }
+
+                    }
+    
+                },
+    
+                error: (err)=> {
+                    console.log(err)
+                }
+            })
+        })
+    },
+    getAllIndexes(isoCodeA2) {
+        const crime = this.indexes.crime;
+        const health = this.indexes.health;
+        const pollution = this.indexes.pollution;
+        const traffic = this.indexes.traffic;
+
+        return new Promise((resolve, reject)=> {
+
+            this.getCrimeIndex(isoCodeA2);
+            this.getHealthIndex(isoCodeA2);
+            this.getTrafficIndex(isoCodeA2);
+            this.getPollutionIndex(isoCodeA2);
+
+            if (crime && health && pollution && traffic) {
+                resolve()
+            } else {
+                reject("Null values")
+            }
         })
     }
 }
