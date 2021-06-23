@@ -20,6 +20,10 @@ export var obj = {
         name: null,
         nowInDst: null,
     },
+    indexes: {
+        crime: null,
+        saftey: null
+    },
     layerGroups: L.layerGroup(),
     updateInfo(dataObj) {
         if (dataObj) {
@@ -133,30 +137,38 @@ export var obj = {
         })
 
     },
-    getCrimeIndex(countryName, searchTerm, apiKey) {
+    getCrimeIndex(isoCodeA2) {
 
-        $.ajax({
-            url: "./php/getCrimeIndex.php",
-            type: "post",
-            dataType: "json",
-            data: {
-                apikey: apiKey,
-                searchTerm: searchTerm,
-                countryName: countryName,
-            },
+        return new Promise((resolve, reject)=> {
+            $.ajax({
+                url: "./php/getCrimeIndex.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    isoCodeA2: isoCodeA2,
+                },
+    
+                success: (res)=> {
 
-            success: (res)=> {
-                if (res.status.name == "ok") {
-                    var rawData = res.data
-                    console.log(rawData)
-                } else {
+                    if (res.status.name == "ok") {
+
+                        this.indexes.crime = res.data.index_crime
+                        this.indexes.saftey = res.data.index_safety
+                        
+                        if (this.indexes.crime && this.indexes.saftey) {
+                            resolve()
+                        } else {
+                            reject("Indexes are null!")
+                        }
+
+                    }
+    
+                },
+    
+                error: (err)=> {
+                    console.log(err)
                 }
-
-            },
-
-            error: (err)=> {
-                console.log(err)
-            }
+            })
         })
     }
 }
