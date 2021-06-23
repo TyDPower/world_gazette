@@ -98,7 +98,7 @@ $(document).ready(()=> {
             $(".modal").hide();
         })
 
-        country.obj.getCrimeIndex("us").then(()=> console.log(country.obj.indexes))
+        country.obj.getAllIndexes("us").then(()=> console.log(country.obj.indexes))
 
     })
 
