@@ -1,9 +1,6 @@
 import * as country from "../common/country.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
-import * as api from "../common/apiKeys.js"
-
-
 
 $(document).ready(()=> {
 
@@ -101,7 +98,7 @@ $(document).ready(()=> {
             $(".modal").hide();
         })
 
-        country.obj.getCrimeIndex();
+        country.obj.getCrimeIndex("us").then(()=> console.log(country.obj.indexes))
 
     })
 
