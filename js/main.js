@@ -87,7 +87,7 @@ $(document).ready(()=> {
             var data = `${countryInfo.name}<br>
                         Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
                         Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
-                        Exchange Rate: ??<br>
+                        Exchange Rate: ${countryInfo.currencyInfo.compare[1]}USD<br>
                         ${countryInfo.flag}`;
             country.obj.layerGroups.addLayer(
                 L.popup()
@@ -105,14 +105,13 @@ $(document).ready(()=> {
         .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
         .then(()=>country.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>country.obj.getCountryIndices(codeA2))        
+        .then(()=>country.obj.getCountryIndices(codeA2))
+        .then(()=>country.obj.getCurrencyExchange(country.obj.currencyInfo.code))        
         .then(()=> countryInfoPopup())
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
-        })
-
-
+        });
 
     })
 
