@@ -11,6 +11,7 @@ export var obj = {
         subunitName: null,
         symbol: null,
         symbolPosition: null,
+        code: null
     },
     roadInfo: {
         driveSide: null,
@@ -45,6 +46,7 @@ export var obj = {
             obj.currencyInfo.subunitName = dataObj.currencySubunitName;
             obj.currencyInfo.symbol = dataObj.currencySymbol;
             obj.currencyInfo.symbolPosition = dataObj.symbolPos;
+            obj.currencyInfo.code = dataObj.currencyCode;
             obj.roadInfo.driveSide = dataObj.driveSide;
             obj.roadInfo.speedUnit = dataObj.speedUnit;
             obj.timezoneInfo.name = dataObj.timezoneName;
@@ -100,7 +102,7 @@ export var obj = {
         return new Promise((resolve, reject)=> {
             $.ajax(
                 {
-                    url: "./php/getPlaceInfo.php",
+                    url: "./php/getCountryInfo.php",
                     type: "post",
                     dataType: "json",
                     data: {
@@ -121,10 +123,11 @@ export var obj = {
                                 currencySubunitName: results.annotations.currency.subunit,
                                 currencySymbol: results.annotations.currency.symbol,
                                 symbolPos: results.annotations.currency.symbol_first,
+                                currencyCode: results.annotations.currency.iso_code,
                                 driveSide: results.annotations.roadinfo.drive_on,
                                 speedUnit: results.annotations.roadinfo.speed_in,
                                 timezoneName: results.annotations.timezone.name,
-                                dst: results.annotations.timezone.now_in_dst
+                                dst: results.annotations.timezone.now_in_dst,
                             };
 
                             this.updateInfo(countryData);
@@ -173,14 +176,11 @@ export var obj = {
                         i.traffic = d.traffic_index;
                         i.pollution = d.pollution_index
                         i.isLoaded = true
-
-                        console.log(d)
-
                         
                         if (i.isLoaded) {
-                            resolve(console.log(i))
+                            resolve()
                         } else {
-                            reject(console.log(i))
+                            reject()
                         }
 
                     }
