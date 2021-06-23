@@ -4,12 +4,10 @@
     error_reporting(E_ALL);
 
     $startTime = microtime(true);
-
-    //$url="https//www.numbeo.com/api/" . $_REQUEST["searchTerm"] . "?api_key=" . $_REQUEST["apiKey"] . "&country=" . $_REQUEST["countryName"];
-
     $apiKey = "wvlo2tz1pwdnha";
 
-    $url="https//www.numbeo.com/api/country_crime?api_key=" . $apiKey;
+    $url="https://www.numbeo.com/api/country_crime?api_key=" . $apiKey . "&country=" . $_REQUEST["isoCodeA2"];
+
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
