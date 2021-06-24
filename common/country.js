@@ -63,7 +63,7 @@ export var obj = {
         } else {
             
             var modalPlaceObj = {
-                name: obj.name,
+                countryName: obj.name,
                 coordsoords: obj.coords,
                 continent: obj.continent,
                 flag: obj.flag,
@@ -76,7 +76,8 @@ export var obj = {
                     name: obj.currencyInfo.unitName,
                     subunit: obj.currencyInfo.subunitName,
                     symbol: obj.currencyInfo.symbol,
-                    symbolPos:obj.currencyInfo.symbolPosition,
+                    symbolPos: obj.currencyInfo.symbolPosition,
+                    foreignExchange: this.currencyInfo.foreignExchange,
                 },
                 roadInfo: {
                     driveSide: obj.roadInfo.driveSide,
@@ -85,6 +86,13 @@ export var obj = {
                 timezoneInfo: {
                     name: obj.timezoneInfo.name,
                     dst: obj.timezoneInfo.nowInDst,
+                },
+                indexes: {
+                    traffic: this.indexes.traffic,
+                    qualityOfLife: this.indexes.qualityOfLife,
+                    healthcare: this.indexes.healthcare,
+                    crime: this.indexes.crime,
+                    pollution: this.indexes.pollution
                 }
             }
     
