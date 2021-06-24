@@ -8,25 +8,29 @@ export const countryInfo = (data) => {
         }
     }
 
-    $("#countryName").html(data.name);
+    $("#countryName").html(data.countryName);
     $("#continent").html(data.continent);
-    $("#flag").html(data.flag);
-    $("#currencyName").html(data.currencyInfo.name);
-    $("#currencySubunit").html(data.currencyInfo.subunit);
-    $("#currencySymbol").html(data.currencyInfo.symbol);
-    $("#driveSide").html(data.roadInfo.driveSide);
-    $("#speedUnit").html(data.roadInfo.speedUnit);
-    $("#timezoneName").html(data.timezoneInfo.name);
-    $("#timezoneDst").html(checkDST(data.timezoneInfo.dst));
-
     $("#population").html(data.societyInfo.population);
     $("#languagePrimary").html(data.societyInfo.languagePrimary);
     $("#languagesOther").html(data.societyInfo.languagesOther);
+    $("#flag").html(data.flag);
+    $("#currencyName").html("Currency name: " + data.currencyInfo.name);
+    $("#currencySubunit").html("Smallest unit: " + data.currencyInfo.subunit);
+    $("#currencySymbol").html("Symbol: " + data.currencyInfo.symbol);
+    $("#foreignExchange").html("USD to " + data.currencyInfo.name + ": " + "$" + data.currencyInfo.foreignExchange[1]);
+    $("#driveSide").html("Drive on the " + data.roadInfo.driveSide + " side of the road.");
+    $("#speedUnit").html("Speed is mesured in " + data.roadInfo.speedUnit);
     $("#trafficIndex").html(data.indexes.traffic);
     $("#qualityOfLifeIndex").html(data.indexes.qualityOfLife);
     $("#healthcareIndex").html(data.indexes.healthcare);
     $("#crimeIndex").html(data.indexes.crime);
     $("#pollutionIndex").html(data.indexes.pollution);
+    $("#timezoneName").html(data.timezoneInfo.name);
+    $("#timezoneDst").html(checkDST(data.timezoneInfo.dst));
+
+    
+    
+    
     $("#countryModal").show();
     
 }
