@@ -107,7 +107,7 @@ $(document).ready(()=> {
         .then(()=>country.obj.getCountryIndices(codeA2))
         .then(()=>country.obj.getCurrencyExchange(country.obj.currencyInfo.code))        
         .then(()=> countryInfoPopup())
-        .then(()=> modal.countryInfo())
+        .then(()=> modal.countryInfo(country.obj.updateInfo()))
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
