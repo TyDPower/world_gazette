@@ -37,11 +37,20 @@ $(document).ready(()=> {
             
                         success: (res)=> {
                             if (res.status.name == "ok") {
-                                var country = res.data.results[0].components["ISO_3166-1_alpha-3"]
+                                var countryInfo = res.data.results[0].components
+                                countryUserLocation.obj.isoCodeA2 = countryInfo["ISO_3166-1_alpha-2"];
+                                countryUserLocation.obj.isoCodeA3 = countryInfo["ISO_3166-1_alpha-3"];
+                                countryUserLocation.obj.name = countryInfo.country;
+
                                 for (let i=0; i<data.features.length; i++) {
-                                    if (data.features[i].properties.ISO_A3 == country) {
+                                    if (data.features[i].properties.ISO_A3 == countryInfo["ISO_3166-1_alpha-3"]) {
                                         let countryBorder = data.features[i];
+                                        countryUserLocation.obj.borders = countryBorder;
                                         L.geoJSON(countryBorder).addTo(map);
+                                        countryUserLocation.obj.getInfo(countryUserLocation.obj.isoCodeA2)
+                                        .then(()=> countryUserLocation.obj.getCountryIndices(countryUserLocation.obj.isoCodeA2))
+                                        .then(()=> countryUserLocation.obj.getCurrencyExchange("USD", countryUserLocation.obj.currencyInfo.code))
+                                        .then(()=> console.log(countryUserLocation.obj))
                                         break;
                                     }
                                 }
