@@ -1,4 +1,5 @@
-import * as country from "../common/country.js";
+import * as countrySelected from "../common/countrySelected.js";
+import * as countryUserLocation from "../common/countryUserLocation.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js"
 
@@ -68,13 +69,13 @@ $(document).ready(()=> {
         const codeA3 = $("#countryList").val().slice(7, 10);
         const codeA2 = $("#countryList").val().slice(19, 21);
 
-        let countryInfo = country.obj;        
+        let countryInfo = countrySelected.obj;        
 
         const goToCountry = () => {
-            map.panTo(country.obj.coords);
-            country.obj.layerGroups.addLayer(
+            map.panTo(countrySelected.obj.coords);
+            countrySelected.obj.layerGroups.addLayer(
                 L.popup()
-                    .setLatLng(country.obj.coords)
+                    .setLatLng(countrySelected.obj.coords)
                     .setContent("Loading...")
                     .openOn(map)
             );
@@ -88,26 +89,26 @@ $(document).ready(()=> {
                         Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
                         Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
                         Exchange Rate: ${countryInfo.currencyInfo.foreignExchange[1]}USD<br>`;
-            country.obj.layerGroups.addLayer(
+            countrySelected.obj.layerGroups.addLayer(
                 L.popup()
-                    .setLatLng(country.obj.coords)
+                    .setLatLng(countrySelected.obj.coords)
                     .setContent(data)
                     .openOn(map)
             );
 
         }
 
-        country.obj.layerGroups.clearLayers();
+        countrySelected.obj.layerGroups.clearLayers();
         naturalEvents.obj.clearMarkers();
 
-        country.obj.getBorders(codeA3)
-        .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
-        .then(()=>country.obj.getInfo(codeA2))
+        countrySelected.obj.getBorders(codeA3)
+        .then((borders)=>countrySelected.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
+        .then(()=>countrySelected.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>country.obj.getCountryIndices(codeA2))
-        .then(()=>country.obj.getCurrencyExchange(country.obj.currencyInfo.code))        
+        .then(()=>countrySelected.obj.getCountryIndices(codeA2))
+        .then(()=>countrySelected.obj.getCurrencyExchange(countrySelected.obj.currencyInfo.code))        
         .then(()=> countryInfoPopup())
-        .then(()=> modal.countryInfo(country.obj.updateInfo()))
+        .then(()=> modal.countryInfo(countrySelected.obj.updateInfo()))
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
@@ -119,7 +120,7 @@ $(document).ready(()=> {
     $("#naturalEvents").change(()=> {
 
         naturalEvents.obj.clearMarkers();
-        country.obj.layerGroups.clearLayers();
+        countrySelected.obj.layerGroups.clearLayers();
 
         let panToCenter = () => {
             map.panTo([0, 0])
@@ -144,7 +145,7 @@ $(document).ready(()=> {
 
             const handleSuccess = () => {
 
-                country.obj.layerGroups.clearLayers();
+                countrySelected.obj.layerGroups.clearLayers();
 
                 switch ($("#naturalEvents").val()) {
                     case "wildfires":
