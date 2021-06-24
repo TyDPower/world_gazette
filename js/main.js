@@ -107,6 +107,7 @@ $(document).ready(()=> {
         .then(()=>goToCountry())
         .then(()=>country.obj.getCountryIndices(codeA2))        
         .then(()=> countryInfoPopup())
+        .then(()=> modal.countryInfo())
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();

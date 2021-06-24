@@ -18,6 +18,15 @@ export const countryInfo = (data) => {
     $("#speedUnit").html(data.roadInfo.speedUnit);
     $("#timezoneName").html(data.timezoneInfo.name);
     $("#timezoneDst").html(checkDST(data.timezoneInfo.dst));
-    //$("#countryModal").show();
+
+    $("#population").html(data.societyInfo.population);
+    $("#languagePrimary").html(data.societyInfo.languagePrimary);
+    $("#languagesOther").html(data.societyInfo.languagesOther);
+    $("#trafficIndex").html(data.indexes.traffic);
+    $("#qualityOfLifeIndex").html(data.indexes.qualityOfLife);
+    $("#healthcareIndex").html(data.indexes.healthcare);
+    $("#crimeIndex").html(data.indexes.crime);
+    $("#pollutionIndex").html(data.indexes.pollution);
+    $("#countryModal").show();
     
 }

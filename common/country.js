@@ -6,6 +6,11 @@ export var obj = {
     coords: [],
     continent: null,
     flag: null,
+    societyInfo: {
+        languagePrimary: null,
+        languagesOther: [],
+        population: null,
+    },
     currencyInfo: {
         unitName: null,
         subunitName: null,
@@ -24,13 +29,15 @@ export var obj = {
     indexes: {
         crime: null,
         saftey: null,
-        health: null,
+        healthcare: null,
         qualityOfLife: null,
         costOfLiving: null,
         rentIndex: null,
         groceriesIndex: null,
         traffic: null,
         pollution: null,
+        resturant: null,
+        purchasingPower: null,
         isLoaded: false,
     },
     layerGroups: L.layerGroup(),
@@ -59,6 +66,11 @@ export var obj = {
                 coordsoords: obj.coords,
                 continent: obj.continent,
                 flag: obj.flag,
+                societyInfo: {
+                    population: obj.societyInfo.pollution,
+                    languagePrimary: this.languagePrimary,
+                    languagesOther: this.languagesOther,
+                },
                 currencyInfo: {
                     name: obj.currencyInfo.unitName,
                     subunit: obj.currencyInfo.subunitName,
@@ -168,13 +180,15 @@ export var obj = {
 
                         i.crime = d.crime_index;
                         i.saftey = d.safety_index;
-                        i.health = d.health_care_index;
+                        i.healthcare = d.health_care_index;
                         i.qualityOfLife = d.quality_of_life_index;
                         i.costOfLiving = d.contributors_cost_of_living;
                         i.rentIndex = d.rent_index;
                         i.groceriesIndex = d.groceries_index;
                         i.traffic = d.traffic_index;
-                        i.pollution = d.pollution_index
+                        i.pollution = d.pollution_index;
+                        i.resturant = d.restaurant_price_index;
+                        i.purchasingPower= d.purchasing_power_incl_rent_index;
                         i.isLoaded = true
                         
                         if (i.isLoaded) {
