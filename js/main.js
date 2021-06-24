@@ -84,11 +84,10 @@ $(document).ready(()=> {
         }
 
         const countryInfoPopup = () => {
-            var data = `${countryInfo.name}<br>
+            var data = `${countryInfo.flag} ${countryInfo.name}<br>
                         Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
                         Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
-                        Exchange Rate: ??<br>
-                        ${countryInfo.flag}`;
+                        Exchange Rate: ${countryInfo.currencyInfo.foreignExchange[1]}USD<br>`;
             country.obj.layerGroups.addLayer(
                 L.popup()
                     .setLatLng(country.obj.coords)
@@ -105,15 +104,14 @@ $(document).ready(()=> {
         .then((borders)=>country.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
         .then(()=>country.obj.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>country.obj.getCountryIndices(codeA2))        
+        .then(()=>country.obj.getCountryIndices(codeA2))
+        .then(()=>country.obj.getCurrencyExchange(country.obj.currencyInfo.code))        
         .then(()=> countryInfoPopup())
         .then(()=> modal.countryInfo())
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
-        })
-
-
+        });
 
     })
 
