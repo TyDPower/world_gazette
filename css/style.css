@@ -44,3 +44,7 @@ header {
     cursor: pointer;
     color: #000;
 }
+
+#countryName {
+    display: inline;
+}
