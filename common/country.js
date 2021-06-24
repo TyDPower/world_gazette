@@ -12,7 +12,7 @@ export var obj = {
         symbol: null,
         symbolPosition: null,
         code: null,
-        compare: [null, null],
+        foreignExchange: [null, null],
     },
     roadInfo: {
         driveSide: null,
@@ -218,8 +218,8 @@ export var obj = {
 
                     if (res.status.name == "ok") {
 
-                        this.currencyInfo.compare[0] = currenciesCombined
-                        this.currencyInfo.compare[1] = res.data[currenciesCombined].toFixed(4);
+                        this.currencyInfo.foreignExchange[0] = currenciesCombined
+                        this.currencyInfo.foreignExchange[1] = res.data[currenciesCombined].toFixed(4);
                         
                         if (currenciesCombined) {
                             resolve()

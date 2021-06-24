@@ -87,7 +87,7 @@ $(document).ready(()=> {
             var data = `${countryInfo.flag} ${countryInfo.name}<br>
                         Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
                         Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
-                        Exchange Rate: ${countryInfo.currencyInfo.compare[1]}USD<br>`;
+                        Exchange Rate: ${countryInfo.currencyInfo.foreignExchange[1]}USD<br>`;
             country.obj.layerGroups.addLayer(
                 L.popup()
                     .setLatLng(country.obj.coords)
