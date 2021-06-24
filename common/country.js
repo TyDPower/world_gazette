@@ -62,7 +62,7 @@ export var obj = {
     
         } else {
             
-            var modalPlaceObj = {
+            var placeObj = {
                 countryName: obj.name,
                 coordsoords: obj.coords,
                 continent: obj.continent,
@@ -96,7 +96,7 @@ export var obj = {
                 }
             }
     
-            return modalPlaceObj
+            return placeObj
     
         }
     
