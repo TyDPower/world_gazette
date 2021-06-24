@@ -84,11 +84,10 @@ $(document).ready(()=> {
         }
 
         const countryInfoPopup = () => {
-            var data = `${countryInfo.name}<br>
+            var data = `${countryInfo.flag} ${countryInfo.name}<br>
                         Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
                         Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
-                        Exchange Rate: ${countryInfo.currencyInfo.compare[1]}USD<br>
-                        ${countryInfo.flag}`;
+                        Exchange Rate: ${countryInfo.currencyInfo.compare[1]}USD<br>`;
             country.obj.layerGroups.addLayer(
                 L.popup()
                     .setLatLng(country.obj.coords)
