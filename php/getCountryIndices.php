@@ -6,7 +6,7 @@
     $startTime = microtime(true);
     $apiKey = "wvlo2tz1pwdnha";
 
-    $url="https://www.numbeo.com/api/country_indices?api_key=" . $apiKey . "&country=" . $_REQUEST["isoCodeA2"];
+    $url="https://www.numbeo.com/api/country_indices?api_key=" . $apiKey . "&country=" . $_REQUEST["isoCode"];
 
 
     $curl = curl_init();
