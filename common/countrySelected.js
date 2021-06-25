@@ -39,7 +39,7 @@ export var obj = {
         qualityOfLife: null,
         costOfLiving: null,
         rentIndex: null,
-        groceriesIndex: null,
+        Index: null,
         traffic: null,
         pollution: null,
         resturant: null,
