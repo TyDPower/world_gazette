@@ -50,7 +50,6 @@ $(document).ready(()=> {
                                         countryUserLocation.obj.getInfo(countryUserLocation.obj.isoCodeA2)
                                         .then(()=> countryUserLocation.obj.getCountryIndices(countryUserLocation.obj.isoCodeA2))
                                         .then(()=> countryUserLocation.obj.getCurrencyExchange("USD", countryUserLocation.obj.currencyInfo.code))
-                                        .then(()=> console.log(countryUserLocation.obj))
                                         break;
                                     }
                                 }
@@ -78,13 +77,14 @@ $(document).ready(()=> {
         const codeA3 = $("#countryList").val().slice(7, 10);
         const codeA2 = $("#countryList").val().slice(19, 21);
 
-        let countryInfo = countrySelected.obj;        
+        let selected = countrySelected.obj;
+        let user = countryUserLocation.obj;        
 
         const goToCountry = () => {
-            map.panTo(countrySelected.obj.coords);
-            countrySelected.obj.layerGroups.addLayer(
+            map.panTo(selected.coords);
+            selected.layerGroups.addLayer(
                 L.popup()
-                    .setLatLng(countrySelected.obj.coords)
+                    .setLatLng(selected.coords)
                     .setContent("Loading...")
                     .openOn(map)
             );
@@ -94,35 +94,39 @@ $(document).ready(()=> {
         }
 
         const countryInfoPopup = () => {
-            var data = `${countryInfo.flag} ${countryInfo.name}<br>
-                        Quality of Life: ${countryInfo.indexes.qualityOfLife}<br>
-                        Cost of Living: ${countryInfo.indexes.costOfLiving}<br>
-                        Exchange Rate: ${countryInfo.currencyInfo.foreignExchange[1]}USD<br>`;
-            countrySelected.obj.layerGroups.addLayer(
+            var data = `${selected.flag} ${selected.name}<br>
+                        Quality of Life: ${selected.indexes.qualityOfLife}<br>
+                        Cost of Living: ${selected.indexes.costOfLiving}<br>
+                        Exchange Rate: ${selected.currencyInfo.foreignExchange[1]} ${selected.currencyInfo.code}/USD<br>`;
+                        selected.layerGroups.addLayer(
                 L.popup()
-                    .setLatLng(countrySelected.obj.coords)
+                    .setLatLng(selected.coords)
                     .setContent(data)
                     .openOn(map)
             );
 
         }
 
-        countrySelected.obj.layerGroups.clearLayers();
+        selected.layerGroups.clearLayers();
         naturalEvents.obj.clearMarkers();
 
-        countrySelected.obj.getBorders(codeA3)
-        .then((borders)=>countrySelected.obj.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
-        .then(()=>countrySelected.obj.getInfo(codeA2))
+        selected.getBorders(codeA3)
+        .then((borders)=>selected.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
+        .then(()=>selected.getInfo(codeA2))
         .then(()=>goToCountry())
-        .then(()=>countrySelected.obj.getCountryIndices(codeA2))
-        .then(()=>countrySelected.obj.getCurrencyExchange(countrySelected.obj.currencyInfo.code))        
+        .then(()=>selected.getCountryIndices(codeA2))
+        .then(()=>selected.getCurrencyExchange(selected.currencyInfo.code, user.currencyInfo.code))        
         .then(()=> countryInfoPopup())
-        .then(()=> modal.countryInfo(countrySelected.obj.updateInfo()))
+        .then(()=> modal.countryInfo(selected.updateInfo(), user.updateInfo()))
 
         $("#closeBtn").click(()=> {
             $(".modal").hide();
         });
 
+    })
+
+    map.on("click", ()=> {
+        console.log("You clicked sir!")
     })
 
     //Select natural event with html drop down menu
@@ -173,14 +177,14 @@ $(document).ready(()=> {
         
                     case "severeStorms":
                         events.severeStormsArr.forEach(res=> {
-                            layerGroup.severeStormsGroup.addLayer(L.marke(res, {icon: markers.severeStorms})).addTo(map);
+                            layerGroup.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
                         })
                         panToCenter();
                         break;
     
                     case "earthquakes":
                         events.earthquakesArr.forEach(res=> {
-                            layerGroup.earthquakesGroup.addLayer(L.marke(res, {icon: markers.earthquakes})).addTo(map);
+                            layerGroup.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
                         })
                         panToCenter();
                         break;
