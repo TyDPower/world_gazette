@@ -4,20 +4,17 @@
     error_reporting(E_ALL);
 
     $startTime = microtime(true);
-    $apiKey = "efbd5efcc6254578986dc2d63c0edb90";
 
-    $url="https://api.opencagedata.com/geocode/v1/json?q=" . $_REQUEST["countryName"] . "&countrycode=" . $_REQUEST["isoCode"] . "&key=" . $apiKey;
+    $url="https://restcountries.eu/rest/v2/alpha/" . $_REQUEST["isoCode"];
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL, $url);
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_URL, $url);
 
-    $result = curl_exec($ch);
+    $result = curl_exec($curl);
 
-    curl_close($ch);
-
-    $decode = json_decode($result, true);
+    curl_close($curl);
 
     $output["status"]["code"] = "200";
     $output["status"]["name"] = "ok";
