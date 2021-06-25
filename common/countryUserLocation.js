@@ -7,8 +7,7 @@ export var obj = {
     continent: null,
     flag: null,
     societyInfo: {
-        languagePrimary: null,
-        languagesOther: [],
+        languages: [],
         population: null,
     },
     currencyInfo: {
@@ -265,9 +264,6 @@ export var obj = {
                 }
             })
         })
-    },
-    getLanguagesAndPopulation() {
-
     }
 }
 

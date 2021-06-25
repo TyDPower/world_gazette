@@ -67,7 +67,7 @@ export const compareIndex = (whichIndex, userIndexArr, compareIndexArr) => {
     }
 
     return res;
-}
+};
 
 export const checkValidCurrency = (userCurrency) => {
     if (!userCurrency) {
@@ -84,4 +84,45 @@ export const checkDST = (dst) => {
         return "No Daylight Savings Time currently active"
     }
 };
+
+export const getGeneralInfo = (obj) => {
+
+    return new Promise((resolve, reject)=> {
+
+        $.ajax({
+            url: "./php/getLanguagesAndPopulation.php",
+            type: "post",
+            dataType: "json",
+            data: {
+
+            },
+
+            success: (res)=> {
+
+                if (res.status.name == "ok") {
+
+                    let info = {
+                        name: obj
+                    }
+
+                    let lang = obj.societyInfo.languages;
+                    let pop = obj.societyInfo.population;  
+
+                    //lang = res;
+                    //pop = res;
+
+                    if (lang && pop) {
+                        resolve();
+                    } else {
+                        reject();
+                    }
+                }
+            },
+
+            error: (err)=> {
+                console.log(err);
+            }
+        })
+    })
+}
 

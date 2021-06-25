@@ -6,9 +6,14 @@ export var obj = {
     coords: [],
     continent: null,
     flag: null,
+    admin: {
+        capital: null,
+        callingCode: null,
+        region: null,
+        subregion: null,
+    },
     societyInfo: {
-        languagePrimary: null,
-        languagesOther: [],
+        languages: [],
         population: null,
     },
     currencyInfo: {

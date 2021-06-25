@@ -47,8 +47,7 @@ export const countryInfo = (selectedCountry, userCountry ) => {
 
     $("#countryName").html(slctCntry.countryName);
     $("#population").html(slctScty.population);
-    $("#languagePrimary").html(slctScty.languagePrimary);
-    $("#languagesOther").html(slctScty.languagesOther);
+    $("#languages").html(slctScty.languages);
     $("#flag").html(slctCntry.flag);
     $("#currencyName").html("Currency name: " + slctCurr.name);
     $("#currencySubunit").html("Smallest unit: " + slctCurr.subunit);
