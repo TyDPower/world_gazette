@@ -92,7 +92,13 @@ export var obj = {
                     qualityOfLife: this.indexes.qualityOfLife,
                     healthcare: this.indexes.healthcare,
                     crime: this.indexes.crime,
-                    pollution: this.indexes.pollution
+                    pollution: this.indexes.pollution,
+                    costOfLiving: this.indexes.costOfLiving,
+                    rent: this.indexes.rent,
+                    groceries: this.indexes.groceries,
+                    resturant: this.indexes.resturant,
+                    purchasingPower: this.indexes.purchasingPower,
+                    saftey: this.indexes.saftey
                 }
             }
     
@@ -119,7 +125,7 @@ export var obj = {
             })
         })
     },
-    getInfo(code) {
+    getCountryInfo(code) {
         return new Promise((resolve, reject)=> {
             $.ajax(
                 {
@@ -225,7 +231,7 @@ export var obj = {
             if (myCurrency) {
                 currenciesCombined =  myCurrency + "_" + selectedCurrency;
             } else {
-                currenciesCombined = selectedCurrency + "_USD";
+                currenciesCombined = "USD_" + selectedCurrency;
             }
 
             $.ajax({
