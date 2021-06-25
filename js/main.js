@@ -1,7 +1,9 @@
 import * as countrySelected from "../common/countrySelected.js";
 import * as countryUserLocation from "../common/countryUserLocation.js";
 import * as modal from "../common/modal.js";
-import * as naturalEvents from "../common/naturalEvents.js"
+import * as naturalEvents from "../common/naturalEvents.js";
+import * as utilities from "../common/utilities.js"
+import * as countryInfo from "../common/countryObj.js"
 
 $(document).ready(()=> {
 
@@ -107,21 +109,24 @@ $(document).ready(()=> {
 
         }
 
-        selected.layerGroups.clearLayers();
-        naturalEvents.obj.clearMarkers();
+        //selected.layerGroups.clearLayers();
+        //naturalEvents.obj.clearMarkers();
 
-        selected.getBorders(codeA3)
+        var selectedCountry = new countryInfo.Country()
+        countryInfo.getCountryInfo(selectedCountry, countryInfo.URLs.restcountriestAPI, "zaf")
+        .then((data)=> countryInfo.getCountryInfo(data, countryInfo.URLs.numbeoCountryIndexAPI))
+        .then((data)=> countryInfo.getCountryBorders(data))
+        .then((data)=> data.layerGroups.addLayer(L.geoJSON(data.borders.obj)).addTo(map));
+
+
+        /*selected.getBorders(codeA3)
         .then((borders)=>selected.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
         .then(()=>selected.getInfo(codeA2))
         .then(()=>goToCountry())
         .then(()=>selected.getCountryIndices(codeA2))
         .then(()=>selected.getCurrencyExchange(selected.currencyInfo.code, user.currencyInfo.code))        
         .then(()=> countryInfoPopup())
-        .then(()=> modal.countryInfo(selected.updateInfo(), user.updateInfo()))
-
-        $("#closeBtn").click(()=> {
-            $(".modal").hide();
-        });
+        .then(()=> modal.countryInfo(selected.updateInfo(), user.updateInfo()))*/
 
     })
 
