@@ -76,8 +76,7 @@ $(document).ready(()=> {
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
 
-        const codeA3 = $("#countryList").val().slice(7, 10);
-        const codeA2 = $("#countryList").val().slice(19, 21);
+        const codeA3 = $("#countryList").val();
 
         let selected = countrySelected.obj;
         let user = countryUserLocation.obj;        
@@ -113,7 +112,7 @@ $(document).ready(()=> {
         //naturalEvents.obj.clearMarkers();
 
         var selectedCountry = new countryInfo.Country()
-        countryInfo.getCountryInfo(selectedCountry, countryInfo.URLs.restcountriestAPI, "zaf")
+        countryInfo.getCountryInfo(selectedCountry, countryInfo.URLs.restcountriestAPI, codeA3)
         .then((data)=> countryInfo.getCountryInfo(data, countryInfo.URLs.numbeoCountryIndexAPI))
         .then((data)=> countryInfo.getCountryBorders(data))
         .then((data)=> data.layerGroups.addLayer(L.geoJSON(data.borders.obj)).addTo(map));
