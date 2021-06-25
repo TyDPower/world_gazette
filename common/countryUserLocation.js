@@ -125,7 +125,7 @@ export var obj = {
             })
         })
     },
-    getCountryInfo(code) {
+    getInfo(code) {
         return new Promise((resolve, reject)=> {
             $.ajax(
                 {
