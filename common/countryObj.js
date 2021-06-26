@@ -14,9 +14,9 @@ export class Country {
         };
         this.timezones = null;
         this.currency = {
-            currencyName: null,
-            currencyCode: null,
-            currencySymbol: null,
+            name: null,
+            code: null,
+            symbol: null,
         };
         this.index = {
             crime: null,
@@ -36,6 +36,11 @@ export class Country {
             isLoaded: null
         };
         this.layerGroups = L.layerGroup();
+        this.removeLayers = () => {
+            if (this.layerGroups) {
+                this.layerGroups.clearLayers();
+            }
+        }
         this.isLoaded = null;
     }
 }
@@ -60,9 +65,9 @@ export const getCountryInfo = (countryObj, phpUrl, isoCode) => {
 
         {if (!countryObj.timezones) {countryObj.timezones = [data.timezones]}};
 
-        {if (!countryObj.currency.currencyName) {countryObj.currency.currencyName = data.currencies[0].name}};
-        {if (!countryObj.currency.currencyCode) {countryObj.currency.currencyCode = data.currencies[0].code}};
-        {if (!countryObj.currency.currencySymbol) {countryObj.currency.currencySymbol = data.currencies[0].symbol}};
+        {if (!countryObj.currency.name) {countryObj.currency.name = data.currencies[0].name}};
+        {if (!countryObj.currency.code) {countryObj.currency.code = data.currencies[0].code}};
+        {if (!countryObj.currency.symbol) {countryObj.currency.symbol = data.currencies[0].symbol}};
          
     };
 
