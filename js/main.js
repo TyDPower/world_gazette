@@ -71,61 +71,38 @@ $(document).ready(()=> {
     const onLocationError = (e) => {
         alert(e.message);
     }
-    map.on('locationerror', onLocationError); 
+    map.on('locationerror', onLocationError);
+
+    //Initial variable declaration for country change from down down menu
+    let selectedCountry;
 
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
 
         const codeA3 = $("#countryList").val();
+        naturalEvents.obj.clearMarkers();
 
-        let selected = countrySelected.obj;
-        let user = countryUserLocation.obj;        
+        if (!selectedCountry) {
 
-        const goToCountry = () => {
-            map.panTo(selected.coords);
-            selected.layerGroups.addLayer(
-                L.popup()
-                    .setLatLng(selected.coords)
-                    .setContent("Loading...")
-                    .openOn(map)
-            );
-            if (map.getZoom() > 5) {
-                map.setZoom(5)
-            }
-        }
+            selectedCountry = new countryInfo.Country() 
 
-        const countryInfoPopup = () => {
-            var data = `${selected.flag} ${selected.name}<br>
-                        Quality of Life: ${selected.indexes.qualityOfLife}<br>
-                        Cost of Living: ${selected.indexes.costOfLiving}<br>
-                        Exchange Rate: ${selected.currencyInfo.foreignExchange[1]} ${selected.currencyInfo.code}/USD<br>`;
-                        selected.layerGroups.addLayer(
-                L.popup()
-                    .setLatLng(selected.coords)
-                    .setContent(data)
-                    .openOn(map)
-            );
+        } else {
+
+            selectedCountry.removeLayers()
+            selectedCountry = new countryInfo.Country()
 
         }
-
-        //selected.layerGroups.clearLayers();
-        //naturalEvents.obj.clearMarkers();
-
-        var selectedCountry = new countryInfo.Country()
+        
         countryInfo.getCountryInfo(selectedCountry, countryInfo.URLs.restcountriestAPI, codeA3)
-        .then((data)=> countryInfo.getCountryInfo(data, countryInfo.URLs.numbeoCountryIndexAPI))
-        .then((data)=> countryInfo.getCountryBorders(data))
-        .then((data)=> data.layerGroups.addLayer(L.geoJSON(data.borders.obj)).addTo(map));
+            .then((data)=> countryInfo.getCountryInfo(data, countryInfo.URLs.numbeoCountryIndexAPI))
+            .then((data)=> countryInfo.getCountryBorders(data))
+            .then((data)=> data.layerGroups.addLayer(L.geoJSON(data.borders.obj)).addTo(map))
+            .then(()=> utilities.panToCountry(map, selectedCountry, true))
+            .then(()=> utilities.countryInfoPopup(map, selectedCountry))
+        
+    
 
-
-        /*selected.getBorders(codeA3)
-        .then((borders)=>selected.layerGroups.addLayer(L.geoJSON(borders)).addTo(map))
-        .then(()=>selected.getInfo(codeA2))
-        .then(()=>goToCountry())
-        .then(()=>selected.getCountryIndices(codeA2))
-        .then(()=>selected.getCurrencyExchange(selected.currencyInfo.code, user.currencyInfo.code))        
-        .then(()=> countryInfoPopup())
-        .then(()=> modal.countryInfo(selected.updateInfo(), user.updateInfo()))*/
+            
 
     })
 
