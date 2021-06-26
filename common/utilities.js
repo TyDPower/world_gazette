@@ -126,3 +126,33 @@ export const getGeneralInfo = (obj) => {
     })
 }
 
+export const panToCountry = (mapObj, countryObj, addPopup = false) => {
+    mapObj.panTo(countryObj.admin.latlng);
+
+    if (addPopup === true) {
+        countryObj.layerGroups.addLayer(
+            L.popup()
+                .setLatLng(countryObj.admin.latlng)
+                .setContent("Loading...")
+                .openOn(mapObj)
+        );
+    };
+
+    if (mapObj.getZoom() > 5) {
+        mapObj.setZoom(5)
+    };
+}
+
+export const countryInfoPopup = (mapObj, countryObj) => {
+    var data = `${countryObj.admin.name}<br>
+                Quality of Life: ${countryObj.index.qualityOfLife}<br>
+                Cost of Living: ${countryObj.index.costOfLiving}<br>
+                Exchange Rate: ${countryObj.currency.symbol} "Foriegn exchange value here! ${countryObj.currency.code}/USD<br>`;
+                countryObj.layerGroups.addLayer(
+        L.popup()
+            .setLatLng(countryObj.admin.latlng)
+            .setContent(data)
+            .openOn(mapObj)
+    );
+
+}
