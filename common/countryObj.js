@@ -39,7 +39,7 @@ export class Country {
         this.URLs = {
             restcountriest: "./php/getCountryInfo.php",
             numbeoCountryIndex: "./php/getCountryIndices.php"
-        }
+        };
         this.isLoaded = null;
         this.utils = {
             getInfo(countryObj, phpUrl, isoCode) {
