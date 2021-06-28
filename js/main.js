@@ -1,6 +1,6 @@
 import * as countryUserLocation from "../common/countryUserLocation.js";
 import * as modal from "../common/modal.js";
-import * as naturalEvents from "../common/naturalEvents.js";
+import * as events from "../common/naturalEvents.js";
 import * as utilities from "../common/utilities.js"
 import * as countryInfo from "../common/countryObj.js"
 
@@ -74,19 +74,31 @@ $(document).ready(()=> {
 
     //Initial variable declaration for country change from down down menu
     let selectedCountry;
+    //Initial variable declaration for natural events change from down down menu
+    let naturalEvents;
 
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
 
         const codeA3 = $("#countryList").val();
-        naturalEvents.obj.clearMarkers();
 
-        if (!selectedCountry) {
+        if (!selectedCountry && !naturalEvents) {
 
             selectedCountry = new countryInfo.Country() 
 
+        } else if (!selectedCountry && naturalEvents) {
+
+            naturalEvents.utils.removeLayers(naturalEvents);
+            selectedCountry = new countryInfo.Country()
+
+        } else if (selectedCountry && !naturalEvents) {
+
+            selectedCountry.utils.removeLayers(selectedCountry)
+            selectedCountry = new countryInfo.Country()
+
         } else {
 
+            naturalEvents.utils.removeLayers(naturalEvents);
             selectedCountry.utils.removeLayers(selectedCountry)
             selectedCountry = new countryInfo.Country()
 
@@ -110,73 +122,37 @@ $(document).ready(()=> {
     //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
 
-        let events = naturalEvents.obj.events;
-        let layerGroup = naturalEvents.obj.layerGroups;
-        let markers = naturalEvents.obj.markers;
-        let period = $("input[name=naturalEvents]:checked").val()
+        let period = $("input[name=naturalEvents]:checked").val();
+        let event = $("#naturalEvents").val();
 
         if (!period) {
+            alert("Please select either 'Today', 'Week', 'Month' or 'Year' to display natural events.")
+        }
 
-            alert("Please select a period")
+        if (!selectedCountry && !naturalEvents) {
+
+            naturalEvents = new events.NaturalEvents();
+
+        } else if (!selectedCountry && naturalEvents) {
+
+            naturalEvents.utils.removeLayers(naturalEvents);
+            naturalEvents = new events.NaturalEvents();
+
+        } else if (selectedCountry && !naturalEvents) {
+
+            selectedCountry.utils.removeLayers(selectedCountry);
+            naturalEvents = new events.NaturalEvents();
 
         } else {
 
-            let periodInDays = parseInt(period)
-            const userRequest = naturalEvents.obj.loadNaturalEventsData(periodInDays) 
+            naturalEvents.utils.removeLayers(naturalEvents);
+            selectedCountry.utils.removeLayers(selectedCountry);
+            naturalEvents = new events.NaturalEvents();
 
-            const handleSuccess = () => {
-
-                if (selectedCountry) {
-                    naturalEvents.obj.clearMarkers();
-                    selectedCountry.utils.removeLayers(selectedCountry);
-                }
-
-                switch ($("#naturalEvents").val()) {
-                    case "wildfires":
-                        events.wildfiresArr.forEach(res=> {
-                            layerGroup.wildfiresGroup.addLayer(L.marker(res, {icon: markers.wildfires})).addTo(map);
-                        })
-                        naturalEvents.obj.panToCenter(map);
-                        break;
-                    
-                    case "volcanos":
-                        events.volcanosArr.forEach(res=> {
-                            layerGroup.volcanosGroup.addLayer(L.marker(res,{icon: markers.volcanos})).addTo(map);
-                        })
-                        naturalEvents.obj.panToCenter(map);
-                        break;
-        
-                    case "severeStorms":
-                        events.severeStormsArr.forEach(res=> {
-                            layerGroup.severeStormsGroup.addLayer(L.marker(res, {icon: markers.severeStorms})).addTo(map);
-                        })
-                        naturalEvents.obj.panToCenter(map);
-                        break;
-    
-                    case "earthquakes":
-                        events.earthquakesArr.forEach(res=> {
-                            layerGroup.earthquakesGroup.addLayer(L.marker(res, {icon: markers.earthquakes})).addTo(map);
-                        })
-                        naturalEvents.obj.panToCenter(map);
-                        break;
-    
-                    default:
-                        events.icebergsArr.forEach(res=> {
-                            layerGroup.icebergsGroup.addLayer(L.marker(res,{icon: markers.icebergs})).addTo(map);
-                        })
-                        naturalEvents.obj.panToCenter(map);
-                }
-                
-            }
-
-            const handleErr = (err) => {
-                console.log(err)
-            }
-
-            userRequest
-            .then(handleSuccess)
-            .catch(handleErr)
         }
+
+        naturalEvents.utils.getEvents(period, event, naturalEvents)
+        .then((data)=> naturalEvents.utils.addEvents(map, data));
 
     })
 
