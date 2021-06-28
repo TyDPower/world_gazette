@@ -1,12 +1,7 @@
 export class NaturalEvents {
     constructor() {
-        this.events = {
-            wildfiresArr: [],
-            earthquakesArr: [],
-            volcanosArr: [],
-            severeStormsArr: [],
-            icebergsArr: []
-        },
+        this.category;
+        this.events = [];
         this.markers = {
             wildfires: L.icon({
                 iconUrl: "./images/wildfireMarker.svg",
@@ -28,17 +23,13 @@ export class NaturalEvents {
                 iconUrl: "./images/volcanoMarker.svg",
                 iconSize: [38, 95]
             }),
-        },
-        this.layerGroups = {
-            wildfiresGroup: L.layerGroup(),
-            earthquakesGroup: L.layerGroup(),
-            volcanosGroup: L.layerGroup(),
-            severeStormsGroup: L.layerGroup(),
-            icebergsGroup: L.layerGroup()
-        },
+        };
+        this.layerGroups = L.layerGroup();
         this.utils = {
-            clearMarkers() {
-                Object.values(obj.layerGroups).forEach(val => val.clearLayers());
+            removeLayers(eventsObj) {
+                if (eventsObj.layerGroups) {
+                    eventsObj.layerGroups.clearLayers();
+                }                
             },
             panToCenter(map) {
                 map.panTo([0, 0])
@@ -46,7 +37,7 @@ export class NaturalEvents {
                         map.setZoom(2);
                     }
             },
-            loadNaturalEventsData(period) {
+            getEvents(period, event, eventsObj) {
         
                 return new Promise((resolve, rej)=> {
                     $.ajax({
@@ -54,33 +45,29 @@ export class NaturalEvents {
                         type: "post",
                         dataType: "json",
                         data: {
-                            period: period
+                            period: period,
+                            event: event,
                         },
                 
                         success: (res)=> {
                 
                             if (res.status.name == "ok") {
                                 var results = res.data.events
+
                 
                                 for (let i=0; i<results.length; i++) {
                 
                                     var lat = results[i].geometries[0].coordinates[1]
                                     var lng = results[i].geometries[0].coordinates[0]
                 
-                                    if (results[i].categories[0].title === "Wildfires") {
-                                        obj.events.wildfiresArr.push([lat, lng]);
-                                    } else if (results[i].categories[0].title === "Severe Storms") {
-                                        obj.events.severeStormsArr.push([lat, lng]);
-                                    } else if (results[i].categories[0].title === "Sea and Lake Ice") {
-                                        obj.events.icebergsArr.push([lat, lng]);
-                                    } else if (results[i].categories[0].title === "Volcanoes") {
-                                        obj.events.volcanosArr.push([lat, lng]);
-                                    } else {
-                                        obj.events.earthquakesArr.push([lat, lng]);
+                                    if (results[i].categories[0].title === event) {
+                                        eventsObj.events.push([lat, lng]);
                                     }
                                 }
+
+                                eventsObj.category = event;
             
-                                resolve()
+                                resolve(eventsObj)
                 
                             }
                 
@@ -95,6 +82,31 @@ export class NaturalEvents {
                 })
                 
             
+            },
+            getMarker(eventsObj) {
+                switch (eventsObj.category) {
+                    case "Wildfires":
+                        return eventsObj.markers.wildfires;
+                    case "Volcanoes":
+                        return eventsObj.markers.volcanos;
+                    case "Severe Storms":
+                        return eventsObj.markers.severeStorms;
+                    case "Earthquakes":
+                        return eventsObj.markers.earthquakes;
+                    case "Sea and Lake Ice":
+                        return eventsObj.markers.icebergs;
+                }
+            },
+            addEvents(map, eventsObj) {
+
+                if (eventsObj.category) {
+                    eventsObj.events.forEach(res=> {
+                        eventsObj.layerGroups.addLayer(L.marker(res, {icon: eventsObj.utils.getMarker(eventsObj)})).addTo(map);
+                        //console.log(eventsObj.utils.getMarker(eventsObj))
+                    })
+                    eventsObj.utils.panToCenter(map);
+                }
+
             }
         }
     }
