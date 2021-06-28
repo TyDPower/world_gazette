@@ -1,4 +1,3 @@
-import * as countrySelected from "../common/countrySelected.js";
 import * as countryUserLocation from "../common/countryUserLocation.js";
 import * as modal from "../common/modal.js";
 import * as naturalEvents from "../common/naturalEvents.js";
@@ -111,9 +110,6 @@ $(document).ready(()=> {
     //Select natural event with html drop down menu
     $("#naturalEvents").change(()=> {
 
-        naturalEvents.obj.clearMarkers();
-        countrySelected.obj.layerGroups.clearLayers();
-
         let events = naturalEvents.obj.events;
         let layerGroup = naturalEvents.obj.layerGroups;
         let markers = naturalEvents.obj.markers;
@@ -126,11 +122,14 @@ $(document).ready(()=> {
         } else {
 
             let periodInDays = parseInt(period)
-            const userRequest = naturalEvents.loadNaturalEventsData(periodInDays) 
+            const userRequest = naturalEvents.obj.loadNaturalEventsData(periodInDays) 
 
             const handleSuccess = () => {
 
-                countrySelected.obj.layerGroups.clearLayers();
+                if (selectedCountry) {
+                    naturalEvents.obj.clearMarkers();
+                    selectedCountry.utils.removeLayers(selectedCountry);
+                }
 
                 switch ($("#naturalEvents").val()) {
                     case "wildfires":
