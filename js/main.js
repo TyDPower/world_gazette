@@ -1,8 +1,8 @@
-import * as countryUserLocation from "../common/countryUserLocation.js";
+import * as userLocation from "../common/userLocation.js";
 import * as modal from "../common/modal.js";
-import * as events from "../common/naturalEvents.js";
+import * as events from "../common/naturalEventsClass.js";
 import * as utilities from "../common/utilities.js"
-import * as countryInfo from "../common/countryObj.js"
+import * as country from "../common/countryClass.js"
 
 $(document).ready(()=> {
 
@@ -15,6 +15,7 @@ $(document).ready(()=> {
     worldMap.addTo(map);
 
     //Grab user location with marker and country select
+    var userCountry;
     map.locate({setView: true, maxZoom: 16});
     const onLocationFound = (e) => {
         var radius = e.accuracy;
@@ -25,44 +26,18 @@ $(document).ready(()=> {
         L.circle(e.latlng, radius).addTo(map);
 
         if (e.latlng) {
-            $.getJSON("./common/countries.geo.json", (data)=> {
-                $.ajax(
-                    {
-                        url: "./php/getUserCountryInfo.php",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            lat: e.latlng.lat,
-                            lng: e.latlng.lng
-                        },
-            
-                        success: (res)=> {
-                            if (res.status.name == "ok") {
-                                var countryInfo = res.data.results[0].components
-                                countryUserLocation.obj.isoCodeA2 = countryInfo["ISO_3166-1_alpha-2"];
-                                countryUserLocation.obj.isoCodeA3 = countryInfo["ISO_3166-1_alpha-3"];
-                                countryUserLocation.obj.name = countryInfo.country;
 
-                                for (let i=0; i<data.features.length; i++) {
-                                    if (data.features[i].properties.ISO_A3 == countryInfo["ISO_3166-1_alpha-3"]) {
-                                        let countryBorder = data.features[i];
-                                        countryUserLocation.obj.borders = countryBorder;
-                                        L.geoJSON(countryBorder).addTo(map);
-                                        countryUserLocation.obj.getInfo(countryUserLocation.obj.isoCodeA2)
-                                        .then(()=> countryUserLocation.obj.getCountryIndices(countryUserLocation.obj.isoCodeA2))
-                                        .then(()=> countryUserLocation.obj.getCurrencyExchange("USD", countryUserLocation.obj.currencyInfo.code))
-                                        break;
-                                    }
-                                }
-                            }
-                        },
+            userCountry = new country.Country();
             
-                        error: (err)=> {
-                            console.log(err);
-                        }
-                    }
-                )
-            })
+            if (userCountry) {
+
+                userCountry.utils.getInfo(userCountry, userCountry.URLs.openCage, e.latlng)
+                .then((data)=> userCountry.utils.getInfo(data, data.URLs.restcountries, data.admin.iso[1]))
+                .then((data)=> userCountry.utils.getInfo(data, data.URLs.numbeoCountryIndex, data.admin.iso[1]))
+                .then((data)=> data.utils.getBorders(data, data.admin.iso[1]))
+                .then((data)=> data.utils.addBorders(data, map))
+            }
+           
         }
         
     }
@@ -73,9 +48,9 @@ $(document).ready(()=> {
     map.on('locationerror', onLocationError);
 
     //Initial variable declaration for country change from down down menu
-    let selectedCountry;
+    var selectedCountry;
     //Initial variable declaration for natural events change from down down menu
-    let naturalEvents;
+    var naturalEvents;
 
     //Select new country with html drop down menu
     $("#countryList").change(()=> {
@@ -84,34 +59,34 @@ $(document).ready(()=> {
 
         if (!selectedCountry && !naturalEvents) {
 
-            selectedCountry = new countryInfo.Country() 
+            selectedCountry = new country.Country() 
 
         } else if (!selectedCountry && naturalEvents) {
 
             naturalEvents.utils.removeLayers(naturalEvents);
-            selectedCountry = new countryInfo.Country()
+            selectedCountry = new country.Country()
 
         } else if (selectedCountry && !naturalEvents) {
 
             selectedCountry.utils.removeLayers(selectedCountry)
-            selectedCountry = new countryInfo.Country()
+            selectedCountry = new country.Country()
 
         } else {
 
             naturalEvents.utils.removeLayers(naturalEvents);
             selectedCountry.utils.removeLayers(selectedCountry)
-            selectedCountry = new countryInfo.Country()
+            selectedCountry = new country.Country()
 
         }
         
         selectedCountry.utils.getBorders(selectedCountry, codeA3)
         .then((data)=> data.utils.addBorders(data, map))
 
-        selectedCountry.utils.getInfo(selectedCountry, selectedCountry.URLs.restcountriest, codeA3)
+        selectedCountry.utils.getInfo(selectedCountry, selectedCountry.URLs.restcountries, codeA3)
         .then((data)=> selectedCountry.utils.getInfo(data, selectedCountry.URLs.numbeoCountryIndex))
-        .then(()=> utilities.panToCountry(map, selectedCountry, true))
-        .then(()=> utilities.countryInfoPopup(map, selectedCountry))
-        .then(()=> console.log(selectedCountry))
+        .then((data)=> selectedCountry.utils.getCurrencyExchange(data, userCountry.currency.code))
+        .then((data)=> data.utils.panToCountry(map, data, true))
+        .then((data)=> data.utils.countryInfoPopup(map, data))
 
     })
 
