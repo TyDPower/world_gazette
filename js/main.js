@@ -87,7 +87,6 @@ $(document).ready(()=> {
         .then((data)=> selectedCountry.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
-        .then((data)=> console.log(data))
 
     })
 

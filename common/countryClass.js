@@ -6,7 +6,8 @@ export class Country {
             capital: null,
             region: null,
             subregion: null,
-            latlng: null
+            latlng: null,
+            flag: `https://flagcdn.com/16x12/${this.admin.iso}.png`
         };
         this.social = {
             population: null,
