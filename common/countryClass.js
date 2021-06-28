@@ -173,16 +173,21 @@ export class Country {
             },
             countryInfoPopup(mapObj, countryObj) {
 
+                let currenciesStr = countryObj.currency.exchangeRate[0].replace(/_/gi, "/");
+                let rate = countryObj.currency.exchangeRate[1]
+
                 var data = `${countryObj.admin.name}<br>
                             Quality of Life: ${countryObj.index.qualityOfLife}<br>
                             Cost of Living: ${countryObj.index.costOfLiving}<br>
-                            Exchange Rate: ${countryObj.currency.symbol} "Foriegn exchange value here! ${countryObj.currency.code}/USD<br>`;
+                            Exchange Rate: ${currenciesStr} ${rate.toFixed(4)}`
                             countryObj.layerGroups.addLayer(
                     L.popup()
                         .setLatLng(countryObj.admin.latlng)
                         .setContent(data)
                         .openOn(mapObj)
                 );
+
+                return countryObj;
             
             },
             getCurrencyExchange(countryObj, userCurrency) {
@@ -208,8 +213,9 @@ export class Country {
                         success: (res)=> {
             
                             if (res.status.name == "ok") {
-            
-                                countryObj.currency.exchangeRate = res.data;
+
+                                let exchangeRate = Object.entries(res.data);         
+                                countryObj.currency.exchangeRate = exchangeRate[0];
                                 
                                 if (currenciesCombined) {
                                     resolve(countryObj)
