@@ -37,6 +37,12 @@ export var obj = {
     },
     clearMarkers: () => {
         Object.values(obj.layerGroups).forEach(val => val.clearLayers());
+    },
+    panToCenter: (map) => {
+        map.panTo([0, 0])
+            if (map.getZoom() > 2) {
+                map.setZoom(2);
+            }
     }
 }
 
