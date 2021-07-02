@@ -264,43 +264,7 @@ export class Country {
 
                 return countryObj;
             },
-            getBounds(countryObj, countryName) {
-
-                return new Promise((resolve, reject)=> {
-
-                    $.ajax({
-                        url: "./php/getCountryBounds.php",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            country: countryName,
-                        },
-
-                        success: (res)=> {
-
-                            if (res.status.name == "ok") {
-
-                                let bounds = countryObj.admin.bounds;
-                                let data = res.data[0].boundingbox;
-
-                                bounds.min = [data[0], data[2]];
-                                bounds.max = [data[1], data[3]];
-
-                                if (countryObj.admin.bounds.min && countryObj.admin.bounds.max) {
-                                    resolve(countryObj);
-                                } else {
-                                    reject();
-                                }
-
-                            }
-                        },
-
-                        error: (err)=> {
-                            console.error(err)
-                        }
-                    })
-                })
-            }
+            getCities()
         };
     }
 };
