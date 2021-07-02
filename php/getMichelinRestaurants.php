@@ -5,11 +5,7 @@
 
     $startTime = microtime(true);
 
-    $where = urlencode('{
-        "region": "United Kingdom"
-    }');
-
-    $url = "https://parseapi.back4app.com/classes/MichelinGuide_Restaurants?count=1&limit=99999"/*&where=" . $where*/;
+    $url = "https://parseapi.back4app.com/classes/MichelinGuide_Restaurants?count=1&limit=99999";
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
