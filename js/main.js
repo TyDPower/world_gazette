@@ -84,18 +84,21 @@ $(document).ready(()=> {
         .then((data)=> data.utils.addBorders(data, map))
 
         selectedCountry.utils.getInfo(selectedCountry, selectedCountry.URLs.restcountries, codeA3)
-        .then((data)=> data.utils.getBounds(data, data.admin.name))
         .then((data)=> data.utils.getInfo(data, data.URLs.numbeoCountryIndex))
         .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
         .then(()=> modal.countryInfo(selectedCountry, userCountry))
         .then(()=> selectedCountry.languages)
-        .then(()=> console.log(selectedCountry))
 
         $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
 
-        restaurants.getMichelinRestaurants(map);
+        //restaurants.getMichelinRestaurants(map);
+
+        const getCities = () => {
+        }
+
+        getCities();
 
     })
 
