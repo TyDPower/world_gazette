@@ -264,7 +264,7 @@ export class Country {
 
                 return countryObj;
             },
-            getCities()
+            //getCities()
         };
     }
 };
