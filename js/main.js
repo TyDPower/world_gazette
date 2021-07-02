@@ -1,8 +1,9 @@
 import * as userLocation from "../common/userLocation.js";
 import * as modal from "../common/modal.js";
 import * as events from "../common/naturalEventsClass.js";
-import * as utilities from "../common/utilities.js"
-import * as country from "../common/countryClass.js"
+import * as utilities from "../common/utilities.js";
+import * as country from "../common/countryClass.js";
+import * as restaurants from "../common/restaurants.js";
 
 $(document).ready(()=> {
 
@@ -32,8 +33,8 @@ $(document).ready(()=> {
             if (userCountry) {
 
                 userCountry.utils.getInfo(userCountry, userCountry.URLs.openCage, e.latlng)
-                .then((data)=> userCountry.utils.getInfo(data, data.URLs.restcountries, data.admin.iso[1]))
-                .then((data)=> userCountry.utils.getInfo(data, data.URLs.numbeoCountryIndex, data.admin.iso[1]))
+                .then((data)=> data.utils.getInfo(data, data.URLs.restcountries, data.admin.iso[1]))
+                .then((data)=> data.utils.getInfo(data, data.URLs.numbeoCountryIndex, data.admin.iso[1]))
                 .then((data)=> data.utils.getBorders(data, data.admin.iso[1]))
                 .then((data)=> data.utils.addBorders(data, map))
             }
@@ -83,10 +84,18 @@ $(document).ready(()=> {
         .then((data)=> data.utils.addBorders(data, map))
 
         selectedCountry.utils.getInfo(selectedCountry, selectedCountry.URLs.restcountries, codeA3)
-        .then((data)=> selectedCountry.utils.getInfo(data, selectedCountry.URLs.numbeoCountryIndex))
-        .then((data)=> selectedCountry.utils.getCurrencyExchange(data, userCountry.currency.code))
+        .then((data)=> data.utils.getBounds(data, data.admin.name))
+        .then((data)=> data.utils.getInfo(data, data.URLs.numbeoCountryIndex))
+        .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
+        .then(()=> modal.countryInfo(selectedCountry, userCountry))
+        .then(()=> selectedCountry.languages)
+        .then(()=> console.log(selectedCountry))
+
+        $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
+
+        restaurants.getMichelinRestaurants(map);
 
     })
 

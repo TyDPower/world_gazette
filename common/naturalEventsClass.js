@@ -102,7 +102,6 @@ export class NaturalEvents {
                 if (eventsObj.category) {
                     eventsObj.events.forEach(res=> {
                         eventsObj.layerGroups.addLayer(L.marker(res, {icon: eventsObj.utils.getMarker(eventsObj)})).addTo(map);
-                        //console.log(eventsObj.utils.getMarker(eventsObj))
                     })
                     eventsObj.utils.panToCenter(map);
                 }

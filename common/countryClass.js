@@ -7,11 +7,19 @@ export class Country {
             region: null,
             subregion: null,
             latlng: null,
-            flag: `https://flagcdn.com/16x12/${this.admin.iso}.png`
+            bounds: {
+                max: null,
+                min: null
+            }
         };
+        this.flag = {
+            small: null,
+            medium: null,
+            large: null
+        }
         this.social = {
             population: null,
-            languages: null
+            languages: null,
         };
         this.timezones = null;
         this.currency = {
@@ -63,6 +71,10 @@ export class Country {
                         {if (!countryObj.admin.region) {countryObj.admin.region = data.region}};
                         {if (!countryObj.admin.subregion) {countryObj.admin.subregion = data.subregion}};
                         {if (!countryObj.admin.latlng) {countryObj.admin.latlng = [data.latlng[0], data.latlng[1]]}};
+
+                        {if (!countryObj.admin.flag) {countryObj.flag.small = `https://flagcdn.com/w20/${countryObj.admin.iso[0].toLowerCase()}.png`}};
+                        {if (!countryObj.admin.flag) {countryObj.flag.medium = `https://flagcdn.com/w40/${countryObj.admin.iso[0].toLowerCase()}.png`}};
+                        {if (!countryObj.admin.flag) {countryObj.flag.large = `https://flagcdn.com/w80/${countryObj.admin.iso[0].toLowerCase()}.png`}};
                 
                         {if (!countryObj.social.population) {countryObj.social.population = data.population}};
                         {if (!countryObj.social.languages) {countryObj.social.languages = data.languages}};
@@ -177,10 +189,10 @@ export class Country {
                 let currenciesStr = countryObj.currency.exchangeRate[0].replace(/_/gi, "/");
                 let rate = countryObj.currency.exchangeRate[1]
 
-                var data = `${countryObj.admin.name}<br>
+                var data = `<img src="${countryObj.flag.small}"> ${countryObj.admin.name}<br>
                             Quality of Life: ${countryObj.index.qualityOfLife}<br>
                             Cost of Living: ${countryObj.index.costOfLiving}<br>
-                            Exchange Rate: ${currenciesStr} ${rate.toFixed(4)}`
+                            Exchange Rate: ${currenciesStr} ${rate.toFixed(3)}`
                             countryObj.layerGroups.addLayer(
                     L.popup()
                         .setLatLng(countryObj.admin.latlng)
@@ -251,8 +263,44 @@ export class Country {
                 };
 
                 return countryObj;
-            }
+            },
+            getBounds(countryObj, countryName) {
 
-        }
+                return new Promise((resolve, reject)=> {
+
+                    $.ajax({
+                        url: "./php/getCountryBounds.php",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            country: countryName,
+                        },
+
+                        success: (res)=> {
+
+                            if (res.status.name == "ok") {
+
+                                let bounds = countryObj.admin.bounds;
+                                let data = res.data[0].boundingbox;
+
+                                bounds.min = [data[0], data[2]];
+                                bounds.max = [data[1], data[3]];
+
+                                if (countryObj.admin.bounds.min && countryObj.admin.bounds.max) {
+                                    resolve(countryObj);
+                                } else {
+                                    reject();
+                                }
+
+                            }
+                        },
+
+                        error: (err)=> {
+                            console.error(err)
+                        }
+                    })
+                })
+            }
+        };
     }
 };

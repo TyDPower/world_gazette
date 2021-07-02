@@ -1,69 +1,86 @@
-export const compareIndex = (whichIndex, userIndexArr, compareIndexArr) => {
-    let x = compareIndexArr[1] * 100
-    let y = x / userIndexArr[1]
-    let res;
+export const compareIndex = (indexType, selectedCountry, userCountry) => {
     
-    const comparison = (whichIndex) => {
-        if (y <= 100) {
-            let z = 100 - y
+    let res;
+    let value;
+    
+    let getComparisonValue = (selectedCountryIndex, userCountryIndex) => {
+        let x = selectedCountryIndex * 100
+        x = x / userCountryIndex
+        return x
+    } 
+    
+    let comparison = (whichIndex, value) => {
+        if (value <= 100) {
+            let z = 100 - value
             z = z.toFixed(2)
-            return `${userIndexArr[0]} ${whichIndex} index is ${z}% higher than in ${compareIndexArr[0]}`
-        } else if (y > 100 && y < 1000) {
-            let a = y - 100
+            return `${userCountry.admin.name} ${whichIndex} index is ${z}% higher than in ${selectedCountry.admin.name}`
+        } else if (value > 100 && value < 1000) {
+            let a = value - 100
             a = a.toFixed(2)
-            return `${userIndexArr[0]} ${whichIndex} index is ${a}% lower than in ${compareIndexArr[0]}`
+            return `${userCountry.admin.name} ${whichIndex} index is ${a}% lower than in ${selectedCountry.admin.name}`
         } else {
-            return `Not enough information is avalible for this comparison. Either enable location sharing by refreshing your browser or please see "About API's" if you have any data relating to ${whichIndex} in ${compareIndexArr[0]}.`
+            return `Not enough information is avalible for this comparison. Either enable location sharing by refreshing your browser or please see "About API's" if you have any data relating to ${whichIndex} in ${selectedCountry.admin.name}.`
         }
     }  
 
-    switch (whichIndex) {
+    switch (indexType) {
         case "traffic":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.traffic, userCountry.index.traffic)
+            res = comparison(indexType, value);
             break;
 
         case "quality of life":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.qualityOfLife, userCountry.index.qualityOfLife)
+            res = comparison(indexType, value);
             break;
 
         case "healthcare":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.healthcare, userCountry.index.healthcare)
+            res = comparison(indexType, value);
             break;
 
         case "crime":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.crime, userCountry.index.crime)
+            res = comparison(indexType, value);
             break;
 
         case "safety":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.safety, userCountry.index.safety)
+            res = comparison(indexType, value);
             break;
 
         case "pollution":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.pollution, userCountry.index.pollution)
+            res = comparison(indexType, value);
             break;
 
         case "cost of living":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.costOfLiving, userCountry.index.costOfLiving)
+            res = comparison(indexType, value);
             break;
 
         case "rent":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.rent, userCountry.index.rent)
+            res = comparison(indexType, value);
             break;
 
         case "groceries": case "food":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.groceries, userCountry.index.groceries)
+            res = comparison(indexType, value);
             break;
 
         case "resturant":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.resturant, userCountry.index.resturant)
+            res = comparison(indexType, value);
             break;
 
         case "purchasing power":
-            res = comparison(whichIndex);
+            value = getComparisonValue(selectedCountry.index.purchasingPower, userCountry.index.purchasingPower)
+            res = comparison(indexType, value);
             break;
 
         default:
-            console.error("whichIndex must be have an input.")
+            console.error(indexType)
     }
 
     return res;

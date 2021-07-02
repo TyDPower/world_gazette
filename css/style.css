@@ -13,7 +13,7 @@ header {
     margin: 10px;
 }
 
-.modal {
+#countryModal {
     display: none;
     position: fixed;
     z-index: 900;
@@ -34,13 +34,13 @@ header {
     font-size: 30px;
 }
 
-#closeBtn {
+.closeBtn {
     float: right;
     font-size: 30px;
     color: gray;
 }
 
-#closeBtn:hover {
+.closeBtn:hover {
     cursor: pointer;
     color: #000;
 }
