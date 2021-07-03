@@ -263,38 +263,6 @@ export class Country {
                 };
 
                 return countryObj;
-            },
-            getCities(countryObj, mapObj, filter) {
-
-                return new Promise((resolve, reject)=> {
-
-                    $.ajax({
-                        url: "./php/getGeoData.php",
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            isoCode: countryObj.admin.iso[0],
-                            filter: filter,
-                            bbox: false
-                        },
-
-                        success: (res)=> {
-
-                            if (res.status.name == "ok") {
-                                let cities = res.data.geonames;
-
-                                console.log(res.data)
-                            } else {
-                                console.error("What happend?")
-                            }
-
-                        },
-
-                        error: (err)=> {
-                            console.error(err);
-                        }
-                    })
-                })
             }
         };
     }

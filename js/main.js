@@ -4,6 +4,7 @@ import * as events from "../common/naturalEventsClass.js";
 import * as utilities from "../common/utilities.js";
 import * as country from "../common/countryClass.js";
 import * as restaurants from "../common/restaurants.js";
+import * as geoData from "../common/geoDataClass.js";
 
 $(document).ready(()=> {
 
@@ -58,6 +59,7 @@ $(document).ready(()=> {
 
         const codeA3 = $("#countryList").val();
 
+        //Consider moving this block to utilities
         if (!selectedCountry && !naturalEvents) {
 
             selectedCountry = new country.Country() 
@@ -79,6 +81,9 @@ $(document).ready(()=> {
             selectedCountry = new country.Country()
 
         }
+        //--------------------------------------------
+
+        let poi = new geoData.GeoData();
         
         selectedCountry.utils.getBorders(selectedCountry, codeA3)
         .then((data)=> data.utils.addBorders(data, map))
@@ -90,7 +95,7 @@ $(document).ready(()=> {
         .then((data)=> data.utils.countryInfoPopup(map, data))
         .then(()=> modal.countryInfo(selectedCountry, userCountry))
         .then(()=> selectedCountry.languages)
-        .then(()=>selectedCountry.utils.getCities(selectedCountry, map, "adm1"))
+        .then(()=> geoData.getGeoData(selectedCountry, map, "OBPT"))
 
         $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
 

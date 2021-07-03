@@ -6,7 +6,7 @@
     $startTime = microtime(true);
     $username = "TyDPower";
 
-    $url="http://api.geonames.org/searchJSON?q=&country=" . $_REQUEST["isoCode"] . "&maxRows=1000" . "&featureCode=" . $_REQUEST["filter"] . "&inclBbox=" . $_REQUEST["bbox"] . "&username=" . $username;
+    $url="http://api.geonames.org/searchJSON?q=&country=" . $_REQUEST["isoCode"] . "&maxRows=1000" . "&featureCode=" . $_REQUEST["filter"] . "&inclBbox=true&username=" . $username;
 
 
     $curl = curl_init();
