@@ -90,15 +90,9 @@ $(document).ready(()=> {
         .then((data)=> data.utils.countryInfoPopup(map, data))
         .then(()=> modal.countryInfo(selectedCountry, userCountry))
         .then(()=> selectedCountry.languages)
+        .then(()=>selectedCountry.utils.getCities(selectedCountry, map, "adm1"))
 
         $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
-
-        //restaurants.getMichelinRestaurants(map);
-
-        const getCities = () => {
-        }
-
-        getCities();
 
     })
 
