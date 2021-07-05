@@ -55,7 +55,7 @@ $(document).ready(()=> {
     var naturalEvents;
 
     //Select new country with html drop down menu
-    $("#countryList").change(()=> {
+    $("#searchCountriesBtn").click(()=> {
 
         const codeA3 = $("#countryList").val();
 
@@ -96,6 +96,8 @@ $(document).ready(()=> {
 
         geoData.clusters.clearLayers();
 
+        $("#searchCountriesModal").hide();
+
         $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
 
     })
@@ -135,6 +137,30 @@ $(document).ready(()=> {
         naturalEvents.utils.getEvents(period, event, naturalEvents)
         .then((data)=> naturalEvents.utils.addEvents(map, data));
 
+    })
+
+    $("#clearMarkers").click(()=> {
+        if (!naturalEvents|| !selectedCountry) {
+            geoData.clusters.clearLayers();
+        } else if (!naturalEvents) {
+            selectedCountry.utils.removeLayers(selectedCountry);
+            geoData.clusters.clearLayers();
+        } else if (!selectedCountry) {
+            naturalEvents.utils.removeLayers(naturalEvents);
+            geoData.clusters.clearLayers();
+        } else {
+            selectedCountry.utils.removeLayers(selectedCountry);
+            naturalEvents.utils.removeLayers(naturalEvents);
+            geoData.clusters.clearLayers();
+        }        
+    })
+
+    $("#countrySearch").click(()=> {
+        $("#searchCountriesModal").show();
+    })
+
+    $("#countriesSeachCloseBtn").click(()=> {
+        $("#searchCountriesModal").hide();
     })
 
 })
