@@ -13,8 +13,7 @@ header {
     margin: 10px;
 }
 
-#countryModal {
-    display: none;
+.modal {
     position: fixed;
     z-index: 900;
     left: 0;
@@ -23,6 +22,14 @@ header {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.75);
+}
+
+#countryModal {
+    display: none;
+}
+
+#geoDataModal {
+    display: none;
 }
 
 .modalContent {

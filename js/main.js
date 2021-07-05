@@ -4,6 +4,10 @@ import * as events from "../common/naturalEventsClass.js";
 import * as utilities from "../common/utilities.js";
 import * as country from "../common/countryClass.js";
 import * as restaurants from "../common/restaurants.js";
+<<<<<<< Updated upstream
+=======
+import * as geoData from "../common/geoData.js";
+>>>>>>> Stashed changes
 
 $(document).ready(()=> {
 
@@ -79,6 +83,10 @@ $(document).ready(()=> {
             selectedCountry = new country.Country()
 
         }
+<<<<<<< Updated upstream
+=======
+        //--------------------------------------------
+>>>>>>> Stashed changes
         
         selectedCountry.utils.getBorders(selectedCountry, codeA3)
         .then((data)=> data.utils.addBorders(data, map))
@@ -90,9 +98,14 @@ $(document).ready(()=> {
         .then((data)=> data.utils.countryInfoPopup(map, data))
         .then(()=> modal.countryInfo(selectedCountry, userCountry))
         .then(()=> selectedCountry.languages)
+<<<<<<< Updated upstream
+=======
+        .then(()=> geoData.getGeoData(selectedCountry, map, "AIRP"))
+>>>>>>> Stashed changes
 
-        $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
+        geoData.clusters.clearLayers();
 
+<<<<<<< Updated upstream
         //restaurants.getMichelinRestaurants(map);
 
         const getCities = () => {
@@ -101,9 +114,10 @@ $(document).ready(()=> {
         getCities();
 
     })
+=======
+        $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
+>>>>>>> Stashed changes
 
-    map.on("click", ()=> {
-        console.log("You clicked sir!")
     })
 
     //Select natural event with html drop down menu
