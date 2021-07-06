@@ -18,29 +18,7 @@
     </head>
 
     <body>
-
-        <header id="header">
-            <select id="naturalEvents">
-                <option value="false">Select a natural event</option>
-                <option value="Wildfires">Wildfires</option>
-                <option value="Volcanoes">Volcanoes</option>
-                <option value="Severe Storms">Severe Storms</option>
-                <option value="Earthquakes">Earthquakes</option>
-                <option value="Sea and Lake Ice">Sea and Lake Ice</option>
-            </select>
-            <form id="periodSelector">
-                <label for="currentNaturalEvent">Today</label>
-                <input id="currentNaturalEvent" type="radio" name="naturalEvents" value="1"><br>
-                <label for="weekNaturalEvent">Week</label>
-                <input id="weekNaturalEvent" type="radio" name="naturalEvents" value="7"><br>
-                <label for="monthNaturalEvent">Month</label>
-                <input id="monthNaturalEvent" type="radio" name="naturalEvents" value="31"><br>
-                <label for="yearNaturalEvent">Year</label>
-                <input id="yearNaturalEvent" type="radio" name="naturalEvents" value="365"><br>
-            </form>
-
-        </header>
-
+        <!--Nav and nav modal-->
         <nav>
             <img class="navIcon" id="countrySearch" src="./images/globe.svg">
             <img class="navIcon" id="worldSearch" src="./images/location.svg">
@@ -50,46 +28,10 @@
             <img class="navIcon" id="contactInfo" src="./images/communicate.svg">
         </nav>
 
-        <div id="map"></div>
-
-        <div id="countryModal" class="modal">
-            <div class="modalContent">
-                <img id="flag">&nbsp<h2 id="countryName"></h2>
-                <span class="closeBtn">&times;</span>
-                <h3>Society Info</h3>
-                <p id="population"></p>
-                <p id="languagesTitle"></p>
-                <p id="languages"></p>
-                <h3>Currency Info</h3>
-                <p id="currencyName"></p>
-                <p id="currencySubunit"></p>
-                <p id="currencySymbol"></p>
-                <p id="foreignExchange"></p>
-                <h3>Traffic Info</h3>
-                <p id="driveSide"></p>
-                <p id="speedUnit"></p>
-                <p id="trafficIndex"></p>
-                <h3>Living Info</h3>
-                <p id="qualityOfLifeIndex"></p>
-                <p id="healthcareIndex"></p>
-                <p id="crimeIndex"></p>
-                <p id="pollutionIndex"></p>
-                <h3>Timezone</h3>
-                <p id="timezoneName"></p>
-                <p id="timezoneDst"></p>
-            </div>
-        </div>
-
-        <div id="geoDataModal" class="modal">
-            <div class="modalContent">
-                <h1 id="geoModalh1"></h1>
-            </div>
-        </div>
-
-        <div id="searchCountriesModal" class="modal">
-            <div class="modalContent">
+        <div id="searchCountriesModal" class="modal modalOff">
+            <div class="modalContent modalContentOff">
                 <span id="countriesSeachCloseBtn" class="closeBtn">&times;</span>
-                <h1>Select a Country</h1>
+                <h3>Select a Country</h3>
                 <select id="countryList">
                     <option>Select a country</option>
                     <option value="AFG">Afghanistan</option>
@@ -346,18 +288,106 @@
             </div>
         </div>
 
-        <div id="searchWorldModal" class="modal">
+        <div id="searchWorldModal" class="modal modalOff">
             <div class="modalContent">
+                <span id="seachWorldCloseBtn" class="closeBtn">&times;</span>
+                <select id="naturalEvents">
+                    <option value="false">Select a natural event</option>
+                    <option value="Wildfires">Wildfires</option>
+                    <option value="Volcanoes">Volcanoes</option>
+                    <option value="Severe Storms">Severe Storms</option>
+                    <option value="Earthquakes">Earthquakes</option>
+                    <option value="Sea and Lake Ice">Sea and Lake Ice</option>
+                </select>
+                <form id="periodSelector">
+                    <label for="currentNaturalEvent">Today</label>
+                    <input id="currentNaturalEvent" type="radio" name="naturalEvents" value="1"><br>
+                    <label for="weekNaturalEvent">Week</label>
+                    <input id="weekNaturalEvent" type="radio" name="naturalEvents" value="7"><br>
+                    <label for="monthNaturalEvent">Month</label>
+                    <input id="monthNaturalEvent" type="radio" name="naturalEvents" value="31"><br>
+                    <label for="yearNaturalEvent">Year</label>
+                    <input id="yearNaturalEvent" type="radio" name="naturalEvents" value="365"><br>
+                </form>
             </div>
         </div>
 
-        <div id="appInfoModal" class="modal">
-            <div class="modalContent">
+        <div id="appInfoModal" class="modal modalOff">
+            <div id="appInfoModalContent" class="modalContent">
+                <span id="appInfoCloseBtn" class="closeBtn">&times;</span>
+                <h3>About the App</h3>
+                <div class="modalTab">
+
+                    <button class="modalTabLinks" id="appInfoTab">App Info</button>
+                    <button class="modalTabLinks" id="howItWorksTab">How its Works</button>
+                    <button class="modalTabLinks" id="creditsTab">Credits</button>
+
+                </div>
+                <div id="infoDisplay" class="modalTabContent modalOff">
+                    <h3>App Information</h3>
+                </div>
+                <div id="howItWorksDisplay" class="modalTabContent modalOff">
+                    <h3>How it Works</h3>
+                </div>
+                <div id="creditsDisplay" class="modalTabContent modalOff">
+                    <h3>App Credits</h3>
+                </div>
             </div>
         </div>
 
-        <div id="contactModal" class="modal">
+        <div id="contactModal" class="modal modalOff">
             <div class="modalContent">
+                <span id="contactCloseBtn" class="closeBtn">&times;</span>
+                <form id="contactForm" action="./php/contactForm.php" method="post">
+                    <h3>Contact us</h3>
+                    <p>If you have any questions or concerns about the app, please fill in the for and I will get back to you.</p>
+                    <label for="formName">Name</label><br>
+                    <input class="formInput" type="text" id="formName" name="name" required><br>
+                    <label for="formEmail">Email</label><br>
+                    <input class="formInput" type="email" id="formEmail" name="email" required><br>
+                    <label for="formMessage">Message</label><br>
+                    <textarea class="formInput" id="formMessage" form="contactForm" name="message"></textarea><br>
+                    <input type="submit" value="submit">
+                </form>
+            </div>
+        </div>
+
+
+
+
+        <div id="map"></div>
+
+        <div id="countryModal" class="modal">
+            <div class="modalContent">
+                <img id="flag">&nbsp<h2 id="countryName"></h2>
+                <span class="closeBtn">&times;</span>
+                <h3>Society Info</h3>
+                <p id="population"></p>
+                <p id="languagesTitle"></p>
+                <p id="languages"></p>
+                <h3>Currency Info</h3>
+                <p id="currencyName"></p>
+                <p id="currencySubunit"></p>
+                <p id="currencySymbol"></p>
+                <p id="foreignExchange"></p>
+                <h3>Traffic Info</h3>
+                <p id="driveSide"></p>
+                <p id="speedUnit"></p>
+                <p id="trafficIndex"></p>
+                <h3>Living Info</h3>
+                <p id="qualityOfLifeIndex"></p>
+                <p id="healthcareIndex"></p>
+                <p id="crimeIndex"></p>
+                <p id="pollutionIndex"></p>
+                <h3>Timezone</h3>
+                <p id="timezoneName"></p>
+                <p id="timezoneDst"></p>
+            </div>
+        </div>
+
+        <div id="geoDataModal" class="modal">
+            <div class="modalContent">
+                <h1 id="geoModalh1"></h1>
             </div>
         </div>
 
