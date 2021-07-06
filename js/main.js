@@ -67,6 +67,7 @@ $(document).ready(()=> {
     $("#searchCountriesBtn").click(()=> {
 
         const codeA3 = $("#countryList").val();
+        const poi = $("input[name='searchCountryOptions']:checked").val();
 
         if (!selectedCountry && !naturalEvents) {
 
@@ -99,16 +100,14 @@ $(document).ready(()=> {
         .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
-        .then(()=> modal.countryInfo(selectedCountry, userCountry))
-        .then(()=> selectedCountry.languages)
-        .then(()=> geoData.getGeoData(selectedCountry, map, "AIRP"))
+        .then((data)=> geoData.getGeoData(data, map, poi))
+        //.then(()=> modal.countryInfo(selectedCountry, userCountry))
+        //.then(()=> selectedCountry.languages)
+        //$("#countryModalClseBtn").click(()=>$("#countryModal").hide())
 
         geoData.clusters.clearLayers();
-
-        $("#searchCountriesModal").hide();
-
-        $("#countryModalClseBtn").click(()=>$("#countryModal").hide())
-
+        $("#searchCountriesModal").addClass(" modalOff");
+        
     })
 
     $("#countriesSeachCloseBtn").click(()=> {
