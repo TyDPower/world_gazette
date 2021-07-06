@@ -54,7 +54,16 @@ $(document).ready(()=> {
     //Initial variable declaration for natural events change from down down menu
     var naturalEvents;
 
-    //Select new country with html drop down menu
+    //Select natural event with html drop down menu
+    
+
+    //Nav country search
+    $("#countrySearch").click(()=> {
+        $(".modal").addClass(" modalOff");
+
+        $("#searchCountriesModal").removeClass(" modalOff");
+    })
+
     $("#searchCountriesBtn").click(()=> {
 
         const codeA3 = $("#countryList").val();
@@ -102,7 +111,17 @@ $(document).ready(()=> {
 
     })
 
-    //Select natural event with html drop down menu
+    $("#countriesSeachCloseBtn").click(()=> {
+        $("#searchCountriesModal").addClass(" modalOff");
+    })
+
+    //Nav world search
+    $("#worldSearch").click(()=> {
+        $(".modal").addClass(" modalOff");
+
+        $("#searchWorldModal").removeClass(" modalOff")
+    })
+
     $("#naturalEvents").change(()=> {
 
         let period = $("input[name=naturalEvents]:checked").val();
@@ -139,8 +158,15 @@ $(document).ready(()=> {
 
     })
 
+    $("#seachWorldCloseBtn").click(()=> {
+        $("#searchWorldModal").addClass(" modalOff")
+    })
+
+    //Nav clear markers
     $("#clearMarkers").click(()=> {
-        if (!naturalEvents|| !selectedCountry) {
+        $(".modal").removeClass(" modalOn");
+        $(".modal").addClass(" modalOff");
+        if (!naturalEvents && !selectedCountry) {
             geoData.clusters.clearLayers();
         } else if (!naturalEvents) {
             selectedCountry.utils.removeLayers(selectedCountry);
@@ -155,12 +181,58 @@ $(document).ready(()=> {
         }        
     })
 
-    $("#countrySearch").click(()=> {
-        $("#searchCountriesModal").show();
+    //Nav app info with tabs
+    $("#appInfo").click(()=> {
+        $(".modal").addClass(" modalOff");
+        $(".modalTabLinks").removeClass(" activeTab");
+        $("#infoDisplay").addClass(" modalOff");
+        $("#howItWorksDisplay").addClass(" modalOff");
+        $("#creditsDisplay").addClass(" modalOff");
+
+        $("#appInfoModal").removeClass(" modalOff");
+        $("#infoDisplay").removeClass(" modalOff");
+        $("#appInfoTab").addClass(" activeTab");
     })
 
-    $("#countriesSeachCloseBtn").click(()=> {
-        $("#searchCountriesModal").hide();
+    $("#appInfoTab").click(()=> {
+        $(".modalTabContent").addClass(" modalOff");
+        $(".modalTabLinks").removeClass(" activeTab");
+
+        $("#infoDisplay").removeClass(" modalOff");
+        $("#appInfoTab").addClass(" activeTab");
+
+    })
+
+    $("#howItWorksTab").click(()=> {
+        $(".modalTabContent").addClass(" modalOff");
+        $(".modalTabLinks").removeClass(" activeTab");
+
+        $("#howItWorksDisplay").removeClass(" modalOff");
+        $("#howItWorksTab").addClass(" activeTab");
+    })
+
+    $("#creditsTab").click(()=> {
+        $(".modalTabContent").addClass(" modalOff");
+        $(".modalTabLinks").removeClass(" activeTab");
+
+        $("#creditsDisplay").removeClass(" modalOff");
+        $("#creditsTab").addClass(" activeTab");
+    })
+
+    $("#appInfoCloseBtn").click(()=> {
+        $("#appInfoModal").addClass(" modalOff");
+        $(".modalTabLinks").removeClass(" activeTab");
+    })
+
+    //Nav contact
+    $("#contactInfo").click(()=> {
+        $(".modal").addClass(" modalOff");
+
+        $("#contactModal").removeClass(" modalOff");
+    })
+
+    $("#contactCloseBtn").click(()=> {
+        $("#contactModal").addClass(" modalOff");
     })
 
 })
