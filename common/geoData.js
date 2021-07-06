@@ -113,13 +113,13 @@ const getMarkers = (markers, fcode) => {
             return markers.observation;
         case "PPL":
             return markers.population;
-            default:
-                return console.error(fCode)
+        default:
+            return console.error(fCode)
 
     }
 }
 
-export const getGeoData = (countryObj, mapObj, fcode) => {
+export const getGeoData = (countryObj, mapObj, fcode, pop) => {
 
     return new Promise((resolve, reject)=> {
 
@@ -136,12 +136,13 @@ export const getGeoData = (countryObj, mapObj, fcode) => {
 
                 if (res.status.name == "ok") {
                     let geo = res.data.geonames;
-                    geo.forEach(res=> {
-                        clusters.addLayer(L.marker([res.lat, res.lng], {icon: getMarkers(markers, fcode)}).on("click", ()=> {
-                            $("#geoModalh1").html(res.name)
-                            $("#geoDataModal").show();
-                        })).addTo(mapObj);
-                    });
+
+                        geo.forEach(res=> {
+                            clusters.addLayer(L.marker([res.lat, res.lng], {icon: getMarkers(markers, fcode)}).on("click", ()=> {
+                                $("#geoModalh1").html(res.name)
+                                $("#geoDataModal").show();
+                            })).addTo(mapObj);
+                        });
 
                     resolve();
 
