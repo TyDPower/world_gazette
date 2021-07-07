@@ -92,7 +92,7 @@ export class Country {
                     if (!countryObj.index.safety) {countryObj.index.safety = data.safety_index}
                     if (!countryObj.index.healthcare) {countryObj.index.healthcare = data.health_care_index}
                     if (!countryObj.index.qualityOfLife) {countryObj.index.qualityOfLife = data.quality_of_life_index}
-                    if (!countryObj.index.costOfLiving) {countryObj.index.costOfLiving = data.contributors_cost_of_living}
+                    if (!countryObj.index.costOfLiving) {countryObj.index.costOfLiving = data.cpi_index}
                     if (!countryObj.index.rent) {countryObj.index.rent = data.rent_index}
                     if (!countryObj.index.groceries) {countryObj.index.groceries = data.groceries_index}
                     if (!countryObj.index.traffic) {countryObj.index.traffic = data.traffic_index}
@@ -188,10 +188,36 @@ export class Country {
 
                 let currenciesStr = countryObj.currency.exchangeRate[0].replace(/_/gi, "/");
                 let rate = countryObj.currency.exchangeRate[1]
+                let qol = countryObj.index.qualityOfLife;
+                let col = countryObj.index.costOfLiving;
+
+                let QoLRating = () => {
+                    if (qol > 144.9) {
+                        return "HIGH";
+                    } else if (qol > 90.9) {
+                        return "MEDIUM";
+                    } else {
+                        return "LOW";
+                    }
+                };
+
+                let CoLRating = () => {
+                    if (col >= 120) {
+                        return "VERY HIGH";
+                    } else if (col >= 90) {
+                        return "HIGH";
+                    } else if (col >= 60) {
+                        return "MEDIUM";
+                    } else if (col >= 30) {
+                        return "LOW";
+                    } else {
+                        return "VERY LOW";
+                    }
+                }
 
                 var data = `<img src="${countryObj.flag.small}"> ${countryObj.admin.name}<br>
-                            Quality of Life: ${countryObj.index.qualityOfLife}<br>
-                            Cost of Living: ${countryObj.index.costOfLiving}<br>
+                            Quality of Life: ${QoLRating()}<br>
+                            Cost of Living: ${CoLRating()}<br>
                             Exchange Rate: ${currenciesStr} ${rate.toFixed(3)}`
                             countryObj.layerGroups.addLayer(
                     L.popup()
