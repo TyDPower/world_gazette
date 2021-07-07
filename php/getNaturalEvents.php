@@ -5,7 +5,7 @@
 
     $startTime = microtime(true);
 
-    $url="https://eonet.sci.gsfc.nasa.gov/api/v2.1/events?&days=" . $_REQUEST["period"];
+    $url="https://eonet.sci.gsfc.nasa.gov/api/v2.1/events?&days=365";
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
