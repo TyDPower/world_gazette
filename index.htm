@@ -330,24 +330,22 @@
         <div id="searchWorldModal" class="modal modalOff">
             <div class="modalContent">
                 <span id="seachWorldCloseBtn" class="closeBtn">&times;</span>
-                <select id="naturalEvents">
-                    <option value="false">Select a natural event</option>
-                    <option value="Wildfires">Wildfires</option>
-                    <option value="Volcanoes">Volcanoes</option>
-                    <option value="Severe Storms">Severe Storms</option>
-                    <option value="Earthquakes">Earthquakes</option>
-                    <option value="Sea and Lake Ice">Sea and Lake Ice</option>
-                </select>
-                <form id="periodSelector">
-                    <label for="currentNaturalEvent">Today</label>
-                    <input id="currentNaturalEvent" type="radio" name="naturalEvents" value="1"><br>
-                    <label for="weekNaturalEvent">Week</label>
-                    <input id="weekNaturalEvent" type="radio" name="naturalEvents" value="7"><br>
-                    <label for="monthNaturalEvent">Month</label>
-                    <input id="monthNaturalEvent" type="radio" name="naturalEvents" value="31"><br>
-                    <label for="yearNaturalEvent">Year</label>
-                    <input id="yearNaturalEvent" type="radio" name="naturalEvents" value="365"><br>
-                </form>
+                <h3>Serach World Wide</h3>
+                <h4>Search NSAS Natural Events (365 days)</h4>
+                <div>
+                    <input type="radio" name="naturalEvents" id="wildfires" value="Wildfires">
+                    <label for="wildfires">Wildfires</label><br>
+                    <input type="radio" name="naturalEvents" id="volcanos" value="Volcanos">
+                    <label for="volcanos">Volcanos</label><br>
+                    <input type="radio" name="naturalEvents" id="severeStorms" value="Severe Storms">
+                    <label for="severeStorms">Severe Storms</label><br>
+                    <input type="radio" name="naturalEvents" id="earthquakes" value="Earthquakes">
+                    <label for="earthquakes">Earthquakes</label><br>
+                    <input type="radio" name="naturalEvents" id="seaAndLakeIce" value="Sea and Lake Ice">
+                    <label for="seaAndLakeIce">Sea and Lake Ice</label><br>
+                </div>
+                <br>
+                <button id="searchWorldBtn">Search</button>
             </div>
         </div>
 
