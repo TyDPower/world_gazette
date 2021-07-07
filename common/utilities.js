@@ -93,3 +93,25 @@ export const checkValidCurrency = (userCurrency) => {
         return userCurrency
     }
 };
+
+export const clearAllLayers = (countryObj, eventsObj, geoDataObj, worldTilesObj, mapObj) => {
+    $(".modal").addClass(" modalOff");
+    if (!eventsObj && !countryObj) {
+        geoDataObj.clusters.clearLayers();
+    } else if (!eventsObj) {
+        countryObj.utils.removeLayers(countryObj);
+        geoDataObj.clusters.clearLayers();
+    } else if (!countryObj) {
+        eventsObj.utils.removeLayers(eventsObj);
+        geoDataObj.clusters.clearLayers();
+    } else {
+        countryObj.utils.removeLayers(countryObj);
+        eventsObj.utils.removeLayers(eventsObj);
+        geoDataObj.clusters.clearLayers();
+    }
+    worldTilesObj.utils.removeOverlays();
+    mapObj.panTo([0, 0])
+    if (mapObj.getZoom() > 2) {
+        mapObj.setZoom(2);
+    }  
+}
