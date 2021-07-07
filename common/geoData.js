@@ -1,5 +1,9 @@
 export var clusters = L.markerClusterGroup();
 
+export const removeLayers = () => {
+    clusters.clearLayers();
+}
+
 const markers = {
     airports: L.icon({
         iconUrl: "./images/plane.svg",
@@ -153,7 +157,7 @@ export const getGeoData = (countryObj, mapObj, fcode, pop) => {
             },
 
             error: (err)=> {
-                console.error(err);
+                reject(err);
             }
         })
     })

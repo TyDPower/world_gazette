@@ -137,18 +137,18 @@ $(document).ready(()=> {
         } else if (selectedCountry && !naturalEvents) {
 
             selectedCountry.utils.removeLayers(selectedCountry);
+            geoData.removeLayers();
             naturalEvents = new events.NaturalEvents();
 
         } else {
 
             naturalEvents.utils.removeLayers(naturalEvents);
             selectedCountry.utils.removeLayers(selectedCountry);
+            geoData.removeLayers();
             naturalEvents = new events.NaturalEvents();
-
         }
 
-        naturalEvents.utils.getEvents(event, naturalEvents)
-        .then((data)=> naturalEvents.utils.addEvents(map, data))
+        naturalEvents.utils.getEvents(event, naturalEvents, map);
 
         $("#searchWorldModal").addClass(" modalOff")
 
