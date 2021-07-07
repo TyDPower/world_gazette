@@ -24,11 +24,11 @@ export class NaturalEvents {
                 iconSize: [38, 95]
             }),
         };
-        this.layerGroups = L.layerGroup();
+        this.clusterGroup = L.markerClusterGroup();
         this.utils = {
             removeLayers(eventsObj) {
-                if (eventsObj.layerGroups) {
-                    eventsObj.layerGroups.clearLayers();
+                if (eventsObj.clusterGroup) {
+                    eventsObj.clusterGroup.clearLayers();
                 }                
             },
             panToCenter(map) {
@@ -37,34 +37,35 @@ export class NaturalEvents {
                         map.setZoom(2);
                     }
             },
-            getEvents(event, eventsObj) {
+            getEvents(event, eventsObj, mapObj) {
         
                 return new Promise((resolve, rej)=> {
                     $.ajax({
                         url: "./php/getNaturalEvents.php",
                         type: "post",
                         dataType: "json",
-                        data: {
-                            event: event
-                        },
                 
                         success: (res)=> {
                 
                             if (res.status.name == "ok") {
-                                var results = res.data.events
+                                let events = res.data.events
 
-                
-                                for (let i=0; i<results.length; i++) {
-                
-                                    var lat = results[i].geometries[0].coordinates[1]
-                                    var lng = results[i].geometries[0].coordinates[0]
-                
-                                    if (results[i].categories[0].title === event) {
-                                        eventsObj.events.push([lat, lng]);
+                                events.forEach(res=> {
+
+                                    let lng = res.geometries[0].coordinates[0]
+                                    let lat = res.geometries[0].coordinates[1]
+
+                                    if (res.categories[0].title === event) {
+
+                                        eventsObj.clusterGroup.addLayer(L.marker([lat, lng], {icon: eventsObj.utils.getMarker(event, eventsObj)}).on("click", ()=> {
+                                            alert(res.title)
+                                        })).addTo(mapObj);
+
+                                        eventsObj.utils.panToCenter(mapObj);
                                     }
-                                }
 
-                                eventsObj.category = event;
+                                })             
+                                
             
                                 resolve(eventsObj)
                 
@@ -82,8 +83,8 @@ export class NaturalEvents {
                 
             
             },
-            getMarker(eventsObj) {
-                switch (eventsObj.category) {
+            getMarker(event, eventsObj) {
+                switch (event) {
                     case "Wildfires":
                         return eventsObj.markers.wildfires;
                     case "Volcanoes":
@@ -95,16 +96,6 @@ export class NaturalEvents {
                     case "Sea and Lake Ice":
                         return eventsObj.markers.icebergs;
                 }
-            },
-            addEvents(map, eventsObj) {
-
-                if (eventsObj.category) {
-                    eventsObj.events.forEach(res=> {
-                        eventsObj.layerGroups.addLayer(L.marker(res, {icon: eventsObj.utils.getMarker(eventsObj)})).addTo(map);
-                    })
-                    eventsObj.utils.panToCenter(map);
-                }
-
             }
         }
     }
