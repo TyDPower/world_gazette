@@ -346,6 +346,29 @@
             </div>
         </div>
 
+        <div id="selectMapModal" class="modal modalOff">
+            <div class="modalContent">
+                <span id="selectMapCloseBtn" class="closeBtn">&times;</span>
+                <h3>Map Selection and overlays</h3>
+                <h4>Select a new map</h4>
+                <select id="mapTiles">
+                    <option value="default">Default</option>
+                    <option value="outdoors">Outdoors</option>
+                </select>
+                <section>
+                    <h3>Select a map overlay</h3>
+                    <input type="checkbox" name="hiking" id="hiking" value="hiking">
+                    <label for="hiking">Hiking</label><br>
+                    <input type="checkbox" name="cycling" id="cycling" value="cycling">
+                    <label for="cycling">Cycling</label><br>
+                    <input type="checkbox" name="railways" id="railways" value="railways">
+                    <label for="railways">Railways</label><br>
+                </section>
+                <br>
+                <button id="selectMapBtn">Select</button>
+            </div>
+        </div>
+
         <div id="appInfoModal" class="modal modalOff">
             <div id="appInfoModalContent" class="modalContent">
                 <span id="appInfoCloseBtn" class="closeBtn">&times;</span>
@@ -374,13 +397,13 @@
                 <span id="contactCloseBtn" class="closeBtn">&times;</span>
                 <form id="contactForm" action="./php/contactForm.php" method="post">
                     <h3>Contact us</h3>
-                    <p>If you have any questions or concerns about the app, please fill in the for and I will get back to you.</p>
+                    <p>If you have any questions or concerns about the app, please fill in the form and I will get back to you asap.</p>
                     <label for="formName">Name</label><br>
                     <input class="formInput" type="text" id="formName" name="name" required><br>
                     <label for="formEmail">Email</label><br>
                     <input class="formInput" type="email" id="formEmail" name="email" required><br>
                     <label for="formMessage">Message</label><br>
-                    <textarea class="formInput" id="formMessage" form="contactForm" name="message"></textarea><br>
+                    <textarea class="formInput" id="formMessage" form="contactForm" name="message" required></textarea><br>
                     <input type="submit" value="submit">
                 </form>
             </div>
@@ -388,10 +411,10 @@
 
         <div id="map"></div>
 
-        <div id="countryModal" class="modal">
+        <div id="countryModal" class="modal modalOff">
             <div class="modalContent">
+                <span id="countryModalcloseBtn" class="closeBtn">&times;</span>
                 <img id="flag">&nbsp<h2 id="countryName"></h2>
-                <span class="closeBtn">&times;</span>
                 <h3>Society Info</h3>
                 <p id="population"></p>
                 <p id="languagesTitle"></p>
@@ -410,13 +433,12 @@
                 <p id="healthcareIndex"></p>
                 <p id="crimeIndex"></p>
                 <p id="pollutionIndex"></p>
-                <h3>Timezone</h3>
-                <p id="timezoneName"></p>
-                <p id="timezoneDst"></p>
+                <h3>Timezone(s)</h3>
+                <p id="timezone"></p>
             </div>
         </div>
 
-        <div id="geoDataModal" class="modal">
+        <div id="geoDataModal" class="modal modalOff">
             <div class="modalContent">
                 <h1 id="geoModalh1"></h1>
             </div>
