@@ -24,14 +24,6 @@ header {
     background-color: rgba(0, 0, 0, 0.75);
 }
 
-#countryModal {
-    display: none;
-}
-
-#geoDataModal {
-    display: none;
-}
-
 .modalContent {
     background-color: white;
     margin: 15% auto;
