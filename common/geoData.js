@@ -123,7 +123,7 @@ const getMarkers = (markers, fcode) => {
     }
 }
 
-export const getGeoData = (countryObj, mapObj, fcode, pop) => {
+export const getGeoData = (countryObj, mapObj, fcode) => {
 
     return new Promise((resolve, reject)=> {
 
