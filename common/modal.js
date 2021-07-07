@@ -1,7 +1,7 @@
 import * as utilities from "./utilities.js"
 
 export const countryInfo = (selectedCountry, userCountry) => {
-
+    
     const displayLanguages = () => {
         $("#languages").html("");
         selectedCountry.social.languages.forEach(res=>{$("#languages").append(`${res.name}<br>`)});
@@ -9,7 +9,7 @@ export const countryInfo = (selectedCountry, userCountry) => {
 
     $("#countryName").html(selectedCountry.admin.name);
     $("#population").html("Population: " + selectedCountry.social.population);
-    $("#languagesTitle").html("Some of " + selectedCountry.admin.name + "'s languages:")
+    $("#languagesTitle").html(selectedCountry.admin.name + "'s languages:")
     $("#flag").attr("src", selectedCountry.flag.large);
 
     displayLanguages();
@@ -28,8 +28,8 @@ export const countryInfo = (selectedCountry, userCountry) => {
     $("#crimeIndex").html(utilities.compareIndex("crime", selectedCountry, userCountry));
     $("#pollutionIndex").html(utilities.compareIndex("pollution", selectedCountry, userCountry));
 
-    $("#timezoneName").html(); //Copy displayLanguages function
+    $("#timezone").html(); //Copy displayLanguages function
     
-    //$("#countryModal").show();
+    $("#countryModal").removeClass(" modalOff");
     
 }
