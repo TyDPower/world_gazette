@@ -1,20 +1,17 @@
-import * as userLocation from "../common/userLocation.js";
-import * as modal from "../common/modal.js";
 import * as events from "../common/naturalEventsClass.js";
-import * as utilities from "../common/utilities.js";
+import * as utils from "../common/utilities.js";
 import * as country from "../common/countryClass.js";
 import * as restaurants from "../common/restaurants.js";
 import * as geoData from "../common/geoData.js";
+import { countryInfo } from "../common/modal.js";
+import { worldTiles } from "../common/mapAndOverlays.js";
 
 $(document).ready(()=> {
 
     //Initial World map tiles
     var map = L.map('map').fitWorld();
-    const worldMap = L.tileLayer('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png', {
-        maxZoom: 20,
-        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    });
-    worldMap.addTo(map);
+
+    worldTiles.maps.default.addTo(map);
 
     //Grab user location with marker and country select
     var userCountry;
@@ -52,10 +49,7 @@ $(document).ready(()=> {
     //Initial variable declaration for country change from down down menu
     var selectedCountry;
     //Initial variable declaration for natural events change from down down menu
-    var naturalEvents;
-
-    //Select natural event with html drop down menu
-    
+    var naturalEvents;    
 
     //Nav country search
     $("#countrySearch").click(()=> {
@@ -100,14 +94,16 @@ $(document).ready(()=> {
         .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
-        .then((data)=> geoData.getGeoData(data, map, poi))
-        //.then(()=> modal.countryInfo(selectedCountry, userCountry))
-        //.then(()=> selectedCountry.languages)
-        //$("#countryModalClseBtn").click(()=>$("#countryModal").hide())
+        .then((data)=> data.layerGroups.addLayer(L.marker(data.admin.latlng).on("click", ()=> {countryInfo(selectedCountry, userCountry)})).addTo(map))
+        .then((data)=> {if (poi) {geoData.getGeoData(data, map, poi)}})
 
         geoData.clusters.clearLayers();
         $("#searchCountriesModal").addClass(" modalOff");
         
+    })
+
+    $("#countryModalcloseBtn").click(()=> {
+        $("#countryModal").addClass(" modalOff");
     })
 
     $("#countriesSeachCloseBtn").click(()=> {
@@ -158,23 +154,26 @@ $(document).ready(()=> {
         $("#searchWorldModal").addClass(" modalOff")
     })
 
+    //Nav select map
+    $("#changeMap").click(()=> {
+        $(".modal").addClass(" modalOff");
+        $("#selectMapModal").removeClass(" modalOff");
+    })
+
+    $("#selectMapBtn").click(()=> {
+
+        worldTiles.utils.loadOverlays(map);
+        $("#selectMapModal").addClass(" modalOff")
+
+    })
+
+    $("#selectMapCloseBtn").click(()=> {
+        $("#selectMapModal").addClass(" modalOff")
+    })
+
     //Nav clear markers
     $("#clearMarkers").click(()=> {
-        $(".modal").removeClass(" modalOn");
-        $(".modal").addClass(" modalOff");
-        if (!naturalEvents && !selectedCountry) {
-            geoData.clusters.clearLayers();
-        } else if (!naturalEvents) {
-            selectedCountry.utils.removeLayers(selectedCountry);
-            geoData.clusters.clearLayers();
-        } else if (!selectedCountry) {
-            naturalEvents.utils.removeLayers(naturalEvents);
-            geoData.clusters.clearLayers();
-        } else {
-            selectedCountry.utils.removeLayers(selectedCountry);
-            naturalEvents.utils.removeLayers(naturalEvents);
-            geoData.clusters.clearLayers();
-        }        
+        utils.clearAllLayers(selectedCountry, naturalEvents, geoData, worldTiles, map);
     })
 
     //Nav app info with tabs
