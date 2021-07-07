@@ -121,14 +121,9 @@ $(document).ready(()=> {
         $("#searchWorldModal").removeClass(" modalOff")
     })
 
-    $("#naturalEvents").change(()=> {
+    $("#searchWorldBtn").click(()=> {
 
-        let period = $("input[name=naturalEvents]:checked").val();
-        let event = $("#naturalEvents").val();
-
-        if (!period) {
-            alert("Please select either 'Today', 'Week', 'Month' or 'Year' to display natural events.")
-        }
+        let event = $("input[name='naturalEvents']:checked").val();
 
         if (!selectedCountry && !naturalEvents) {
 
@@ -152,8 +147,10 @@ $(document).ready(()=> {
 
         }
 
-        naturalEvents.utils.getEvents(period, event, naturalEvents)
-        .then((data)=> naturalEvents.utils.addEvents(map, data));
+        naturalEvents.utils.getEvents(event, naturalEvents)
+        .then((data)=> naturalEvents.utils.addEvents(map, data))
+
+        $("#searchWorldModal").addClass(" modalOff")
 
     })
 
