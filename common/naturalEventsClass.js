@@ -37,7 +37,7 @@ export class NaturalEvents {
                         map.setZoom(2);
                     }
             },
-            getEvents(period, event, eventsObj) {
+            getEvents(event, eventsObj) {
         
                 return new Promise((resolve, rej)=> {
                     $.ajax({
@@ -45,8 +45,7 @@ export class NaturalEvents {
                         type: "post",
                         dataType: "json",
                         data: {
-                            period: period,
-                            event: event,
+                            event: event
                         },
                 
                         success: (res)=> {
