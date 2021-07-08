@@ -3,7 +3,7 @@ import * as utils from "../common/utilities.js";
 import * as country from "../common/countryClass.js";
 import * as restaurants from "../common/restaurants.js";
 import * as geoData from "../common/geoData.js";
-import { countryInfo } from "../common/modal.js";
+import { countryModal } from "../common/modal.js";
 import { worldTiles } from "../common/mapAndOverlays.js";
 
 $(document).ready(()=> {
@@ -94,8 +94,8 @@ $(document).ready(()=> {
         .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
-        .then((data)=> data.layerGroups.addLayer(L.marker(data.admin.latlng).on("click", ()=> {countryInfo(selectedCountry, userCountry)})).addTo(map))
-        .then((data)=> {if (poi) {geoData.getGeoData(data, map, poi)}})
+        .then((data)=> data.layerGroups.addLayer(L.marker(data.admin.latlng).on("click", ()=> {countryModal(selectedCountry, userCountry)})).addTo(map))
+        .then(()=> {if (poi) {geoData.getGeoData(selectedCountry, map, poi)}})
 
         geoData.clusters.clearLayers();
         $("#searchCountriesModal").addClass(" modalOff");
