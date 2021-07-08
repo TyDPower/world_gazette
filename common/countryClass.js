@@ -218,7 +218,8 @@ export class Country {
                 var data = `<img src="${countryObj.flag.small}"> ${countryObj.admin.name}<br>
                             Quality of Life: ${QoLRating()}<br>
                             Cost of Living: ${CoLRating()}<br>
-                            Exchange Rate: ${currenciesStr} ${rate.toFixed(3)}`
+                            Exchange Rate: ${currenciesStr} ${rate.toFixed(3)}<br>
+                            Close & click on pin for more info.`
                             countryObj.layerGroups.addLayer(
                     L.popup()
                         .setLatLng(countryObj.admin.latlng)
