@@ -13,6 +13,33 @@ header {
     margin: 10px;
 }
 
+table, th, td {
+    border: 1px solid black;
+}
+
+#comparisonTable {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#comparisonTable td, #comparisonTable th {
+    border: 1px solid #aaa;
+    padding: 8px;
+}
+
+#comparisonTable tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+#comparisonTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
 .modal {
     position: fixed;
     z-index: 900;
@@ -114,3 +141,30 @@ nav img {
     border: 1px solid #ccc;
     border-top: none;
   }
+
+#countryModal  h6 {
+    margin: auto;
+    font-weight: normal;
+}
+
+#countryModal h5 {
+      display: inline;
+}
+
+#countryModal h3 {
+    text-decoration: underline;
+}
+
+#searchCountriesModal img {
+    width: 75px;
+    padding: 10px;
+}
+
+.modalHeaderContainer h4 {
+    text-align: center;
+    margin: 0;
+}
+
+.modalHeadersWithImg {
+    display: inline-flex;
+}
