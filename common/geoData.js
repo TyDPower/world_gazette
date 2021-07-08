@@ -148,7 +148,7 @@ export const getGeoData = (countryObj, mapObj, fcode) => {
                             })).addTo(mapObj);
                         });
 
-                    resolve();
+                    resolve(countryObj);
 
                 } else {
                     reject(res.status);
