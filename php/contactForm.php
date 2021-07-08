@@ -1,9 +1,6 @@
 <?php
 
-    mail("tyrone.power@live.com", "Test: 07/07 21:48", "Test email");
-
-
-    /*$emailTo = "contact@typower.info";
+   $emailTo = "contact@typower.info";
 
     if (empty($_POST["name"]) || empty($_POST["email"]) || empty($_POST["message"])) {
         $errors .= "\n Error: all fields are required";
@@ -37,7 +34,7 @@
 
         //redirect to the 'thank you' page
 
-        header('Location: contact-form-thank-you.html');
+        //header('Location: contact-form-thank-you.html');
 
         }*/
 
