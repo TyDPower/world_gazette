@@ -168,3 +168,8 @@ nav img {
 .modalHeadersWithImg {
     display: inline-flex;
 }
+
+.italicBold {
+    font-style: italic;
+    font-weight: bold;
+}
