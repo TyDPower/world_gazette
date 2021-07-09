@@ -24,7 +24,7 @@
 
         " Here are the details:\n Name: $name \n ".
 
-        "Email: $email\n Message \n $message";
+        "Email: $email\n Message: \n $message";
 
         $headers = "From: $emailTo\n";
 
@@ -32,10 +32,8 @@
 
         mail($to,$email_subject,$email_body,$headers);
 
-        //redirect to the 'thank you' page
+        header('Location: https://typower.tech/');
 
-        //header('Location: contact-form-thank-you.html');
-
-        }*/
+        }
 
 ?>
