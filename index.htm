@@ -301,8 +301,8 @@
                     <h4>Points of Intrest Search (optional)</h4>
                     <input type="radio" name="searchCountryOptions" id="airports" value="AIRP">
                     <label for="airports">Airports</label><br>
-                    <input type="radio" name="searchCountryOptions" id="railwayStations" value="RSTP">
-                    <label for="railwayStations">Railway Stations</label><br>
+                    <!--<input type="radio" name="searchCountryOptions" id="railwayStations" value="RSTP">
+                    <label for="railwayStations">Railway Stations</label><br>-->
                     <input type="radio" name="searchCountryOptions" id="raceTracks" value="RECR">
                     <label for="raceTracks">Race Tracks</label><br>
                     <input type="radio" name="searchCountryOptions" id="stadiums" value="STDM">
@@ -389,18 +389,30 @@
                 <div class="modalTab">
 
                     <button class="modalTabLinks" id="appInfoTab">App Info</button>
-                    <button class="modalTabLinks" id="howItWorksTab">How its Works</button>
                     <button class="modalTabLinks" id="creditsTab">Credits</button>
 
                 </div>
                 <div id="infoDisplay" class="modalTabContent modalOff">
                     <h3>App Information</h3>
-                </div>
-                <div id="howItWorksDisplay" class="modalTabContent modalOff">
-                    <h3>How it Works</h3>
+                    <p>"Where To?" is a Country Gazetteer that displays geographical information based on worldwide or specific country seraches. All the information displayed has been pulled from various scources via API calls. To see a list of the API's used please see the credits tab.</p>
+                    <p>There are three main functions avalible currently:</p>
+                    <p>First, <span class="italicBold">Country Specific Searches</span>. This will search for the selected country and display a mini info bubble. If that bubble is closed and the location pin is clicked on a window with more information will be displayed. These country searched can also be overlayed with additional on map locations, which too, when clicked on will display information about that location. <span class="italicBold">Clicking the search button will clear all natural event markers but not map routes</span>.</p>
+                    <p>Second, <span class="italicBold">Worldwide Searches</span>. This will display the locations of the selected Natural Events that have occurred within that last 365 days. If the markers are clicked, a window will display information with regards to the event at the location. <span class="italicBold">Clicking the search button will clear all markers and map routes</span>.</p>
+                    <p>Third, <span class="italicBold">Map and Route Change</span>. This section will change the map to the newley selected map with additional route options avalible to overlay on the map. <span class="italicBold">Clicking the search button will clear all natural event markers but not map routes</span>.</p>
                 </div>
                 <div id="creditsDisplay" class="modalTabContent modalOff">
                     <h3>App Credits</h3>
+                    <p>A big thanks to all the API orgnisations that have given free acceess to thier data bases and those that have given free API keys for use in this project. The project is ongoing and will continue to grow and develop and time progresses.</p>
+                    <h4>API's used</h4>
+                    <ul>
+                        <li><a href="https://www.numbeo.com/common/api.jsp" target="_blank">Numbeo</a></li>
+                        <li><a href="https://restcountries.eu/" target="_blank">Rest Countries</a></li>
+                        <li><a href="https://www.currencyconverterapi.com/" target="_blank">Currency Converter API</a></li>
+                        <li><a href="https://www.geonames.org/" target="_blank">GeoNames</a></li>
+                        <li><a href="https://api.nasa.gov/" target="_blank">NASA API</a></li>
+                        <li><a href="https://opencagedata.com/" target="_blank">OpenCage</a></li>
+                        <li><a href="https://opencagedata.com/" target="_blank">OpenCage</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
