@@ -1,3 +1,5 @@
+import { geoDataModal } from "./modals.js";
+
 export var clusters = L.markerClusterGroup();
 
 export const removeLayers = () => {
@@ -143,8 +145,7 @@ export const getGeoData = (countryObj, mapObj, fcode) => {
 
                         geo.forEach(res=> {
                             clusters.addLayer(L.marker([res.lat, res.lng], {icon: getMarkers(markers, fcode)}).on("click", ()=> {
-                                $("#geoModalh1").html(res.name)
-                                $("#geoDataModal").show();
+                                geoDataModal(geo);
                             })).addTo(mapObj);
                         });
 
