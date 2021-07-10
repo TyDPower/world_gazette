@@ -20,7 +20,7 @@ $(document).ready(()=> {
         var radius = e.accuracy;
 
         L.marker(e.latlng).addTo(map)
-            .bindPopup("You are within " + radius + " meters from this point").openPopup();
+            .bindPopup("You are within " + radius.toFixed(0) + " meters from this point").openPopup();
 
         L.circle(e.latlng, radius).addTo(map);
 
@@ -52,6 +52,17 @@ $(document).ready(()=> {
     var naturalEvents;    
 
     //Nav country search
+
+    $("#appNavIcon").click(()=> {
+        $("#appNav").fadeIn();
+        $("#appNavIcon").hide()
+
+        setTimeout(()=> {
+            $("#appNav").fadeOut();
+            $("#appNavIcon").fadeIn()
+        }, 3000)
+    })
+
     $("#countrySearch").click(()=> {
         $(".modal").addClass(" modalOff");
 
@@ -94,7 +105,7 @@ $(document).ready(()=> {
         .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
         .then((data)=> data.utils.panToCountry(map, data, true))
         .then((data)=> data.utils.countryInfoPopup(map, data))
-        .then((data)=> data.layerGroups.addLayer(L.marker(data.admin.latlng).on("click", ()=> {modals(selectedCountry, userCountry)})).addTo(map))
+        .then((data)=> data.layerGroups.addLayer(L.marker(data.admin.latlng).on("click", ()=> {modals.countryModal(selectedCountry, userCountry)})).addTo(map))
         .then(()=> {if (poi) {geoData.getGeoData(selectedCountry, map, poi)}})
 
         geoData.clusters.clearLayers();
@@ -104,6 +115,10 @@ $(document).ready(()=> {
 
     $("#countryModalcloseBtn").click(()=> {
         $("#countryModal").addClass(" modalOff");
+    })
+
+    $("#geoDataModalcloseBtn").click(()=> {
+        $("#geoDataModal").addClass(" modalOff");
     })
 
     $("#countriesSeachCloseBtn").click(()=> {
@@ -152,6 +167,10 @@ $(document).ready(()=> {
 
     $("#seachWorldCloseBtn").click(()=> {
         $("#searchWorldModal").addClass(" modalOff")
+    })
+
+    $("#naturalEventsModalcloseBtn").click(()=> {
+        $("#naturalEventsModal").addClass(" modalOff");
     })
 
     //Nav select map
