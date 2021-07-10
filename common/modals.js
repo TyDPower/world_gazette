@@ -58,7 +58,32 @@ export const countryModal = (selectedCountry, userCountry) => {
     
 }
 
-export const geoDataModal = (geo) => {
-    $("#geoDataModal").removeClass(" modalOff");
-    console.log(geo)
+export const geoDataModal = (data) => {
+
+    if (data) {
+        $("#geoDataModal").removeClass(" modalOff");
+        $("#geoDataModalTitle").html(data.geoName);
+        $("#geoDataModalLat").html(`Lat: ${data.lat}`);
+        $("#geoDataModalLng").html(`Lng: ${data.lng}`);
+        $("#geoDataModalAddress").html(`Address: ${data.address}`);
+        return;
+    }
+
+    $("#geoDataModalTitle").html("No data avalible");
+
+}
+
+export const naturalEventModal = (data) => {
+    console.log(data)
+
+    if (data) {
+        $("#naturalEventsModal").removeClass(" modalOff");
+        $("#naturalEventsModalTitle").html(data.title);
+        $("#naturalEventsModalDate").html(`Date & Time: ${data.geometries[0].date}`);
+        $("#naturalEventsModalLat").html(`Lat: ${data.geometries[0].coordinates[0]}`);
+        $("#naturalEventsModalLng").html(`Lng: ${data.geometries[0].coordinates[1]}`);
+        return;
+    }
+
+    $("#naturalEventsModalTitle").html("No data avalible");
 }
