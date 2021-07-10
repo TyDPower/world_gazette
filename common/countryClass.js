@@ -219,7 +219,8 @@ export class Country {
                             Quality of Life: ${QoLRating()}<br>
                             Cost of Living: ${CoLRating()}<br>
                             Exchange Rate: ${currenciesStr} ${rate.toFixed(3)}<br>
-                            Close & click on pin for more info.`
+                            Close & click on pin for country info, <br>
+                            or click on icons for location info.`
                             countryObj.layerGroups.addLayer(
                     L.popup()
                         .setLatLng(countryObj.admin.latlng)
