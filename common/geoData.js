@@ -145,7 +145,7 @@ export const getGeoData = (countryObj, mapObj, fcode) => {
 
                         geo.forEach(res=> {
                             clusters.addLayer(L.marker([res.lat, res.lng], {icon: getMarkers(markers, fcode)}).on("click", ()=> {
-                                geoDataModal(geo);
+                                getGeoLocationData(res)
                             })).addTo(mapObj);
                         });
 
@@ -162,4 +162,48 @@ export const getGeoData = (countryObj, mapObj, fcode) => {
             }
         })
     })
+}
+
+export const getGeoLocationData = (geoData) => {
+
+    return new Promise((resolve, reject)=> {
+
+        $.ajax({
+            url: "./php/getGeoLocationData.php",
+            type: "post",
+            dataType: "json",
+            data: {
+                lat: geoData.lat,
+                lng: geoData.lng
+            },
+
+            success: (res)=> {
+
+                if (res.status.name == "ok") {
+
+                    let data = res.data.results[0];
+
+                    let geoInfo = {
+                        geoName: geoData.toponymName,
+                        lat: geoData.lat,
+                        lng: geoData.lng,
+                        address: data.formatted
+                    }
+
+                    geoDataModal(geoInfo);
+
+                    resolve()
+
+                } else {
+                    reject(res.status);
+                }
+
+            },
+
+            error: (err)=> {
+                reject(err);
+            }
+        })
+    })
+
 }
