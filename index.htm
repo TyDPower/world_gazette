@@ -19,7 +19,10 @@
 
     <body>
         <!--Nav and nav modal-->
-        <nav>
+        <div id="appNavIcon">
+            <img src="./images/square.svg">
+        </div>
+        <nav id="appNav">
             <img class="navIcon" id="countrySearch" src="./images/globe.svg">
             <img class="navIcon" id="worldSearch" src="./images/location.svg">
             <img class="navIcon" id="changeMap" src="./images/map.svg">
@@ -34,12 +37,11 @@
                     <span id="countriesSeachCloseBtn" class="closeBtn">&times;</span>
                     <div class="modalHeadersWithImg">
                         <img src="./images/globe.svg">&nbsp
-                        <h2 class="test">Search Country Information</h2>
+                        <h2>Search Country Information</h2>
                     </div>
-                    <h4>Select a country and optionally add points of intrest to the map for the selected country. Click the "Search" to go to the country.</h4>
+                    <hr>
+                    <h4>Select a country and optionally add points of intrest to the map for the selected country. Click "Search" to go to the country.</h4>
                 </section>
-
-                <hr>
                 
                 <section>
                     <h3>Select a Country</h3>
@@ -298,7 +300,7 @@
                 </section>
                 
                 <section>
-                    <h4>Points of Intrest Search (optional)</h4>
+                    <h3>Points of Intrest Search (optional)</h3>
                     <input type="radio" name="searchCountryOptions" id="airports" value="AIRP">
                     <label for="airports">Airports</label><br>
                     <!--<input type="radio" name="searchCountryOptions" id="railwayStations" value="RSTP">
@@ -339,9 +341,16 @@
 
         <div id="searchWorldModal" class="modal modalOff">
             <div class="modalContent">
-                <span id="seachWorldCloseBtn" class="closeBtn">&times;</span>
-                <h3>Serach World Wide</h3>
-                <h4>Search NASA Natural Events (365 days)</h4>
+                <section class="modalHeaderContainer">
+                    <span id="seachWorldCloseBtn" class="closeBtn">&times;</span>
+                    <div class="modalHeadersWithImg">
+                        <img src="images/location.svg">&nbsp
+                        <h2>Search World Wide</h2>
+                    </div>
+                    <hr>
+                    <h4>Select a natural event below and click "Serach" to display those events across the wrold.</h4>
+                </section>
+                <h3>Search NASA Natural Events (365 days)</h3>
                 <div>
                     <input type="radio" name="naturalEvents" id="wildfires" value="Wildfires">
                     <label for="wildfires">Wildfires</label><br>
@@ -361,9 +370,16 @@
 
         <div id="selectMapModal" class="modal modalOff">
             <div class="modalContent">
-                <span id="selectMapCloseBtn" class="closeBtn">&times;</span>
-                <h3>Map Selection and overlays</h3>
-                <h4>Select a new map</h4>
+                <section class="modalHeaderContainer">
+                    <span id="selectMapCloseBtn" class="closeBtn">&times;</span>
+                    <div class="modalHeadersWithImg">
+                        <img src="images/map.svg">&nbsp
+                        <h2>Map Selection & Overlays</h2>
+                    </div>
+                    <hr>
+                    <h4>Change the World map, and/or add overlay routes. This options works inconjunction with the Country Search option, including the Points of Intrest options.</h4>
+                </section>
+                <h3>Select a new map</h3>
                 <select id="mapTiles">
                     <option value="default">Default</option>
                     <option value="outdoors">Outdoors</option>
@@ -384,13 +400,17 @@
 
         <div id="appInfoModal" class="modal modalOff">
             <div id="appInfoModalContent" class="modalContent">
-                <span id="appInfoCloseBtn" class="closeBtn">&times;</span>
-                <h3>About the App</h3>
+                <section class="modalHeaderContainer">
+                    <span id="appInfoCloseBtn" class="closeBtn">&times;</span>
+                    <div class="modalHeadersWithImg">
+                        <img src="images/info.svg">&nbsp
+                        <h3>About the App</h3>
+                    </div>
+                    
+                </section>
                 <div class="modalTab">
-
                     <button class="modalTabLinks" id="appInfoTab">App Info</button>
                     <button class="modalTabLinks" id="creditsTab">Credits</button>
-
                 </div>
                 <div id="infoDisplay" class="modalTabContent modalOff">
                     <h3>App Information</h3>
@@ -411,7 +431,6 @@
                         <li><a href="https://www.geonames.org/" target="_blank">GeoNames</a></li>
                         <li><a href="https://api.nasa.gov/" target="_blank">NASA API</a></li>
                         <li><a href="https://opencagedata.com/" target="_blank">OpenCage</a></li>
-                        <li><a href="https://opencagedata.com/" target="_blank">OpenCage</a></li>
                     </ul>
                 </div>
             </div>
@@ -419,10 +438,17 @@
 
         <div id="contactModal" class="modal modalOff">
             <div class="modalContent">
-                <span id="contactCloseBtn" class="closeBtn">&times;</span>
                 <form id="contactForm" action="./php/contactForm.php" method="post">
-                    <h3>Contact us</h3>
-                    <p>If you have any questions or concerns about the app, please fill in the form and I will get back to you asap.</p>
+                    <section class="modalHeaderContainer">
+                        <span id="contactCloseBtn" class="closeBtn">&times;</span>
+                        <div id="contactHeader" class="modalHeadersWithImg">
+                            <img src="images/communicate.svg">&nbsp;
+                            <h2>Contact Me</h2>
+                        </div>
+                        <hr>
+                        <h3>If you have any questions or concerns about the app, please fill in the form and I will get back to you asap.</h3>
+                    </section>
+
                     <label for="formName">Name</label><br>
                     <input class="formInput" type="text" id="formName" name="name" required><br>
                     <label for="formEmail">Email</label><br>
@@ -506,7 +532,24 @@
 
         <div id="geoDataModal" class="modal modalOff">
             <div class="modalContent">
-                <h1 id="geoModalh1"></h1>
+                <span id="geoDataModalcloseBtn" class="closeBtn">&times;</span>
+                <h3 id="geoDataModalTitle"></h3>
+                <hr>
+                <p id="geoDataModalLat"></p>
+                <p id="geoDataModalLng"></p>
+                <p id="geoDataModalAddress"></p>             
+            </div>
+        </div>
+
+        <div id="naturalEventsModal" class="modal modalOff">
+            <div class="modalContent">
+                <span id="naturalEventsModalcloseBtn" class="closeBtn">&times;</span>
+                <h3 id="naturalEventsModalTitle"></h3>
+                <hr>
+                <p id="naturalEventsModalDate"></p>
+                <p id="naturalEventsModalLat"></p>
+                <p id="naturalEventsModalLng"></p>
+
             </div>
         </div>
 
