@@ -1,3 +1,5 @@
+import { naturalEventModal } from "./modals.js";
+
 export class NaturalEvents {
     constructor() {
         this.category;
@@ -58,7 +60,7 @@ export class NaturalEvents {
                                     if (res.categories[0].title === event) {
 
                                         eventsObj.clusterGroup.addLayer(L.marker([lat, lng], {icon: eventsObj.utils.getMarker(event, eventsObj)}).on("click", ()=> {
-                                            alert(res.title)
+                                            naturalEventModal(res);
                                         })).addTo(mapObj);
 
                                         eventsObj.utils.panToCenter(mapObj);
