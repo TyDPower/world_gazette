@@ -1,3 +1,68 @@
+/*--------------- INDEX ---------------*/
+/*
+    1. PRELOADER
+    2. GENERAL
+    3. MODALS
+        3.1 MODAL TABS
+    4. CLOSE BUTTONS
+    5. TABLES
+    6. NAV
+    7. OTHER
+    8. RESPONSIVE
+*/
+
+/*--------------- 1. PRELOADER ---------------*/
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    overflow: hidden;
+    background: #283747;
+    opacity: 0.75;
+    }
+
+#preloader:before {
+    content: "";
+    position: fixed;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+    border: 6px solid #707070;
+    border-top: 6px solid #DE354C ;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    -webkit-animation: animate-preloader 1s linear infinite;
+    animation: animate-preloader 1s linear infinite;
+}
+
+@-webkit-keyframes animate-preloader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    } 
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes animate-preloader {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/*--------------- 2. GENERAL ---------------*/
+
 * {
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -17,35 +82,15 @@ header {
     margin: 10px;
 }
 
-/*--------------Table Styles--------------------*/
-
-table, th, td {
-    border: 1px solid black;
-}
-
-#comparisonTable {
-    border-collapse: collapse;
+select {
     width: 100%;
 }
 
-#comparisonTable td, #comparisonTable th {
-    border: 1px solid #aaa;
-    padding: 8px;
+th, td {
+    border: 1px solid black;
 }
 
-#comparisonTable tr:nth-child(even) {
-    background-color: #ddd;
-}
-
-#comparisonTable th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #04AA6D;
-  color: white;
-}
-
-/*--------------Table Styles END--------------------*/
+/*--------------- 3. MODALS ---------------*/
 
 .modal {
     position: fixed;
@@ -68,6 +113,62 @@ table, th, td {
     border-radius: 15px;
 }
 
+.modalOff {
+    display: none;
+}
+
+/*---------------- 3.1 MODAL TABS -----------*/
+
+.modalTab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.modalTab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.modalTab button:hover {
+    background-color: #ddd;
+}
+
+.modalTab button.activeTab {
+    background-color: #ccc;
+}
+
+.modalTabContent {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+#countryModal  h6 {
+    margin: auto;
+    font-weight: normal;
+}
+
+#countryModal h5 {
+    display: inline;
+}
+
+#countryModal h3 {
+    text-decoration: underline;
+}
+
+.modalHeadersWithImg h4 {
+    text-align: justify;
+    margin: 0;
+}
+
+/*--------------- 4. CLOSE BUTTONS ---------------*/
+
 .closeBtn {
     float: right;
     font-size: 30px;
@@ -84,6 +185,32 @@ table, th, td {
 #countryName {
     display: inline;
 }
+
+/*--------------- 5. TABLES ---------------*/
+
+#comparisonTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#comparisonTable td, #comparisonTable th {
+    border: 1px solid #aaa;
+    padding: 8px;
+}
+
+#comparisonTable tr:nth-child(even) {
+    background-color: #ddd;
+}
+
+#comparisonTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+}
+
+/*--------------- 6. NAV ---------------*/
 
 #appNav {
     position: fixed;
@@ -109,79 +236,6 @@ table, th, td {
     cursor: pointer;
 }
 
-.modalOff {
-    display: none;
-}
-
-.formInput {
-    width: 100%;
-}
-
- /*---------------- Modal Tab Styles -----------*/
- .modalTab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-  }
-  
-  .modalTab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    text-align: center;
-  }
-  
-  .modalTab button:hover {
-    background-color: #ddd;
-  }
-  
-  .modalTab button.activeTab {
-    background-color: #ccc;
-  }
-  
-  .modalTabContent {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-  }
-
-  /*---------------- Modal Tab Styles END -----------*/
-
-#countryModal  h6 {
-    margin: auto;
-    font-weight: normal;
-}
-
-#countryModal h5 {
-      display: inline;
-}
-
-#countryModal h3 {
-    text-decoration: underline;
-}
-
-#searchCountriesModal select {
-    width: 250px;
-}
-
-.modalHeadersWithImg h4 {
-    text-align: justify;
-    margin: 0;
-}
-
-.italicBold {
-    font-style: italic;
-    font-weight: bold;
-}
-
-#contactHeader img {
-    width: 100px
-}
-
 #appNavIcon {
     position: fixed;
     z-index: 1000;
@@ -200,12 +254,25 @@ table, th, td {
     cursor: pointer;
 }
 
+/*--------------- 7. OTHER ---------------*/
+
+.formInput {
+    width: 100%;
+}
+
+.italicBold {
+    font-style: italic;
+    font-weight: bold;
+}
+
+#contactHeader img {
+    width: 100px
+}
+
+/*--------------- 8. RESPONSIVE ---------------*/
+
 @media only screen 
   and (min-width: 320px) {
-
-    * {
-        color: red;
-    }
 
     #appNav {
         display: none;
@@ -232,24 +299,15 @@ table, th, td {
         width: 100px;
     }
 
-}
-
-@media only screen 
-  and (min-width: 480px) {
-
-    * {
-        color: blue;
+    p, th, td {
+        font-size: 5vw;
     }
 
-
 }
+
 
 @media only screen 
   and (min-width: 900px) {
-
-    * {
-        color: orange;
-    }
 
     .modalHeadersWithImg {
         display: inline-flex;
@@ -259,15 +317,14 @@ table, th, td {
         width: 67%;
     }
 
+    p, th, td {
+        font-size: 30px;
+    }
 
 }
 
 @media only screen 
   and (min-width: 1224px) {
-
-    * {
-        color: green;
-    }
 
     #appNav {
         display: block;
