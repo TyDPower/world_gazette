@@ -1,8 +1,21 @@
+<!--------------- CONTENT --------------->
+<!--
+    1. HEAD DATA
+    2. PRELOADER
+    3. NAV ICON AND MENU
+    4. MODALS
+        4.1 PRIMARY MODALS
+        4.2 SECONDARY MODALS
+    5. APP WORLD MAP
+    6. SCRIPS
+-->
+
 <!DOCTYPE html>
 
 <html>
     <head>
 
+        <!--------------- 1. HEAD DATA --------------->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
@@ -14,13 +27,15 @@
         <link rel="stylesheet" href="./css/leaflet.css">
         <link rel="stylesheet" href="./css/MarkerCluster.css">
         <link rel="stylesheet" href="./css/MarkerCluster.Default.css">
-
     </head>
 
     <body>
-        <!--Nav and nav modal-->
+        <!--------------- 2. PRELOADER --------------->
+        <div id="preloader"></div>
+
+        <!--------------- 3. NAV ICON & MENU --------------->
         <div id="appNavIcon">
-            <img src="./images/square.svg">
+            <img src="./images/menu.svg">
         </div>
         <nav id="appNav">
             <img class="navIcon" id="countrySearch" src="./images/globe.svg">
@@ -31,6 +46,8 @@
             <img class="navIcon" id="contactInfo" src="./images/communicate.svg">
         </nav>
 
+        <!--------------- 4. MODALS --------------->
+        <!--------------- 4.1 PRIMARY MODALS --------------->
         <div id="searchCountriesModal" class="modal modalOff">
             <div class="modalContent modalContentOff">
                 <section class="modalHeaderContainer">
@@ -40,7 +57,8 @@
                         <h2>Search Country Information</h2>
                     </div>
                     <hr>
-                    <h4>Select a country and optionally add points of intrest to the map for the selected country. Click "Search" to go to the country.</h4>
+                    <p>Select a country and optionally add points of intrest to the map for the selected country. Click "Search" to go to the country.</p>
+                    <hr>
                 </section>
                 
                 <section>
@@ -338,7 +356,6 @@
                 <button id="searchCountriesBtn">Search</button>
             </div>
         </div>
-
         <div id="searchWorldModal" class="modal modalOff">
             <div class="modalContent">
                 <section class="modalHeaderContainer">
@@ -348,7 +365,8 @@
                         <h2>Search World Wide</h2>
                     </div>
                     <hr>
-                    <h4>Select a natural event below and click "Serach" to display those events across the wrold.</h4>
+                    <p>Select a natural event below and click "Serach" to display those events across the wrold.</p>
+                    <hr>
                 </section>
                 <h3>Search NASA Natural Events (365 days)</h3>
                 <div>
@@ -367,7 +385,6 @@
                 <button id="searchWorldBtn">Search</button>
             </div>
         </div>
-
         <div id="selectMapModal" class="modal modalOff">
             <div class="modalContent">
                 <section class="modalHeaderContainer">
@@ -377,7 +394,8 @@
                         <h2>Map Selection & Overlays</h2>
                     </div>
                     <hr>
-                    <h4>Change the World map, and/or add overlay routes. This options works inconjunction with the Country Search option, including the Points of Intrest options.</h4>
+                    <p>Change the World map, and/or add overlay routes. This options works inconjunction with the Country Search option, including the Points of Intrest options.</p>
+                    <hr>
                 </section>
                 <h3>Select a new map</h3>
                 <select id="mapTiles">
@@ -397,7 +415,6 @@
                 <button id="selectMapBtn">Select</button>
             </div>
         </div>
-
         <div id="appInfoModal" class="modal modalOff">
             <div id="appInfoModalContent" class="modalContent">
                 <section class="modalHeaderContainer">
@@ -432,10 +449,13 @@
                         <li><a href="https://api.nasa.gov/" target="_blank">NASA API</a></li>
                         <li><a href="https://opencagedata.com/" target="_blank">OpenCage</a></li>
                     </ul>
+                    <h4>Icon's used</h4>
+                    <ul>
+                        <li>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
-
         <div id="contactModal" class="modal modalOff">
             <div class="modalContent">
                 <form id="contactForm" action="./php/contactForm.php" method="post">
@@ -446,7 +466,8 @@
                             <h2>Contact Me</h2>
                         </div>
                         <hr>
-                        <h3>If you have any questions or concerns about the app, please fill in the form and I will get back to you asap.</h3>
+                        <p>If you have any questions or concerns about the app, please fill in the form and I will get back to you asap.</p>
+                        <hr>
                     </section>
 
                     <label for="formName">Name</label><br>
@@ -460,8 +481,7 @@
             </div>
         </div>
 
-        <div id="map"></div>
-
+        <!--------------- 4.2 SECONDARY MODALS --------------->
         <div id="countryModal" class="modal modalOff">
             <div class="modalContent">
                 <section>
@@ -497,13 +517,13 @@
                             <th id="indexTableComparison"></th>
                         </tr>
                         <tr>
-                            <td id="healthIndexRow">Health Index</td>
+                            <td id="healthIndexRow">Health</td>
                             <td id="healthIndexCountry1"></td>
                             <td id="healthIndexCountry2"></td>
                             <td id="healthIndexComparison"></td>
                         </tr>
                         <tr>
-                            <td id="crimeIndexRow">Crime Index</td>
+                            <td id="crimeIndexRow">Crime</td>
                             <td id="crimeIndexCountry1"></td>
                             <td id="crimeIndexCountry2"></td>
                             <td id="crimeIndexComparison"></td>
@@ -514,8 +534,8 @@
                             <td id="pollutionIndexCountry2"></td>
                             <td id="pollutionIndexComparison"></td>
                         </tr>
-                        <tr>
-                            <td id="trafficIndexRow">Traffic Index</td>
+                        <tr id="comparisonPercent">
+                            <td id="trafficIndexRow">Traffic</td>
                             <td id="trafficIndexCountry1"></td>
                             <td id="trafficIndexCountry2"></td>
                             <td id="trafficIndexComparison"></td>
@@ -529,7 +549,6 @@
                 </section>
             </div>
         </div>
-
         <div id="geoDataModal" class="modal modalOff">
             <div class="modalContent">
                 <span id="geoDataModalcloseBtn" class="closeBtn">&times;</span>
@@ -540,7 +559,6 @@
                 <p id="geoDataModalAddress"></p>             
             </div>
         </div>
-
         <div id="naturalEventsModal" class="modal modalOff">
             <div class="modalContent">
                 <span id="naturalEventsModalcloseBtn" class="closeBtn">&times;</span>
@@ -553,6 +571,10 @@
             </div>
         </div>
 
+        <!--------------- 5. APP WORLD MAP --------------->
+        <div id="map"></div>
+
+        <!--------------- 6. SCRIPTS --------------->
         <script src="./js/jquery-2.2.3.min.js"></script>
         <script src="./js/leaflet.js"></script>
         <script src="./js/leaflet.js"></script>
