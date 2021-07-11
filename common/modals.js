@@ -34,7 +34,7 @@ export const countryModal = (selectedCountry, userCountry) => {
 
     $("#indexTableCountry1").html(selectedCountry.admin.iso[0]);
     $("#indexTableCountry2").html(userCountry.admin.iso[0]);
-    $("#indexTableComparison").html(`${userCountry.admin.iso[0]} compared to ${selectedCountry.admin.iso[0]}`);
+    $("#indexTableComparison").html(`${userCountry.admin.iso[0]} vs. ${selectedCountry.admin.iso[0]}`);
 
     $("#healthIndexCountry1").html(utilities.validIndexCheck(selectedCountry.index.healthcare));
     $("#healthIndexCountry2").html(utilities.validIndexCheck(userCountry.index.healthcare));
