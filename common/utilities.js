@@ -76,3 +76,13 @@ export const validIndexCheck = (index) => {
     }
     return index.toFixed(2);
 }
+
+export const preloader = (loaded) => {
+    if (!loaded) {
+        $("#preloader").fadeIn("fast")
+    }
+
+    if(loaded) {
+        $("#preloader").fadeOut("fast")
+    }
+}
