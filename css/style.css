@@ -299,7 +299,7 @@ th, td {
         width: 100px;
     }
 
-    p, th, td {
+    a, p, th, td, li {
         font-size: 5vw;
     }
 
@@ -317,7 +317,7 @@ th, td {
         width: 67%;
     }
 
-    p, th, td {
+    a, p, th, td, li {
         font-size: 30px;
     }
 
