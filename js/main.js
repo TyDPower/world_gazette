@@ -42,20 +42,8 @@ import { worldTiles } from "../common/mapAndOverlays.js";
 
 /*--------------- 2. HTTP TO HTTPS REDIRECT ---------------*/
 if (window.location.protocol == 'http:') {
-      
-    console.log("you are accessing us via "
-        +  "an insecure protocol (HTTP). "
-        + "Redirecting you to HTTPS.");
-          
-    window.location.href = 
-        window.location.href.replace(
-                   'http:', 'https:');
-} 
-else if
-    (window.location.protocol == "https:") {
-        console.log("you are accessing us via"
-            + " our secure HTTPS protocol.");
-    }
+    window.location.href = window.location.href.replace('http:', 'https:');
+}
 
 /*--------------- 3. WINDOW PRELOADER ---------------*/
 $(window).on("load", ()=> {
@@ -155,8 +143,6 @@ $(document).ready(()=> {
             selectedCountry = new country.Country()
 
         }
-        //--------------------------------------------
-
         
 
         utils.preloader(loaded)
