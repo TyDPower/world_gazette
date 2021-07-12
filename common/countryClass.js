@@ -186,10 +186,22 @@ export class Country {
             },
             countryInfoPopup(mapObj, countryObj) {
 
-                let currenciesStr = countryObj.currency.exchangeRate[0].replace(/_/gi, "/");
-                let rate = countryObj.currency.exchangeRate[1]
                 let qol = countryObj.index.qualityOfLife;
                 let col = countryObj.index.costOfLiving;
+
+                const exchangRate = () => {
+
+                    if (countryObj.currency.exchangeRate) {
+                        let currenciesStr = countryObj.currency.exchangeRate[0].replace(/_/gi, "/");
+                        let rate = countryObj.currency.exchangeRate[1];
+                        return currenciesStr + " " + rate.toFixed(3);
+                    } else {
+                        return "Exchange rate not currently avalible."
+                    }
+
+                }
+
+                
 
                 let QoLRating = () => {
                     if (qol > 144.9) {
@@ -218,7 +230,7 @@ export class Country {
                 var data = `<img src="${countryObj.flag.small}"> ${countryObj.admin.name}<br>
                             Quality of Life: ${QoLRating()}<br>
                             Cost of Living: ${CoLRating()}<br>
-                            Exchange Rate: ${currenciesStr} ${rate.toFixed(3)}<br>
+                            Exchange Rate: ${exchangRate()}<br>
                             Close & click on pin for country info, <br>
                             or click on icons for location info.`
                             countryObj.layerGroups.addLayer(
@@ -255,8 +267,15 @@ export class Country {
             
                             if (res.status.name == "ok") {
 
-                                let exchangeRate = Object.entries(res.data);         
-                                countryObj.currency.exchangeRate = exchangeRate[0];
+                                if (res.data != null) {
+                                    let exchangeRate = Object.entries(res.data);         
+                                    countryObj.currency.exchangeRate = exchangeRate[0];
+                                    resolve(countryObj)
+                                } else {
+                                    resolve(countryObj)   
+                                }
+
+                                
                                 
                                 if (currenciesCombined) {
                                     resolve(countryObj)
@@ -273,6 +292,50 @@ export class Country {
                         }
                     })
                 })
+            },
+            getCurrencyBackupAPI(countryObj, userCurrency) {
+
+                return new Promise((resolve, reject)=> {
+            
+                    $.ajax({
+                        url: "./php/getCurrencyExchange.php",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            currencies: currenciesCombined,
+                        },
+            
+                        success: (res)=> {
+            
+                            if (res.status.name == "ok") {
+
+                                if (res.data != null) {
+                                    let exchangeRate = Object.entries(res.data);         
+                                    countryObj.currency.exchangeRate = exchangeRate[0];
+                                    resolve(countryObj)
+                                } else {
+                                    
+                                    resolve(countryObj)   
+                                }
+
+                                
+                                
+                                if (currenciesCombined) {
+                                    resolve(countryObj)
+                                } else {
+                                    reject()
+                                }
+            
+                            }
+            
+                        },
+            
+                        error: (err)=> {
+                            console.log(err)
+                        }
+                    })
+                })
+
             },
             panToCountry(mapObj, countryObj, addPopup = false) {
                 mapObj.panTo(countryObj.admin.latlng);
