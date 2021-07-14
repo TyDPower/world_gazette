@@ -18,7 +18,7 @@ export const countryModal = (selectedCountry, userCountry) => {
     $("#countryRegion").html(` (${selectedCountry.admin.region},`);
     $("#countrySubRegion").html(` ${selectedCountry.admin.subregion})`);
 
-    $("#capital").html(`Capital City: ${selectedCountry.admin.capital}`);
+    $("#capital").html(`Capital city: ${selectedCountry.admin.capital}`);
     $("#population").html("Population: " + selectedCountry.social.population);
     $("#languagesTitle").html(selectedCountry.admin.name + "'s languages:")
     $("#flag").attr("src", selectedCountry.flag.large);

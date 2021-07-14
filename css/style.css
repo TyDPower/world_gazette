@@ -90,6 +90,11 @@ th, td {
     border: 1px solid black;
 }
 
+footer h6 {
+    font-weight: normal;
+    font-style: italic;
+}
+
 /*--------------- 3. MODALS ---------------*/
 
 .modal {

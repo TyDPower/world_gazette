@@ -190,7 +190,6 @@ export class Country {
                 let col = countryObj.index.costOfLiving;
 
                 const exchangRate = () => {
-
                     if (countryObj.currency.exchangeRate) {
                         let currenciesStr = countryObj.currency.exchangeRate[0].replace(/_/gi, "/");
                         let rate = countryObj.currency.exchangeRate[1];
@@ -198,10 +197,7 @@ export class Country {
                     } else {
                         return "Exchange rate not currently avalible."
                     }
-
                 }
-
-                
 
                 let QoLRating = () => {
                     if (qol > 144.9) {
