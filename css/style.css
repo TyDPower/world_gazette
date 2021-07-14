@@ -9,6 +9,7 @@
     6. NAV
     7. OTHER
     8. RESPONSIVE
+    9. Attributions & Diclaimers
 */
 
 /*--------------- 1. PRELOADER ---------------*/
@@ -88,11 +89,6 @@ select {
 
 th, td {
     border: 1px solid black;
-}
-
-footer h6 {
-    font-weight: normal;
-    font-style: italic;
 }
 
 /*--------------- 3. MODALS ---------------*/
@@ -342,4 +338,16 @@ footer h6 {
     .modalContent {
         width: 50%;
     }
+}
+
+/*--------------- 9. ATTRIBUTIONS & DISCLAIMERS ---------------*/
+
+footer h6 {
+    font-weight: normal;
+    font-style: italic;
+}
+
+#map p, #map a  {
+    display: inline;
+    font-size: 10px;
 }
