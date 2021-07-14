@@ -223,7 +223,7 @@ th, td {
     display: none;
 }
 
-#appNav img {
+.navIcon {
     width: 50px;
     height: auto;
     padding: 10px;
