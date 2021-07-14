@@ -41,9 +41,9 @@ import * as modals from "../common/modals.js";
 import { worldTiles } from "../common/mapAndOverlays.js";
 
 /*--------------- 2. HTTP TO HTTPS REDIRECT ---------------*/
-/*if (window.location.protocol == 'http:') {
+if (window.location.protocol == 'http:') {
     window.location.href = window.location.href.replace('http:', 'https:');
-}*/
+}
 
 /*--------------- 3. WINDOW PRELOADER ---------------*/
 $(window).on("load", ()=> {
