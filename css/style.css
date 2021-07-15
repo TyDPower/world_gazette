@@ -9,7 +9,6 @@
     6. NAV
     7. OTHER
     8. RESPONSIVE
-    9. Attributions & Diclaimers
 */
 
 /*--------------- 1. PRELOADER ---------------*/
@@ -300,10 +299,6 @@ th, td {
         width: 100px;
     }
 
-    a, p, th, td, li {
-        font-size: 5vw;
-    }
-
 }
 
 
@@ -318,9 +313,6 @@ th, td {
         width: 67%;
     }
 
-    a, p, th, td, li {
-        font-size: 30px;
-    }
 
 }
 
@@ -338,16 +330,4 @@ th, td {
     .modalContent {
         width: 50%;
     }
-}
-
-/*--------------- 9. ATTRIBUTIONS & DISCLAIMERS ---------------*/
-
-footer h6 {
-    font-weight: normal;
-    font-style: italic;
-}
-
-#map p, #map a  {
-    display: inline;
-    font-size: 10px;
 }
