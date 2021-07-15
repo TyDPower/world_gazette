@@ -5,7 +5,7 @@
     3. WINDOW PRELOADER
     4. JQUERY DOCUMENT
         4.1 LOAD WORLD MAP TILES
-        4.2 LOAD USER LOCATION
+        4.2 LOAD USER COUNTRY
         4.3 GLOBAL VARIABLE DELARATIONS
         4.4 NAV ICONS
             4.4.1 MOBILE MENU ICON
@@ -41,9 +41,9 @@ import * as modals from "../common/modals.js";
 import { worldTiles } from "../common/mapAndOverlays.js";
 
 /*--------------- 2. HTTP TO HTTPS REDIRECT ---------------*/
-if (window.location.protocol == 'http:') {
+/*if (window.location.protocol == 'http:') {
     window.location.href = window.location.href.replace('http:', 'https:');
-}
+}*/
 
 /*--------------- 3. WINDOW PRELOADER ---------------*/
 $(window).on("load", ()=> {
@@ -57,38 +57,11 @@ $(document).ready(()=> {
     var map = L.map('map').fitWorld();
     worldTiles.maps.default.addTo(map);
 
-    /*--------------- 4.2 LOAD USER LOCATION ---------------*/
-    var userCountry;
-    map.locate({setView: true, maxZoom: 16});
-    const onLocationFound = (e) => {
-        var radius = e.accuracy;
+    /*--------------- 4.2 LOAD USER COUNTRY ---------------*/
 
-        L.marker(e.latlng).addTo(map)
-            .bindPopup("You are within " + radius.toFixed(0) + " meters from this point").openPopup();
 
-        L.circle(e.latlng, radius).addTo(map);
-
-        if (e.latlng) {
-
-            userCountry = new country.Country();
-            
-            if (userCountry) {
-
-                userCountry.utils.getInfo(userCountry, userCountry.URLs.openCage, e.latlng)
-                .then((data)=> data.utils.getInfo(data, data.URLs.restcountries, data.admin.iso[1]))
-                .then((data)=> data.utils.getInfo(data, data.URLs.numbeoCountryIndex, data.admin.iso[1]))
-                .then((data)=> data.utils.getBorders(data, data.admin.iso[1]))
-                .then((data)=> data.utils.addBorders(data, map))
-            }
-           
-        }
-        
-    }
-    map.on('locationfound', onLocationFound);
-    const onLocationError = (e) => {
-        alert(e.message);
-    }
-    map.on('locationerror', onLocationError);
+    //Zoom to and highlight user country
+    
 
     /*--------------- 4.3 GLOBAL VARIABLE DELARATIONS ---------------*/
     //INITIAL VAR DECLARATIONS FOR COUNTRY AND NATURAL EVENTS OBJECTS
@@ -316,6 +289,53 @@ $(document).ready(()=> {
     /*--------------- 4.4.7.2 NAV CONTACT CLOSE FUNCTIONS ---------------*/
     $("#contactCloseBtn").click(()=> {
         $("#contactModal").addClass(" modalOff");
+    })
+
+
+
+    //------------------NEW CODE
+    $("#countrySelector").click(() => {
+        const getCountryList = () => {
+            $.getJSON("./common/countryBorders.geo.json", (data) => {
+                let list = [];
+                let sortedList = [];
+
+                data.features.forEach((res) => {
+                    list.push({
+                        country: res.properties.name,
+                        iso: res.properties.iso_a3,
+                    });
+                });
+
+                sortedList = list.sort((a, b) => {
+                    var countryA = a.country;
+                    var countryB = b.country;
+                    if (countryA < countryB) {
+                        return -1;
+                    }
+                    if (countryA > countryB) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
+                sortedList.forEach((res) => {
+                    $("#countrySelector").append(
+                        $("<option>", {
+                            value: res.iso,
+                            text: res.country,
+                        })
+                    );
+                });
+            });
+        };
+
+        getCountryList();
+    });
+
+    $("#countrySelector").change(()=> {
+        console.log($("#countrySelector").val());
+        $("#countrySelector").empty();
     })
 
 })
