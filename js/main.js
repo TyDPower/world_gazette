@@ -294,48 +294,207 @@ $(document).ready(()=> {
 
 
     //------------------NEW CODE
-    $("#countrySelector").click(() => {
-        const getCountryList = () => {
-            $.getJSON("./common/countryBorders.geo.json", (data) => {
-                let list = [];
-                let sortedList = [];
 
-                data.features.forEach((res) => {
-                    list.push({
-                        country: res.properties.name,
-                        iso: res.properties.iso_a3,
-                    });
-                });
+    const getCountryList = () => {
+        $.ajax({
+            url: "./php/getCountryList.php",
+            type: "post",
+            dataType: "json",
+            success: (res)=> {
+                if (res.status.name == "ok") {
+                    res.data.forEach((res) => {
+                        $("#countrySelector").append(
+                            $("<option>", {
+                                value: res.code,
+                                text: res.name,
+                            })
+                        );
+                    })
+                } else {
+                    console.error(`Error code: ${res.status.code}`)
+                }
+            },
+            error: (err)=> {
+                console.error(err);
+            }
+        })
+    };
 
-                sortedList = list.sort((a, b) => {
-                    var countryA = a.country;
-                    var countryB = b.country;
-                    if (countryA < countryB) {
-                        return -1;
-                    }
-                    if (countryA > countryB) {
-                        return 1;
-                    }
-                    return 0;
-                });
-
-                sortedList.forEach((res) => {
-                    $("#countrySelector").append(
-                        $("<option>", {
-                            value: res.iso,
-                            text: res.country,
-                        })
-                    );
-                });
-            });
-        };
-
-        getCountryList();
-    });
+    getCountryList();
 
     $("#countrySelector").change(()=> {
-        console.log($("#countrySelector").val());
-        $("#countrySelector").empty();
+
+        let ctry = {
+            code: $("#countrySelector").val(),
+            name: $("#countrySelector").find(":selected").text()
+        }
+
+        const getCountryBorders = (isoCodeA2) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.getJSON("./common/countryBorders.geo.json", (data) => {
+                    for (let i=0; i<data.features.length; i++) {
+                        if (data.features[i].properties.iso_a2 === isoCodeA2) {
+                            let obj = data.features[i].geometry;
+                            if (obj) {
+                                resolve(obj);
+                            } else {
+                                reject("No ISO Match!")
+                            }
+                        }
+                    }
+                
+                })
+
+            })
+
+        }
+
+        const getCountryInfo = (ctry) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getCountryInfo.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        code: ctry.code,
+                        name: ctry.name
+                    },
+
+                    success: (res)=> {
+                        resolve(res)
+                    },
+
+                    error: (err)=> {
+                        reject(err);
+                    }
+                })
+            })
+        }
+
+        const getExchangeRates = (data) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getExchangeRates.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        currCode: data.currencies[0].code,
+                    },
+
+                    success: (res)=> {
+                        resolve(res.rates)
+                    },
+
+                    error: (err)=> {
+                        reject(err);
+                    }
+                })
+            })
+        }
+
+        const getWebCams = (isoCodeA2, category) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getWebCams.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        code: isoCodeA2,
+                        category: category
+                    },
+
+                    success: (res)=> {
+                        resolve(res)
+                    },
+
+                    error: (err)=> {
+                        reject(err);
+                    }
+                })
+
+            })
+        }
+
+        const getCities = (isoCodeA2) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getCities.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        code: isoCodeA2
+                    },
+
+                    success: (res)=> {
+                        resolve(res.data)
+                    },
+
+                    error: (err)=> {
+                        reject(err);
+                    }
+                })
+            })
+        }
+
+        const getWeather = (latLng) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getWeather.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        lat: latLng[0],
+                        lng: latLng[1]
+                    },
+
+                    success: (res)=> {
+                        resolve(res)
+                    },
+
+                    error: (err)=> {
+                        reject(err)
+                    }
+                })
+            })
+        }
+
+        //getCountryBorders(ctry.code)
+        //.then((data)=> console.log(data))
+        //.catch((err)=> console.error(err));
+
+        //getCountryInfo(ctry)
+        //.then((data)=> console.log(data))
+        //.then((data)=> ctryInfoModal(data)) --Needs to be programmed
+        //.then((data)=> getExchangeRates(data))
+        //.then((data)=> console.log(data))
+        //.then((data)=> exRatesModal(data)) --Needs to be programmed
+        //.catch((err)=> console.error(err));
+
+        //let category = "beach";
+        //getWebCams(ctry.code, category)
+        //.then((data)=> console.log(data))
+
+        //getCities(ctry.code)
+        //.then((data)=> console.log(data))
+        //.catch((err)=> console.error(err));
+
+        //let latlng = [51.2283, -2.3221];
+        //getWeather(latlng)
+        //.then((data)=> console.log(data))
+        //.catch((err)=> console.error(err));
+        
     })
 
 })
