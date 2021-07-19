@@ -496,7 +496,7 @@
         </div>
 
         <!--------------- 4.2 SECONDARY MODALS --------------->
-        <div id="countryModal" class="modal modalOff">
+        <div id="countryModalOLD" class="modal modalOff">
             <div class="modalContent">
                 <section>
                     <span id="countryModalcloseBtn" class="closeBtn">&times;</span>
@@ -588,6 +588,74 @@
         <!--TEST CODE-->
         <select id="countrySelector">
         </select>
+
+        <div id="countryModal" class="modal modalOff">
+            <div class="modalContent">
+                <header>
+                    <img id="ctryFlag">
+                    <h1 class="ctryName"></h1>
+                </header>
+                <section id="adminInfo">
+                    <h1>Administrative Information</h1>
+                    <p class="ctryName"></p>
+                    <p id="currencyCode"></p>
+                    <p id="currencySymbol"></p>
+                    <p id="regionGlobal"></p>
+                    <p id="region"></p>
+                    <p id="areaSize"></p>
+                    <p id="isoA2"></p>
+                    <p id="isoA3"></p>
+                    <p id="capital"></p>
+                    <p id="dialCode"></p>
+                </section>
+                <section id="genInfo">
+                    <h1>General Info</h1>
+                    <p id="population"></p>
+                    <p id="incomeLevel"></p>
+                    <details>
+                        <summary>Exchange Rates</summary>
+                        <div class="exRates"></div>
+                    </details>
+                    <details>
+                        <summary>Country Weather</summary>
+                        <div class="ctryWeather"></div>
+                    </details>
+                    <details>
+                        <summary>Living Standards</summary>
+                        <p id="qolIndex"></p>
+                        <p id="healthIndex"></p>
+                        <p id="crimeIndex"></p>
+                        <p id="pollutionIndex"></p>
+                        <p id="trafficIndex"></p>
+                    </details>
+                    <details>
+                        <summary>Road Info</summary>
+                        <p id="speedIn"></p>
+                        <p id="driveOn"></p>
+                    </details>
+                    <details>
+                        <summary>Country Prices</summary>
+                        <div class="itemPrices"></div>
+                    </details>
+                    <details>
+                        <summary>Country Languages</summary>
+                        <div class="languages"></div>
+                    </details>
+                    <details>
+                        <summary>National Holidays</summary>
+                        <div class="holidays"></div>
+                    </details>
+                </section>
+
+                <section id="countryLinks">
+                    <div id="imgGallery">
+
+                    </div>
+                    <a href="" id="wikiLink"></a>
+                </section>
+
+            </div>
+        </div>
 
         <!--------------- 5. APP WORLD MAP --------------->
         <div id="map"></div>
