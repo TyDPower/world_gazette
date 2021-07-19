@@ -322,11 +322,11 @@ $(document).ready(()=> {
 
     getCountryList();
 
-    $("#countrySelector").change(()=> {
+    $("#countrySelector").change(()=> {        
 
-        let ctry = {
+        const info = {
             code: $("#countrySelector").val(),
-            name: $("#countrySelector").find(":selected").text()
+            name: $("#countrySelector").find(":selected").text(),
         }
 
         const getCountryBorders = (isoCodeA2) => {
@@ -351,7 +351,7 @@ $(document).ready(()=> {
 
         }
 
-        const getCountryInfo = (ctry) => {
+        const getCountryInfo = (ctryInfo) => {
 
             return new Promise((resolve, reject)=> {
 
@@ -360,8 +360,8 @@ $(document).ready(()=> {
                     type: "post",
                     dataType: "json",
                     data: {
-                        code: ctry.code,
-                        name: ctry.name
+                        code: ctryInfo.code,
+                        name: ctryInfo.name
                     },
 
                     success: (res)=> {
@@ -470,11 +470,74 @@ $(document).ready(()=> {
             })
         }
 
+        const getHolidays = (isoCodeA2) => {
+
+            const date = new Date();
+
+            return new Promise ((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getHolidays.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        ctry: isoCodeA2,
+                        year: date.getFullYear()
+                    },
+
+                    success: (res)=> {
+
+                        if (res.status.name === "ok" && res.data.length > 0) {
+                            resolve(res.data);
+                        } else if (res.status.name === "ok" && res.data.length === 0) {
+                            resolve(["No data avalible!"]);
+                        } else {
+                            reject(res.status);
+                        };
+                        
+                    },
+
+                    error: (err)=> {
+                        reject(err);
+                    }
+                })
+            })
+        }
+
+        const getImages = (ctryName) => {
+
+            return new Promise((resolve, reject)=> {
+
+                $.ajax({
+                    url: "./php/getImages.php",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        search: ctryName
+                    },
+
+                    success: (res)=> {
+                        resolve(res);
+                    },
+
+                    error: (err)=> {
+                        reject(err);
+                    }
+                })
+            })
+
+
+        }
+
+        //getImages(info.name)
+        //.then((data)=> console.log(data))
+        //.catch((err)=> console.error(err));
+
         //getCountryBorders(ctry.code)
         //.then((data)=> console.log(data))
         //.catch((err)=> console.error(err));
 
-        //getCountryInfo(ctry)
+        //getCountryInfo(info)
         //.then((data)=> console.log(data))
         //.then((data)=> ctryInfoModal(data)) --Needs to be programmed
         //.then((data)=> getExchangeRates(data))
@@ -483,15 +546,19 @@ $(document).ready(()=> {
         //.catch((err)=> console.error(err));
 
         //let category = "beach";
-        //getWebCams(ctry.code, category)
+        //getWebCams(info.code, category)
         //.then((data)=> console.log(data))
 
-        //getCities(ctry.code)
+        //getCities(info.code)
         //.then((data)=> console.log(data))
         //.catch((err)=> console.error(err));
 
         //let latlng = [51.2283, -2.3221];
         //getWeather(latlng)
+        //.then((data)=> console.log(data))
+        //.catch((err)=> console.error(err));
+
+        //getHolidays(info.code)
         //.then((data)=> console.log(data))
         //.catch((err)=> console.error(err));
         
