@@ -2,12 +2,6 @@
 <!--
     1. HEAD DATA
     2. PRELOADER
-    3. NAV ICON AND MENU
-    4. MODALS
-        4.1 PRIMARY MODALS
-        4.2 SECONDARY MODALS
-    5. APP WORLD MAP
-    6. SCRIPS
 -->
 
 <!DOCTYPE html>
@@ -33,558 +27,6 @@
         <!--------------- 2. PRELOADER --------------->
         <div id="preloader"></div>
 
-        <!--------------- 3. NAV ICON & MENU --------------->
-        <div id="appNavIcon">
-            <img src="./images/menu.svg">
-        </div>
-        <nav id="appNav">
-            <img class="navIcon" id="countrySearch" src="./images/globe.svg">
-            <img class="navIcon" id="worldSearch" src="./images/location.svg">
-            <img class="navIcon" id="changeMap" src="./images/map.svg">
-            <img class="navIcon" id="clearMarkers" src="./images/x-button.svg">
-            <img class="navIcon" id="appInfo" src="./images/info.svg">
-            <img class="navIcon" id="contactInfo" src="./images/communicate.svg">
-        </nav>
-
-        <!--------------- 4. MODALS --------------->
-        <!--------------- 4.1 PRIMARY MODALS --------------->
-        <div id="searchCountriesModal" class="modal modalOff">
-            <div class="modalContent modalContentOff">
-                <section class="modalHeaderContainer">
-                    <span id="countriesSeachCloseBtn" class="closeBtn">&times;</span>
-                    <div class="modalHeadersWithImg">
-                        <img src="./images/globe.svg">&nbsp
-                        <h2>Search Country Information</h2>
-                    </div>
-                    <hr>
-                    <p>Select a country and points of interest to see their location on the map. Click 'Search' to view.</p>
-                    <hr>
-                </section>
-                
-                <section>
-                    <h3>Select a Country (required)</h3>
-                    <select id="countryList">
-                        <option>Select a country</option>
-                        <option value="AFG">Afghanistan</option>
-                        <option value="ALA">Åland Islands</option>
-                        <option value="ALB">Albania</option>
-                        <option value="DZA">Algeria</option>
-                        <option value="ASM">American Samoa</option>
-                        <option value="AND">Andorra</option>
-                        <option value="AGO">Angola</option>
-                        <option value="AIA">Anguilla</option>
-                        <option value="ATA">Antarctica</option>
-                        <option value="ATG">Antigua and Barbuda</option>
-                        <option value="ARG">Argentina</option>
-                        <option value="ARM">Armenia</option>
-                        <option value="ABW">Aruba</option>
-                        <option value="AUS">Australia</option>
-                        <option value="AUT">Austria</option>
-                        <option value="AZE">Azerbaijan</option>
-                        <option value="BHS">Bahamas</option>
-                        <option value="BHR">Bahrain</option>
-                        <option value="BGD">Bangladesh</option>
-                        <option value="BRB">Barbados</option>
-                        <option value="BLR">Belarus</option>
-                        <option value="BEL">Belgium</option>
-                        <option value="BLZ">Belize</option>
-                        <option value="BEN">Benin</option>
-                        <option value="BMU">Bermuda</option>
-                        <option value="BTN">Bhutan</option>
-                        <option value="BOL">Bolivia, Plurinational State of</option>
-                        <option value="BES">Bonaire, Sint Eustatius and Saba</option>
-                        <option value="BIH">Bosnia and Herzegovina</option>
-                        <option value="BWA">Botswana</option>
-                        <option value="BVT">Bouvet Island</option>
-                        <option value="BRA">Brazil</option>
-                        <option value="IOT">British Indian Ocean Territory</option>
-                        <option value="BRN">Brunei Darussalam</option>
-                        <option value="BGR">Bulgaria</option>
-                        <option value="BFA">Burkina Faso</option>
-                        <option value="BDI">Burundi</option>
-                        <option value="KHM">Cambodia</option>
-                        <option value="CMR">Cameroon</option>
-                        <option value="CAN">Canada</option>
-                        <option value="CPV">Cape Verde</option>
-                        <option value="CYM">Cayman Islands</option>
-                        <option value="CAF">Central African Republic</option>
-                        <option value="TCD">Chad</option>
-                        <option value="CHL">Chile</option>
-                        <option value="CHN">China</option>
-                        <option value="CXR">Christmas Island</option>
-                        <option value="CCK">Cocos (Keeling) Islands</option>
-                        <option value="COL">Colombia</option>
-                        <option value="COM">Comoros</option>
-                        <option value="COG">Congo</option>
-                        <option value="COD">Congo, the Democratic Republic of the</option>
-                        <option value="COK">Cook Islands</option>
-                        <option value="CRI">Costa Rica</option>
-                        <option value="CIV">Côte d'Ivoire</option>
-                        <option value="HRV">Croatia</option>
-                        <option value="CUB">Cuba</option>
-                        <option value="CUW">Curaçao</option>
-                        <option value="CYP">Cyprus</option>
-                        <option value="CZE">Czech Republic</option>
-                        <option value="DNK">Denmark</option>
-                        <option value="DJI">Djibouti</option>
-                        <option value="DMA">Dominica</option>
-                        <option value="DOM">Dominican Republic</option>
-                        <option value="ECU">Ecuador</option>
-                        <option value="EGY">Egypt</option>
-                        <option value="SLV">El Salvador</option>
-                        <option value="GNQ">Equatorial Guinea</option>
-                        <option value="ERI">Eritrea</option>
-                        <option value="EST">Estonia</option>
-                        <option value="ETH">Ethiopia</option>
-                        <option value="FLK">Falkland Islands (Malvinas)</option>
-                        <option value="FRO">Faroe Islands</option>
-                        <option value="FJI">Fiji</option>
-                        <option value="FIN">Finland</option>
-                        <option value="FRA">France</option>
-                        <option value="GUF">French Guiana</option>
-                        <option value="PYF">French Polynesia</option>
-                        <option value="ATF">French Southern Territories</option>
-                        <option value="GAB">Gabon</option>
-                        <option value="GMB">Gambia</option>
-                        <option value="GEO">Georgia</option>
-                        <option value="DEU">Germany</option>
-                        <option value="GHA">Ghana</option>
-                        <option value="GIB">Gibraltar</option>
-                        <option value="GRC">Greece</option>
-                        <option value="GRL">Greenland</option>
-                        <option value="GRD">Grenada</option>
-                        <option value="GLP">Guadeloupe</option>
-                        <option value="GUM">Guam</option>
-                        <option value="GTM">Guatemala</option>
-                        <option value="GGY">Guernsey</option>
-                        <option value="GIN">Guinea</option>
-                        <option value="GNB">Guinea-Bissau</option>
-                        <option value="GUY">Guyana</option>
-                        <option value="HTI">Haiti</option>
-                        <option value="HMD">Heard Island and McDonald Islands</option>
-                        <option value="VAT">Holy See (Vatican City State)</option>
-                        <option value="HND">Honduras</option>
-                        <option value="HKG">Hong Kong</option>
-                        <option value="HUN">Hungary</option>
-                        <option value="ISL">Iceland</option>
-                        <option value="IND">India</option>
-                        <option value="IDN">Indonesia</option>
-                        <option value="IRN">Iran, Islamic Republic of</option>
-                        <option value="IRQ">Iraq</option>
-                        <option value="IRL">Ireland</option>
-                        <option value="IMN">Isle of Man</option>
-                        <option value="ISR">Israel</option>
-                        <option value="ITA">Italy</option>
-                        <option value="JAM">Jamaica</option>
-                        <option value="JPN">Japan</option>
-                        <option value="JEY">Jersey</option>
-                        <option value="JOR">Jordan</option>
-                        <option value="KAZ">Kazakhstan</option>
-                        <option value="KEN">Kenya</option>
-                        <option value="KIR">Kiribati</option>
-                        <option value="PRK">Korea, Democratic People's Republic of</option>
-                        <option value="KOR">Korea, Republic of</option>
-                        <option value="KWT">Kuwait</option>
-                        <option value="KGZ">Kyrgyzstan</option>
-                        <option value="LAO">Lao People's Democratic Republic</option>
-                        <option value="LVA">Latvia</option>
-                        <option value="LBN">Lebanon</option>
-                        <option value="LSO">Lesotho</option>
-                        <option value="LBR">Liberia</option>
-                        <option value="LBY">Libya</option>
-                        <option value="LIE">Liechtenstein</option>
-                        <option value="LTU">Lithuania</option>
-                        <option value="LUX">Luxembourg</option>
-                        <option value="MAC">Macao</option>
-                        <option value="MKD">Macedonia, the former Yugoslav Republic of</option>
-                        <option value="MDG">Madagascar</option>
-                        <option value="MWI">Malawi</option>
-                        <option value="MYS">Malaysia</option>
-                        <option value="MDV">Maldives</option>
-                        <option value="MLI">Mali</option>
-                        <option value="MLT">Malta</option>
-                        <option value="MHL">Marshall Islands</option>
-                        <option value="MTQ">Martinique</option>
-                        <option value="MRT">Mauritania</option>
-                        <option value="MUS">Mauritius</option>
-                        <option value="MYT">Mayotte</option>
-                        <option value="MEX">Mexico</option>
-                        <option value="FSM">Micronesia, Federated States of</option>
-                        <option value="MDA">Moldova, Republic of</option>
-                        <option value="MCO">Monaco</option>
-                        <option value="MNG">Mongolia</option>
-                        <option value="MNE">Montenegro</option>
-                        <option value="MSR">Montserrat</option>
-                        <option value="MAR">Morocco</option>
-                        <option value="MOZ">Mozambique</option>
-                        <option value="MMR">Myanmar</option>
-                        <option value="NAM">Namibia</option>
-                        <option value="NRU">Nauru</option>
-                        <option value="NPL">Nepal</option>
-                        <option value="NLD">Netherlands</option>
-                        <option value="NCL">New Caledonia</option>
-                        <option value="NZL">New Zealand</option>
-                        <option value="NIC">Nicaragua</option>
-                        <option value="NER">Niger</option>
-                        <option value="NGA">Nigeria</option>
-                        <option value="NIU">Niue</option>
-                        <option value="NFK">Norfolk Island</option>
-                        <option value="MNP">Northern Mariana Islands</option>
-                        <option value="NOR">Norway</option>
-                        <option value="OMN">Oman</option>
-                        <option value="PAK">Pakistan</option>
-                        <option value="PLW">Palau</option>
-                        <option value="PSE">Palestinian Territory, Occupied</option>
-                        <option value="PAN">Panama</option>
-                        <option value="PNG">Papua New Guinea</option>
-                        <option value="PRY">Paraguay</option>
-                        <option value="PER">Peru</option>
-                        <option value="PHL">Philippines</option>
-                        <option value="PCN">Pitcairn</option>
-                        <option value="POL">Poland</option>
-                        <option value="PRT">Portugal</option>
-                        <option value="PRI">Puerto Rico</option>
-                        <option value="QAT">Qatar</option>
-                        <option value="REU">Réunion</option>
-                        <option value="ROU">Romania</option>
-                        <option value="RUS">Russian Federation</option>
-                        <option value="RWA">Rwanda</option>
-                        <option value="BLM">Saint Barthélemy</option>
-                        <option value="SHN">Saint Helena, Ascension and Tristan da Cunha</option>
-                        <option value="KNA">Saint Kitts and Nevis</option>
-                        <option value="LCA">Saint Lucia</option>
-                        <option value="MAF">Saint Martin (French part)</option>
-                        <option value="SPM">Saint Pierre and Miquelon</option>
-                        <option value="VCT">Saint Vincent and the Grenadines</option>
-                        <option value="WSM">Samoa</option>
-                        <option value="SMR">San Marino</option>
-                        <option value="STP">Sao Tome and Principe</option>
-                        <option value="SAU">Saudi Arabia</option>
-                        <option value="SEN">Senegal</option>
-                        <option value="SRB">Serbia</option>
-                        <option value="SYC">Seychelles</option>
-                        <option value="SLE">Sierra Leone</option>
-                        <option value="SGP">Singapore</option>
-                        <option value="SXM">Sint Maarten (Dutch part)</option>
-                        <option value="SVK">Slovakia</option>
-                        <option value="SVN">Slovenia</option>
-                        <option value="SLB">Solomon Islands</option>
-                        <option value="SOM">Somalia</option>
-                        <option value="ZAF">South Africa</option>
-                        <option value="SGS">South Georgia and the South Sandwich Islands</option>
-                        <option value="SSD">South Sudan</option>
-                        <option value="ESP">Spain</option>
-                        <option value="LKA">Sri Lanka</option>
-                        <option value="SDN">Sudan</option>
-                        <option value="SUR">Suriname</option>
-                        <option value="SJM">Svalbard and Jan Mayen</option>
-                        <option value="SWZ">Swaziland</option>
-                        <option value="SWE">Sweden</option>
-                        <option value="CHE">Switzerland</option>
-                        <option value="SYR">Syrian Arab Republic</option>
-                        <option value="TWN">Taiwan, Province of China</option>
-                        <option value="TJK">Tajikistan</option>
-                        <option value="TZA">Tanzania, United Republic of</option>
-                        <option value="THA">Thailand</option>
-                        <option value="TLS">Timor-Leste</option>
-                        <option value="TGO">Togo</option>
-                        <option value="TKL">Tokelau</option>
-                        <option value="TON">Tonga</option>
-                        <option value="TTO">Trinidad and Tobago</option>
-                        <option value="TUN">Tunisia</option>
-                        <option value="TUR">Turkey</option>
-                        <option value="TKM">Turkmenistan</option>
-                        <option value="TCA">Turks and Caicos Islands</option>
-                        <option value="TUV">Tuvalu</option>
-                        <option value="UGA">Uganda</option>
-                        <option value="UKR">Ukraine</option>
-                        <option value="ARE">United Arab Emirates</option>
-                        <option value="GBR">United Kingdom</option>
-                        <option value="USA">United States</option>
-                        <option value="UMI">United States Minor Outlying Islands</option>
-                        <option value="URY">Uruguay</option>
-                        <option value="UZB">Uzbekistan</option>
-                        <option value="VUT">Vanuatu</option>
-                        <option value="VEN">Venezuela, Bolivarian Republic of</option>
-                        <option value="VNM">Viet Nam</option>
-                        <option value="VGB">Virgin Islands, British</option>
-                        <option value="VIR">Virgin Islands, U.S.</option>
-                        <option value="WLF">Wallis and Futuna</option>
-                        <option value="ESH">Western Sahara</option>
-                        <option value="YEM">Yemen</option>
-                        <option value="ZMB">Zambia</option>
-                        <option value="ZWE">Zimbabwe</option>
-                    </select>
-                </section>
-                
-                <section>
-                    <h3>Points of Interest (optional)</h3>
-                    <input type="radio" name="searchCountryOptions" id="airports" value="AIRP">
-                    <label for="airports">Airports</label><br>
-                    <!--<input type="radio" name="searchCountryOptions" id="railwayStations" value="RSTP">
-                    <label for="railwayStations">Railway Stations</label><br>-->
-                    <input type="radio" name="searchCountryOptions" id="raceTracks" value="RECR">
-                    <label for="raceTracks">Race Tracks</label><br>
-                    <input type="radio" name="searchCountryOptions" id="stadiums" value="STDM">
-                    <label for="stadiums">Stadiums</label><br>
-                    <input type="radio" name="searchCountryOptions" id="beaches" value="BCH">
-                    <label for="beaches">Beaches</label><br>
-                    <input type="radio" name="searchCountryOptions" id="mountains" value="MT">
-                    <label for="mountains">Mountains</label><br>
-                    <input type="radio" name="searchCountryOptions" id="lighthouses" value="LTHSE">
-                    <label for="lighthouses">Lighthouses</label><br>
-                    <input type="radio" name="searchCountryOptions" id="forts" value="FT">
-                    <label for="forts">Forts</label><br>
-                    <input type="radio" name="searchCountryOptions" id="castles" value="CSTL">
-                    <label for="castles">Castles</label><br>
-                    <input type="radio" name="searchCountryOptions" id="caves" value="CAVE">
-                    <label for="caves">Caves</label><br>
-                    <input type="radio" name="searchCountryOptions" id="amusementParks" value="AMUS">
-                    <label for="amusementParks">Amusement Parks</label><br>
-                    <input type="radio" name="searchCountryOptions" id="natureReserves" value="RESN">
-                    <label for="natureReserves">Nature Reserves</label><br>
-                    <input type="radio" name="searchCountryOptions" id="lakes" value="LK">
-                    <label for="lakes">Lakes</label><br>
-                    <input type="radio" name="searchCountryOptions" id="harbours" value="HBR">
-                    <label for="harbours">Harbours</label><br>
-                    <input type="radio" name="searchCountryOptions" id="campsites" value="CMP">
-                    <label for="campsites">Campsites</label><br>
-                    <input type="radio" name="searchCountryOptions" id="observationPoints" value="OBPT">
-                    <label for="observationPoints">Observation Points</label><br><br>
-                </section>
-                
-                <button id="searchCountriesBtn">Search</button>
-                <br>
-                <hr>
-                <footer>
-                    <h6 class="disclaimer">*All information is provided by a third party API. Some information may not be available in their databases. Please see the 'About App' page for more information. If there is any missing and/or inaccurate information for the above sections, please contact me on the contact page.</h6>
-                </footer>
-            </div>
-        </div>
-        <div id="searchWorldModal" class="modal modalOff">
-            <div class="modalContent">
-                <section class="modalHeaderContainer">
-                    <span id="seachWorldCloseBtn" class="closeBtn">&times;</span>
-                    <div class="modalHeadersWithImg">
-                        <img src="images/location.svg">&nbsp
-                        <h2>Search World Wide</h2>
-                    </div>
-                    <hr>
-                    <p>Select a natural event below and click 'Search' to display those events across the world.</p>
-                    <hr>
-                </section>
-                <h3>Search NASA Natural Events (365 days)</h3>
-                <div>
-                    <input type="radio" name="naturalEvents" id="wildfires" value="Wildfires">
-                    <label for="wildfires">Wildfires</label><br>
-                    <input type="radio" name="naturalEvents" id="volcanoes" value="Volcanoes">
-                    <label for="volcanoes">Volcanoes</label><br>
-                    <input type="radio" name="naturalEvents" id="severeStorms" value="Severe Storms">
-                    <label for="severeStorms">Severe Storms</label><br>
-                    <input type="radio" name="naturalEvents" id="earthquakes" value="Earthquakes">
-                    <label for="earthquakes">Earthquakes</label><br>
-                    <input type="radio" name="naturalEvents" id="seaAndLakeIce" value="Sea and Lake Ice">
-                    <label for="seaAndLakeIce">Sea and Lake Ice</label><br>
-                </div>
-                <br>
-                <button id="searchWorldBtn">Search</button>
-                <hr>
-                <footer>
-                    <h6 class="disclaimer">*All information is provided by a third party API. Some information may not be available in their databases. Please see the 'About App' page for more information. If there is any missing and/or inaccurate information for the above sections, please contact me on the contact page.</h6>
-                </footer>
-            </div>
-        </div>
-        <div id="selectMapModal" class="modal modalOff">
-            <div class="modalContent">
-                <section class="modalHeaderContainer">
-                    <span id="selectMapCloseBtn" class="closeBtn">&times;</span>
-                    <div class="modalHeadersWithImg">
-                        <img src="images/map.svg">&nbsp
-                        <h2>Map Selection & Overlays</h2>
-                    </div>
-                    <hr>
-                    <p>Change the world map and/or add overlay routes. This option works in conjunction with the Country Search, including the Points of Interest options.</p>
-                    <hr>
-                </section>
-                <h3>Select a new map</h3>
-                <select id="mapTiles">
-                    <option value="default">Default</option>
-                    <option value="outdoors">Outdoor</option>
-                </select>
-                <section>
-                    <h3>Select a map overlay</h3>
-                    <input type="checkbox" name="hiking" id="hiking" value="hiking">
-                    <label for="hiking">Hiking</label><br>
-                    <input type="checkbox" name="cycling" id="cycling" value="cycling">
-                    <label for="cycling">Cycling</label><br>
-                    <input type="checkbox" name="railways" id="railways" value="railways">
-                    <label for="railways">Railways</label><br>
-                </section>
-                <br>
-                <button id="selectMapBtn">Select</button>
-                <br>
-                <hr>
-                <footer>
-                    <h6 class="disclaimer">*All information is provided by a third party API. Some information may not be available in their databases. Please see the 'About App' page for more information. If there is any missing and/or inaccurate information for the above sections, please contact me on the contact page.</h6>
-                </footer>
-            </div>
-        </div>
-        <div id="appInfoModal" class="modal modalOff">
-            <div id="appInfoModalContent" class="modalContent">
-                <section class="modalHeaderContainer">
-                    <span id="appInfoCloseBtn" class="closeBtn">&times;</span>
-                    <div class="modalHeadersWithImg">
-                        <img src="images/info.svg">&nbsp
-                        <h3>About the App</h3>
-                    </div>
-                    
-                </section>
-                <div class="modalTab">
-                    <button class="modalTabLinks" id="appInfoTab">App Info</button>
-                    <button class="modalTabLinks" id="creditsTab">Credits</button>
-                </div>
-                <div id="infoDisplay" class="modalTabContent modalOff">
-                    <h3>App Information</h3>
-                    <p>World Gazetteer displays geographical information based on worldwide or specific country searches. All the information displayed has been pulled from various scources via API calls. To see a list of the APIs used please see the credits tab.</p>
-                    <p>There are three main functions avalible currently:</p>
-                    <p>1: <span class="italicBold">Country Specific Searches</span>. This will search for the selected country and display a mini info bubble. If that bubble is closed and the location pin is clicked on a window with more information will be displayed. These country searches can also be overlayed with additional on-map locations, which when clicked will display information about that location. <span class="italicBold">Clicking the search button will clear all natural event markers but not map routes</span>.</p>
-                    <p>2: <span class="italicBold">Worldwide Searches</span>. This will display the locations of the selected Natural Events that have occurred within that last 365 days. If the markers are clicked, a window will display information on the event at the location. <span class="italicBold">Clicking the search button will clear all markers and map routes</span>.</p>
-                    <p>3: <span class="italicBold">Map and Route Change</span>. This section will change the map to the newly selected map with additional route options avalible to overlay on the map. <span class="italicBold">Clicking the search button will clear all natural event markers but not map routes</span>.</p>
-                </div>
-                <div id="creditsDisplay" class="modalTabContent modalOff">
-                    <h3>App Credits</h3>
-                    <p>A big thanks to all the API organisations that have given free acceess to their databases and those that have given free API keys for use in this project. The project is ongoing and will continue to grow and develop as time progresses.</p>
-                    <h4>APIs used</h4>
-                    <ul>
-                        <li><a href="https://www.numbeo.com/common/api.jsp" target="_blank">Numbeo</a></li>
-                        <li><a href="https://restcountries.eu/" target="_blank">Rest Countries</a></li>
-                        <li><a href="https://www.currencyconverterapi.com/" target="_blank">Currency Converter API</a></li>
-                        <li><a href="https://www.geonames.org/" target="_blank">GeoNames</a></li>
-                        <li><a href="https://api.nasa.gov/" target="_blank">NASA API</a></li>
-                        <li><a href="https://opencagedata.com/" target="_blank">OpenCage</a></li>
-                    </ul>
-                    <h4>Icons used</h4>
-                    <ul>
-                        <li>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div id="contactModal" class="modal modalOff">
-            <div class="modalContent">
-                <form id="contactForm" action="./php/contactForm.php" method="post">
-                    <section class="modalHeaderContainer">
-                        <span id="contactCloseBtn" class="closeBtn">&times;</span>
-                        <div id="contactHeader" class="modalHeadersWithImg">
-                            <img src="images/communicate.svg">&nbsp;
-                            <h2>Contact Me</h2>
-                        </div>
-                        <hr>
-                        <p>If you have any questions or concerns about the app, please fill in the form and I will get back to you asap.</p>
-                        <hr>
-                    </section>
-
-                    <label for="formName">Name</label><br>
-                    <input class="formInput" type="text" id="formName" name="name" required><br>
-                    <label for="formEmail">Email</label><br>
-                    <input class="formInput" type="email" id="formEmail" name="email" required><br>
-                    <label for="formMessage">Message</label><br>
-                    <textarea class="formInput" id="formMessage" form="contactForm" name="message" required></textarea><br>
-                    <input type="submit" value="Submit">
-                </form>
-            </div>
-        </div>
-
-        <!--------------- 4.2 SECONDARY MODALS --------------->
-        <div id="countryModalOLD" class="modal modalOff">
-            <div class="modalContent">
-                <section>
-                    <span id="countryModalcloseBtn" class="closeBtn">&times;</span>
-                    <img id="flag">&nbsp<h2 id="countryName"></h2>
-                    <h5 id="countryRegion" class="countryRegions"></h5>
-                    <h5 id="countrySubRegion" class="countryRegions"></h5>
-                </section>
-                <hr>
-                <section>
-                    <h3>Society Info</h3>
-                    <p id="capital"></p>
-                    <p id="population"></p>
-                    <p id="languagesTitle"></p>
-                    <p id="languages"></p>
-                </section>
-                <section><h3>Currency Info</h3>
-                    <p id="currencyName"></p>
-                    <p id="currencySubunit"></p>
-                    <p id="currencySymbol"></p>
-                    <p id="foreignExchange"></p></section>
-                <section>
-                    <h3>Timezone(s)</h3>
-                    <p id="timezone"></p>
-                </section>
-                <section>
-                    <h3>Living Condition Indexes</h3>
-                    <table id="comparisonTable">
-                        <tr>
-                            <th>Index</th>
-                            <th id="indexTableCountry1"></th>
-                            <th id="indexTableCountry2"></th>
-                            <th id="indexTableComparison"></th>
-                        </tr>
-                        <tr>
-                            <td id="healthIndexRow">Health</td>
-                            <td id="healthIndexCountry1"></td>
-                            <td id="healthIndexCountry2"></td>
-                            <td id="healthIndexComparison"></td>
-                        </tr>
-                        <tr>
-                            <td id="crimeIndexRow">Crime</td>
-                            <td id="crimeIndexCountry1"></td>
-                            <td id="crimeIndexCountry2"></td>
-                            <td id="crimeIndexComparison"></td>
-                        </tr>
-                        <tr>
-                            <td id="pollutionIndexRow">Pollution</td>
-                            <td id="pollutionIndexCountry1"></td>
-                            <td id="pollutionIndexCountry2"></td>
-                            <td id="pollutionIndexComparison"></td>
-                        </tr>
-                        <tr id="comparisonPercent">
-                            <td id="trafficIndexRow">Traffic</td>
-                            <td id="trafficIndexCountry1"></td>
-                            <td id="trafficIndexCountry2"></td>
-                            <td id="trafficIndexComparison"></td>
-                        </tr>
-                    </table>
-                    <h6 id="livingInfoComparison"></h6><br>
-                </section>
-                <hr>
-                <footer>
-                    <h6 class="disclaimer">*All information is provided by a third party API. Some information may not be available in their databases. Please see the 'About App' page for more information. If there is any missing and/or inaccurate information for the above sections, please contact me on the contact page.</h6>
-                </footer>
-            </div>
-        </div>
-        <div id="geoDataModal" class="modal modalOff">
-            <div class="modalContent">
-                <span id="geoDataModalcloseBtn" class="closeBtn">&times;</span>
-                <h3 id="geoDataModalTitle"></h3>
-                <hr>
-                <p id="geoDataModalLat"></p>
-                <p id="geoDataModalLng"></p>
-                <p id="geoDataModalAddress"></p>             
-            </div>
-        </div>
-        <div id="naturalEventsModal" class="modal modalOff">
-            <div class="modalContent">
-                <span id="naturalEventsModalcloseBtn" class="closeBtn">&times;</span>
-                <h3 id="naturalEventsModalTitle"></h3>
-                <hr>
-                <p id="naturalEventsModalDate"></p>
-                <p id="naturalEventsModalLat"></p>
-                <p id="naturalEventsModalLng"></p>
-
-            </div>
-        </div>
-
         <!--TEST CODE-->
         <select id="countrySelector">
         </select>
@@ -592,33 +34,35 @@
         <div id="countryModal" class="modal modalOff">
             <div class="modalContent">
                 <header>
-                    <img id="ctryFlag">
-                    <h1 class="ctryName"></h1>
+                    <div>
+                        <span id="ctryModalcloseBtn" class="closeBtn">&times;</span>
+                        <img id="ctryFlag">
+                    </div>
                 </header>
-                <section id="adminInfo">
-                    <h1>Administrative Information</h1>
-                    <p class="ctryName"></p>
-                    <p id="currencyCode"></p>
-                    <p id="currencySymbol"></p>
-                    <p id="regionGlobal"></p>
-                    <p id="region"></p>
-                    <p id="areaSize"></p>
-                    <p id="isoA2"></p>
-                    <p id="isoA3"></p>
-                    <p id="capital"></p>
-                    <p id="dialCode"></p>
+                <h1 id="ctryName"></h1>
+                <section>
+                    <h3>Administrative Information</h3>
+                    <div id="adminInfo"></div>
+                    <details>
+                        <summary>Bordering Countries</summary>
+                        <div id="borderingCtry"></div>
+                    </details>
                 </section>
-                <section id="genInfo">
-                    <h1>General Info</h1>
-                    <p id="population"></p>
-                    <p id="incomeLevel"></p>
+                <section>
+                    <h3>Currency</h3>
+                    <div id="curInfo"></div>
                     <details>
                         <summary>Exchange Rates</summary>
-                        <div class="exRates"></div>
+                        <div id="exRateKeyVal"></div>
                     </details>
+                </section>
+                <section id="genInfo">
+                    <h3>General Info</h3>
+                    <p id="ctryPop"></p>
+                    <p id="incomeLevel"></p>
                     <details>
-                        <summary>Country Weather</summary>
-                        <div class="ctryWeather"></div>
+                        <summary>Timezones</summary>
+                        <div id="ctryTZ"></div>
                     </details>
                     <details>
                         <summary>Living Standards</summary>
@@ -639,20 +83,31 @@
                     </details>
                     <details>
                         <summary>Country Languages</summary>
-                        <div class="languages"></div>
+                        <div id="ctryLang"></div>
                     </details>
                     <details>
                         <summary>National Holidays</summary>
-                        <div class="holidays"></div>
+                        <div id="holidays"></div>
+                    </details>
+                    <details>
+                        <summary>News</summary>
+                        <div id=ctryNews></div>
                     </details>
                 </section>
 
-                <section id="countryLinks">
-                    <div id="imgGallery">
+                <details>
+                    <summary>Image Gallery</summary>
+                    <div id="imgGallery"></div>
+                </details>
 
-                    </div>
-                    <a href="" id="wikiLink"></a>
-                </section>
+                
+
+                <details>
+                    <summary>Wiki Info</summary>
+                    <section>
+                        <div id="wikiInfo"></div>
+                    </section>
+                </details>
 
             </div>
         </div>
