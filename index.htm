@@ -21,6 +21,8 @@
         <link rel="stylesheet" href="./css/leaflet.css">
         <link rel="stylesheet" href="./css/MarkerCluster.css">
         <link rel="stylesheet" href="./css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     </head>
 
     <body>
@@ -30,6 +32,12 @@
         <!--TEST CODE-->
         <select id="countrySelector">
         </select>
+
+        <div id="webCamContainer" class="modal modalOff">
+            <span id="webCamCloseBtn" class="closeBtn">&times;</span>
+            <div id="webCamPlayer" class="modalContent"></div>
+            
+        </div>
 
         <div id="countryModal" class="modal modalOff">
             <div class="modalContent">
@@ -66,20 +74,16 @@
                     </details>
                     <details>
                         <summary>Living Standards</summary>
-                        <p id="qolIndex"></p>
-                        <p id="healthIndex"></p>
-                        <p id="crimeIndex"></p>
-                        <p id="pollutionIndex"></p>
-                        <p id="trafficIndex"></p>
+                        <div class="ct-chart ct-perfect-fourth"></div>
                     </details>
                     <details>
-                        <summary>Road Info</summary>
-                        <p id="speedIn"></p>
-                        <p id="driveOn"></p>
+                        <summary>Driving Info</summary>
+                        <div id="driveInfo"></div>
                     </details>
                     <details>
                         <summary>Country Prices</summary>
-                        <div class="itemPrices"></div>
+                        <div id="curDisplay"></div>
+                        <div id="itemPrices"></div>
                     </details>
                     <details>
                         <summary>Country Languages</summary>
@@ -94,14 +98,10 @@
                         <div id=ctryNews></div>
                     </details>
                 </section>
-
                 <details>
                     <summary>Image Gallery</summary>
                     <div id="imgGallery"></div>
                 </details>
-
-                
-
                 <details>
                     <summary>Wiki Info</summary>
                     <section>
@@ -115,11 +115,16 @@
         <!--------------- 5. APP WORLD MAP --------------->
         <div id="map"></div>
 
+        
+
         <!--------------- 6. SCRIPTS --------------->
         <script src="./js/jquery-2.2.3.min.js"></script>
         <script src="./js/leaflet.js"></script>
         <script src="./js/leaflet.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
+        <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        <script src="js/leaflet.extra-markers.min.js"></script>
+        <script src="./common/all.js"></script>
         <script type="module" src="./js/main.js"></script>
 
     </body>
