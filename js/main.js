@@ -50,9 +50,94 @@ import { worldTiles } from "../common/mapAndOverlays.js";
 /*--------------- 4. JQUERY DOCUMENT ---------------*/
 $(document).ready(()=> {
 
-    /*--------------- 4.1 LOAD WORLD MAP TILES ---------------*/
-    var map = L.map('map').fitWorld();
-    worldTiles.maps.default.addTo(map);
+    let defaultMap = L.tileLayer('https://{s}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png?apikey=3bd3719a93e0430094d656e7d697f55e', {
+        maxZoom: 22,
+        attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    let outdoorMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    var map = L.map('map', {
+        center: [0, 0],
+        zoom: 2,
+        layers: [defaultMap, outdoorMap]
+    });
+
+    var baseMaps = {
+        "<span style='color: gray'>Grayscale</span>": defaultMap,
+        "Streets": outdoorMap
+    };
+
+    var cityMarker = L.ExtraMarkers.icon({
+        icon: 'fa-city',
+        markerColor: 'pink',
+        shape: 'round',
+        prefix: 'fas',
+    });
+
+    var beachMarker = L.ExtraMarkers.icon({
+        icon: 'fa-umbrella-beach',
+        markerColor: 'blue',
+        shape: 'square',
+        prefix: 'fas',
+    });
+
+    var trafficMarker = L.ExtraMarkers.icon({
+        icon: 'fa-traffic-light',
+        markerColor: 'red',
+        shape: 'square',
+        prefix: 'fas',
+    });
+
+    var squareMarker = L.ExtraMarkers.icon({
+        icon: 'fa-store',
+        markerColor: 'green',
+        shape: 'square',
+        prefix: 'fas',
+    });
+
+    var cityGroup = L.markerClusterGroup();
+    var beachCamsGroup = L.markerClusterGroup();
+    var trafficCamsGroup = L.markerClusterGroup();
+    var squareCamsGroup = L.markerClusterGroup();    
+    
+    var overlayMaps = {
+        "Cities": cityGroup,
+        "Webcams Beaches": beachCamsGroup,
+        "Webcams Traffic": trafficCamsGroup,
+        "Webcams City Center": squareCamsGroup
+    };
+
+    const displayCityMarkers = (data, clusterGroup, marker) => {
+        $.each(data, (i,o)=> {
+            clusterGroup.addLayer(L.marker([o.latitude, o.longitude], {icon: marker}).bindPopup(`${o.city}`));
+        })   
+    }
+
+    const displayWebCamMarkers = (data, clusterGroup, marker) => {
+        $.each(data, (i,o)=> {
+            clusterGroup.addLayer(L.marker([o.location.latitude, o.location.longitude], {icon: marker}).on("click", ()=> {
+                $("#webCamContainer").removeClass("modalOff");
+                $("#webCamPlayer").append(`
+                    <div id="videoPlayer">
+                        <iframe src="${o.player.month.embed}style="width:100%"></iframe> 
+                    </div>
+                `);
+            }))
+        })
+        
+    }
+
+    const clearLayers = () => {
+        cityGroup.clearLayers();
+        beachCamsGroup.clearLayers();
+        trafficCamsGroup.clearLayers();
+        squareCamsGroup.clearLayers();
+    }
+
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
 
     /*--------------- 4.2 LOAD USER COUNTRY ---------------*/
 
@@ -106,7 +191,7 @@ $(document).ready(()=> {
         })
     }
 
-    const getCtryBorders = (obj) => {
+    const getCtryBorders = (data) => {
 
         let ctryInfo;
 
@@ -117,13 +202,13 @@ $(document).ready(()=> {
                 type: "post",
                 dataType: "json",
                 data: {
-                    code: obj.code
+                    code: data.restCtry.alpha2Code
                 },
 
                 success: (res)=> {
                     resolve(ctryInfo = {
                         borders: res.data[0].geometry,
-                        code: obj.code
+                        ctryInfo: data
                     })
                 },
 
@@ -135,268 +220,25 @@ $(document).ready(()=> {
 
     }
 
-    const addBorderLayer = (ctryInfo) => {
+    const addCtryLayer = (data) => {
 
-        ctryLayerGroup.addLayer(L.geoJSON(ctryInfo.borders)).addTo(map);
+        ctryLayerGroup.addLayer(L.geoJSON(data.borders)).addTo(map);
 
+        let crds = data.ctryInfo.openCage.bounds
         let bounds = [
-            [61.061, 2.0919117], [49.674, -14.015517]
-        ] // bounds found in openCage[0]
+            [crds.northeast.lat, crds.northeast.lng], [crds.southwest.lat, crds.southwest.lng]
+        ]
         map.fitBounds(bounds)
-
-        return ctryInfo;
     }
 
-
     $("#preloader").fadeIn("fast")
-
+    
     getUserLatLng()
     .then((data)=> getUserCtry(data))
-    .then((data)=> getCtryBorders(data))
-    .then((data)=> addBorderLayer(data))
-    .then((data)=> getCountryInfo(data))
-    .then((data)=> getAddCtryInfo(data))
-    .then((data)=> ctryInfoModal(data))
-    .then(()=> $("#preloader").fadeOut("fast"))
-    .catch((err)=> console.error(err));
+    .then((data)=> getAllInfo(data))
     
     //$("#preloader").fadeOut("fast")
-
-
-    //Zoom to and highlight user country
     
-
-    /*--------------- 4.3 GLOBAL VARIABLE DELARATIONS ---------------*/
-    //INITIAL VAR DECLARATIONS FOR COUNTRY AND NATURAL EVENTS OBJECTS
-    var selectedCountry;
-    var naturalEvents;  
-    
-    /*--------------- 4.4 NAV ICONS ---------------*/
-    /*--------------- 4.4.1 MOBILE MENU ICON ---------------*/
-    $("#appNavIcon").click(()=> {
-        $("#appNav").fadeIn();
-        $("#appNavIcon").hide()
-
-        setTimeout(()=> {
-            $("#appNav").fadeOut();
-            $("#appNavIcon").fadeIn()
-        }, 3000)
-    })
-
-    /*--------------- 4.4.2 NAV COUNTRY SEARCH ---------------*/
-    /*--------------- 4.4.2.1 NAV COUNTRY SEARCH MODAL ---------------*/
-    $("#countrySearch").click(()=> {
-        $(".modal").addClass(" modalOff");
-
-        $("#searchCountriesModal").removeClass(" modalOff");
-    })
-
-    /*--------------- 4.4.2.2 COUNTRY SEARCH FUNCTIONS ---------------*/
-    $("#searchCountriesBtn").click(()=> {
-
-        const codeA3 = $("#countryList").val();
-        const poi = $("input[name='searchCountryOptions']:checked").val();
-        let loaded = false;
-
-        if (!selectedCountry && !naturalEvents) {
-
-            selectedCountry = new country.Country() 
-
-        } else if (!selectedCountry && naturalEvents) {
-
-            naturalEvents.utils.removeLayers(naturalEvents);
-            selectedCountry = new country.Country()
-
-        } else if (selectedCountry && !naturalEvents) {
-
-            selectedCountry.utils.removeLayers(selectedCountry)
-            selectedCountry = new country.Country()
-
-        } else {
-
-            naturalEvents.utils.removeLayers(naturalEvents);
-            selectedCountry.utils.removeLayers(selectedCountry)
-            selectedCountry = new country.Country()
-
-        }
-        
-
-        utils.preloader(loaded)
-        
-        selectedCountry.utils.getBorders(selectedCountry, codeA3)
-        .then((data)=> data.utils.addBorders(data, map))
-
-        selectedCountry.utils.getInfo(selectedCountry, selectedCountry.URLs.restcountries, codeA3)
-        .then((data)=> data.utils.getInfo(data, data.URLs.numbeoCountryIndex))
-        .then((data)=> data.utils.getCurrencyExchange(data, userCountry.currency.code))
-        .then((data)=> data.utils.panToCountry(map, data, true))
-        .then((data)=> data.utils.countryInfoPopup(map, data))
-        .then((data)=> data.layerGroups.addLayer(L.marker(data.admin.latlng).on("click", ()=> {modals.countryModal(selectedCountry, userCountry)})).addTo(map))
-        .then(()=> {if (poi) {geoData.getGeoData(selectedCountry, map, poi)}})
-        .then(()=> loaded = true)
-        .then(()=> utils.preloader(loaded))
-
-        geoData.clusters.clearLayers();
-        $("#searchCountriesModal").addClass(" modalOff");
-        
-    })
-
-    /*--------------- 4.4.2.3 COUNTRY SEARCH CLOSE FUNCTIONS ---------------*/
-    $("#countryModalcloseBtn").click(()=> {
-        $("#countryModal").addClass(" modalOff");
-    })
-    $("#geoDataModalcloseBtn").click(()=> {
-        $("#geoDataModal").addClass(" modalOff");
-    })
-    $("#countriesSeachCloseBtn").click(()=> {
-        $("#searchCountriesModal").addClass(" modalOff");
-    })
-
-    /*--------------- 4.4.3 NAV WORLD SEARCH ---------------*/
-    /*--------------- 4.4.3.1 NAV WORLD SEARCH MODAL ---------------*/
-    $("#worldSearch").click(()=> {
-        $(".modal").addClass(" modalOff");
-        $("#searchWorldModal").removeClass(" modalOff")
-    })
-
-    /*--------------- 4.4.3.2 WORLD SEARCH FUNCTIONS ---------------*/
-    $("#searchWorldBtn").click(()=> {
-
-        let event = $("input[name='naturalEvents']:checked").val();
-        let loaded = false;
-
-        if (!selectedCountry && !naturalEvents) {
-
-            naturalEvents = new events.NaturalEvents();
-
-        } else if (!selectedCountry && naturalEvents) {
-
-            naturalEvents.utils.removeLayers(naturalEvents);
-            naturalEvents = new events.NaturalEvents();
-
-        } else if (selectedCountry && !naturalEvents) {
-
-            selectedCountry.utils.removeLayers(selectedCountry);
-            geoData.removeLayers();
-            naturalEvents = new events.NaturalEvents();
-
-        } else {
-
-            naturalEvents.utils.removeLayers(naturalEvents);
-            selectedCountry.utils.removeLayers(selectedCountry);
-            geoData.removeLayers();
-            naturalEvents = new events.NaturalEvents();
-        }
-
-        utils.preloader(loaded);
-
-        naturalEvents.utils.getEvents(event, naturalEvents, map)
-        .then(()=> loaded = true)
-        .then(()=> utils.preloader(loaded));
-
-        $("#searchWorldModal").addClass(" modalOff")
-
-    })
-
-    /*--------------- 4.4.3.3 WORLD SEARCH CLOSE FUNCTIONS ---------------*/
-    $("#seachWorldCloseBtn").click(()=> {
-        $("#searchWorldModal").addClass(" modalOff")
-    })
-    $("#naturalEventsModalcloseBtn").click(()=> {
-        $("#naturalEventsModal").addClass(" modalOff");
-    })
-
-    /*--------------- 4.4.4 NAV SELECT MAP ---------------*/
-    /*--------------- 4.4.4.1 NAV SELECT MAP MODAL ---------------*/
-    $("#changeMap").click(()=> {
-        $(".modal").addClass(" modalOff");
-        $("#selectMapModal").removeClass(" modalOff");
-    })
-
-    /*--------------- 4.4.4.2 NAV SELECT MAP FUNCTIONS ---------------*/
-    $("#selectMapBtn").click(()=> {
-
-        if (naturalEvents) {
-            naturalEvents.utils.removeLayers(naturalEvents)
-        }
-
-        worldTiles.utils.loadOverlays(map)
-
-        $("#selectMapModal").addClass(" modalOff")
-
-    })
-
-    /*--------------- 4.4.4.3 NAV SELECT MAP CLOSE FUNCTIONS ---------------*/
-    $("#selectMapCloseBtn").click(()=> {
-        $("#selectMapModal").addClass(" modalOff")
-    })
-
-    /*--------------- 4.4.5 NAV CLEAR MARKERS ---------------*/
-    /*--------------- 4.4.5.1 NAV CLEAR MARKERS FUNCTION ---------------*/
-    $("#clearMarkers").click(()=> {
-        utils.clearAllLayers(selectedCountry, naturalEvents, geoData, worldTiles, map);
-    })
-
-    /*--------------- 4.4.6 NAV INFO ---------------*/
-    /*--------------- 4.4.6.1 NAV INFO MODAL ---------------*/
-    $("#appInfo").click(()=> {
-        $(".modal").addClass(" modalOff");
-        $(".modalTabLinks").removeClass(" activeTab");
-        $("#infoDisplay").addClass(" modalOff");
-        $("#howItWorksDisplay").addClass(" modalOff");
-        $("#creditsDisplay").addClass(" modalOff");
-
-        $("#appInfoModal").removeClass(" modalOff");
-        $("#infoDisplay").removeClass(" modalOff");
-        $("#appInfoTab").addClass(" activeTab");
-    })
-
-    /*--------------- 4.4.6.2 NAV INFO TABS ---------------*/
-    $("#appInfoTab").click(()=> {
-        $(".modalTabContent").addClass(" modalOff");
-        $(".modalTabLinks").removeClass(" activeTab");
-
-        $("#infoDisplay").removeClass(" modalOff");
-        $("#appInfoTab").addClass(" activeTab");
-
-    })
-    $("#howItWorksTab").click(()=> {
-        $(".modalTabContent").addClass(" modalOff");
-        $(".modalTabLinks").removeClass(" activeTab");
-
-        $("#howItWorksDisplay").removeClass(" modalOff");
-        $("#howItWorksTab").addClass(" activeTab");
-    })
-    $("#creditsTab").click(()=> {
-        $(".modalTabContent").addClass(" modalOff");
-        $(".modalTabLinks").removeClass(" activeTab");
-
-        $("#creditsDisplay").removeClass(" modalOff");
-        $("#creditsTab").addClass(" activeTab");
-    })
-
-    /*--------------- 4.4.6.3 NAV INFO CLOSE FUNCTIONS ---------------*/
-    $("#appInfoCloseBtn").click(()=> {
-        $("#appInfoModal").addClass(" modalOff");
-        $(".modalTabLinks").removeClass(" activeTab");
-    })
-
-    /*--------------- 4.4.7 NAV CONTACT ---------------*/
-    /*--------------- 4.4.7.1 NAV CONTACT MODAL ---------------*/
-    $("#contactInfo").click(()=> {
-        $(".modal").addClass(" modalOff");
-
-        $("#contactModal").removeClass(" modalOff");
-    })
-
-    /*--------------- 4.4.7.2 NAV CONTACT CLOSE FUNCTIONS ---------------*/
-    $("#contactCloseBtn").click(()=> {
-        $("#contactModal").addClass(" modalOff");
-    })
-
-
-
-    //------------------NEW CODE
 
     const getCountryList = () => {
         $.ajax({
@@ -425,28 +267,6 @@ $(document).ready(()=> {
 
     getCountryList();
 
-    const getCountryBorders = (isoCodeA2) => {
-
-        return new Promise((resolve, reject)=> {
-
-            $.getJSON("./common/countryBorders.geo.json", (data) => {
-                for (let i=0; i<data.features.length; i++) {
-                    if (data.features[i].properties.iso_a2 === isoCodeA2) {
-                        let obj = data.features[i].geometry;
-                        if (obj) {
-                            resolve(obj);
-                        } else {
-                            reject("No ISO Match!")
-                        }
-                    }
-                }
-            
-            })
-
-        })
-
-    }
-
     const getCountryInfo = (ctryInfo) => {
 
         const date = new Date();
@@ -473,71 +293,12 @@ $(document).ready(()=> {
         })
     }
 
-    const getAddCtryInfo = (data) => {
-
-        let ctryData;
+    const getOverlayInfo = (isoCodeA2) => {
 
         return new Promise((resolve, reject)=> {
 
             $.ajax({
-                url: "./php/getAddCtryInfo.php",
-                type: "post",
-                dataType: "json",
-                data: {
-                    currCode: data.restCtry.currencies[0].code,
-                    name: data.restCtry.nativeName.replace(/\s+/g, "%20")
-                },
-
-                success: (res)=> {
-                    resolve(ctryData = {
-                        exRates: res.data.exRates,
-                        news: res.data.news,
-                        wiki: res.data.wiki,
-                        images: res.data.images,
-                        openCage: res.data.openCage,
-                        holidays: data.holidays,
-                        restCtry: data.restCtry,
-                        })
-                },
-
-                error: (err)=> {
-                    reject(err);
-                }
-            })
-        })
-    }
-
-    const getWebCams = (isoCodeA2, category) => {
-
-        return new Promise((resolve, reject)=> {
-
-            $.ajax({
-                url: "./php/getWebCams.php",
-                type: "post",
-                dataType: "json",
-                data: {
-                    code: isoCodeA2,
-                    category: category
-                },
-
-                success: (res)=> {
-                    resolve(res)
-                },
-
-                error: (err)=> {
-                    reject(err);
-                }
-            })
-
-        })
-    }
-
-    const getCities = (isoCodeA2) => {
-
-        return new Promise((resolve, reject)=> {
-
-            $.ajax({
-                url: "./php/getCities.php",
+                url: "./php/getOverlayInfo.php",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -579,8 +340,10 @@ $(document).ready(()=> {
         })
     }
 
-
     const ctryInfoModal = (data) => {
+
+        console.log(data)
+
 
         const imgCheck = (img) => {
             if (img) {
@@ -608,21 +371,21 @@ $(document).ready(()=> {
         `);
 
         $("#ctryLang").html("");
-        $.each(data.restCtry.languages, (index, obj)=> {
+        $.each(data.restCtry.languages, (i, obj)=> {
             $("#ctryLang").append(`
                 <p>${obj.name}</p>
             `)
         })
 
         $("#ctryTZ").html("");
-        $.each(data.restCtry.timezones, (index, tz)=> {
+        $.each(data.restCtry.timezones, (i, tz)=> {
             $("#ctryTZ").append(`
                 <p>${tz}</p>
             `)
         })
 
         $("#wikiInfo").html("");
-        $.each(data.wiki.geonames, (index, obj)=> {
+        $.each(data.wiki.geonames, (i, obj)=> {
             $("#wikiInfo").append(`
                 <br><img src="${imgCheck(obj.thumbnailImg)}">
                 <h3>${obj.title}</h3>
@@ -639,7 +402,7 @@ $(document).ready(()=> {
         `);
 
         $("#exRateKeyVal").html("");
-        $.each(data.exRates, (index, obj)=> {
+        $.each(data.exRates, (i, obj)=> {
             for (const [key, value] of Object.entries(obj)) {
                 $("#exRateKeyVal").append(`${key}: ${value}<br>`);
             };
@@ -647,7 +410,7 @@ $(document).ready(()=> {
 
         $("#borderingCtry").html("");
         if (data.restCtry.borders.length > 0) {
-            $.each(data.restCtry.borders, (index, ctry)=> {
+            $.each(data.restCtry.borders, (i, ctry)=> {
                 $("#borderingCtry").append(`
                 <p>${ctry}</p>
                 `);
@@ -657,8 +420,7 @@ $(document).ready(()=> {
         };
 
         $("#ctryNews").html("");
-        $.each(data.news, (index, news)=> {
-        
+        $.each(data.news, (i, news)=> {
             $("#ctryNews").append(`
                 <br>
                 <img src=${imgCheck(news.image.url)} alt="No Image!" onerror=this.src="./images/train.svg">
@@ -672,22 +434,96 @@ $(document).ready(()=> {
         });
 
         $("#holidays").html("");
-        $.each(data.holidays, (index, obj)=> {
+        $.each(data.holidays, (i, obj)=> {
             $("#holidays").append(`
                 <p><span>${obj.name}</span><span>${obj.date}</span></p>
             `)
         })
 
         $("#imgGallery").html("");
-        $.each(data.images, (index, img)=> {
+        $.each(data.images, (i, img)=> {
             $("#imgGallery").append(`
-                <img id="img${index}" src=${img.thumb}>
+                <img id="img${i}" src=${img.thumb}>
             `)
         })
 
-        console.log(data);
-        $("#countryModal").removeClass("modalOff");
+        $("#driveInfo").html("");
+        $("#driveInfo").append(`
+            <p><span>Drive on: </span><span>${data.openCage.annotations.roadinfo.drive_on}</span></p>
+            <p><span>Speed in: </span><span>${data.openCage.annotations.roadinfo.speed_in}</span></p>
+        `)
 
+        //----------NUMBEO INDEX CHART
+
+        let idx = data.numbeoIndexs 
+        var charData = {
+            labels: ['Quality of Life', 'Crime', 'Safety', 'Cliamte', 'Rent', 'Health Care', 'Food(cost)', 'Pollution', 'Buying Power'],
+            series: [
+              [idx.quality_of_life_index, idx.crime_index, idx.safety_index, idx.climate_index, idx.rent_index, idx.health_care_index, idx.groceries_index, idx.pollution_index, idx.purchasing_power_incl_rent_index]
+            ]
+          };
+    
+        var charOptions = {
+            width: 500,
+            height: 400,
+            horizontalBars: true,
+            axisY: {
+                offset: 70
+              }
+        }
+          
+          new Chartist.Bar('.ct-chart', charData, charOptions);
+
+        //-----------------------
+
+        $("#curDisplay").html("");
+        $("#curDisplay").html(`<p><span>Prices displayed is: </span><span>${data.numbeoPrices.currency}</span></p>`)
+
+        let cur = data.restCtry.currencies[0].symbol;
+        const priceCheck = (price, obj) => {
+            if (price in obj) {
+                switch(price) {
+                    case "average_price":
+                        return cur + obj.average_price.toFixed(2);
+
+                    case "highest_price":
+                        return cur + obj.highest_price.toFixed(2);
+
+                    case "lowest_price":
+                        return cur + obj.lowest_price.toFixed(2);
+                }
+            }
+
+            return "Price not available."
+        };
+        $("#itemPrices").html("");
+        $.each(data.numbeoPrices.prices, (i, obj)=> {          
+
+            $("#itemPrices").append(`
+                <p><span>Item: </span><span>${obj.item_name}</span></p>
+                <p><span>Average Price: </span><span>${priceCheck("average_price", obj)}</span></p>
+                <p><span>Highest Price: </span><span>${priceCheck("highest_price", obj)}</span></p>
+                <p><span>Lowest Price: </span><span>${priceCheck("lowest_price", obj)}</span></p>
+                <hr>
+                
+            `)
+
+        })
+        
+
+
+        $("#countryModal").removeClass("modalOff");
+        return data;
+
+    }
+
+    const getAllInfo = (data) => {
+        getCountryInfo(data)
+        .then((data)=> ctryInfoModal(data))
+        .then((data)=> getCtryBorders(data))
+        .then((data)=> addCtryLayer(data))
+        .then(()=> $("#preloader").fadeOut("fast"))
+        .catch((err)=> console.error(err));
     }
 
     $("#countrySelector").change(()=> {
@@ -698,40 +534,41 @@ $(document).ready(()=> {
         }
 
         ctryLayerGroup.clearLayers();
+        clearLayers();
 
         $("#preloader").fadeIn("fast")
+        getCountryInfo(info)
+        .then((data)=> getAllInfo(data))
+        //.then((data)=> ctryInfoModal(data))
+        //.then((data)=> getCtryBorders(data))
+        //.then((data)=> addCtryLayer(data))
+        //.then(()=> $("#preloader").fadeOut("fast"))
+        //.catch((err)=> console.error(err));
 
-        getCtryBorders(info)
-        .then((data)=> addBorderLayer(data))
-        .then((data)=> getCountryInfo(data))
-        .then((data)=> getAddCtryInfo(data))
-        .then((data)=> ctryInfoModal(data))
-        .then(()=> $("#preloader").fadeOut("fast"))
+        getOverlayInfo(info.code)
+        .then((data)=> {
+            console.log(data)
+            displayWebCamMarkers(data.beaches, beachCamsGroup, beachMarker)
+            displayWebCamMarkers(data.traffic, trafficCamsGroup, trafficMarker)
+            displayWebCamMarkers(data.squares, squareCamsGroup, squareMarker)
+            displayCityMarkers(data.cities, cityGroup, cityMarker)
+        })
         .catch((err)=> console.error(err));
-
-
-        //getCountryBorders(info.code)
-        //.then((data)=> console.log(data))
-        //.catch((err)=> console.error(err));
-
-        //let category = "beach";
-        //getWebCams(info.code, category)
-        //.then((data)=> console.log(data)) 
-
-        //getCities(info.code)
-        //.then((data)=> console.log(data))
-        //.catch((err)=> console.error(err));
-
-        //let latlng = [51.2283, -2.3221];
-        //getWeather(latlng)
-        //.then((data)=> console.log(data))
-        //.catch((err)=> console.error(err));
-
         
     })
 
     $("#ctryModalcloseBtn").click(()=> {
         $("#countryModal").addClass(" modalOff");
     })
+
+    $("#webCamCloseBtn").click(()=> {
+        $("#webCamContainer").addClass(" modalOff");
+        $("#webCamPlayer").html("");
+    })
+
+    //let latlng = [51.2283, -2.3221];
+        //getWeather(latlng)
+        //.then((data)=> console.log(data))
+        //.catch((err)=> console.error(err));
 
 })
