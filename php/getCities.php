@@ -4,9 +4,8 @@
     error_reporting(E_ALL);
 
     $startTime = microtime(true);
-    $apiKey = "wvlo2tz1pwdnha";
 
-    $url="https://www.numbeo.com/api/cities?api_key=" . $apiKey . "&country=" . $_REQUEST["code"];
+    $url="https://www.numbeo.com/api/cities?api_key=wvlo2tz1pwdnha&country=" . $_REQUEST["code"];
 
 
     $curl = curl_init();
