@@ -50,6 +50,16 @@ import { worldTiles } from "../common/mapAndOverlays.js";
 /*--------------- 4. JQUERY DOCUMENT ---------------*/
 $(document).ready(()=> {
 
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    var myCarousel = document.querySelector('#myCarousel')
+    var carousel = new bootstrap.Carousel(myCarousel)
+
+
+
     let defaultMap = L.tileLayer('https://{s}.tile.thunderforest.com/neighbourhood/{z}/{x}/{y}.png?apikey=3bd3719a93e0430094d656e7d697f55e', {
         maxZoom: 22,
         attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -70,76 +80,296 @@ $(document).ready(()=> {
         "Streets": outdoorMap
     };
 
-    var cityMarker = L.ExtraMarkers.icon({
-        icon: 'fa-city',
-        markerColor: 'pink',
-        shape: 'round',
-        prefix: 'fas',
-    });
+    const markers = {
+        city: L.ExtraMarkers.icon({
+            icon: 'fa-home',
+            markerColor: 'pink',
+            shape: 'round',
+            prefix: 'fas',
+        }),
+        beachCam: L.ExtraMarkers.icon({
+            icon: 'fa-umbrella-beach',
+            markerColor: 'blue',
+            shape: 'square',
+            prefix: 'fas',
+        }),
+        trafficCam: L.ExtraMarkers.icon({
+            icon: 'fa-traffic-light',
+            markerColor: 'red',
+            shape: 'square',
+            prefix: 'fas',
+        }),
+        squareCam: L.ExtraMarkers.icon({
+            icon: 'fa-store',
+            markerColor: 'light blue',
+            shape: 'square',
+            prefix: 'fas',
+        }),
+        city: L.ExtraMarkers.icon({
+            icon: 'fa-city',
+            markerColor: 'pink',
+            shape: 'circle',
+            prefix: 'fas',
+        }),
 
-    var beachMarker = L.ExtraMarkers.icon({
-        icon: 'fa-umbrella-beach',
-        markerColor: 'blue',
-        shape: 'square',
-        prefix: 'fas',
-    });
+        mountainPOI: L.ExtraMarkers.icon({
+            icon: 'fa-mountain',
+            markerColor: 'green',
+            shape: 'star',
+            prefix: 'fas',
+        }),
+        airportPOI: L.ExtraMarkers.icon({
+            icon: 'fa-plane-departure',
+            markerColor: 'purple',
+            shape: 'star',
+            prefix: 'fas',
+        }),
+        beachPOI: L.ExtraMarkers.icon({
+            icon: 'fa-umbrella-beach',
+            markerColor: 'yellow',
+            shape: 'star',
+            prefix: 'fas',
+        }),
+        castlePOI: L.ExtraMarkers.icon({
+            icon: 'fa-fort-awesome',
+            markerColor: 'black',
+            shape: 'star',
+            prefix: 'fab',
+        }),
+        lakePOI: L.ExtraMarkers.icon({
+            icon: 'fa-water',
+            markerColor: 'blue',
+            shape: 'star',
+            prefix: 'fas',
+        }),
+    }
 
-    var trafficMarker = L.ExtraMarkers.icon({
-        icon: 'fa-traffic-light',
-        markerColor: 'red',
-        shape: 'square',
-        prefix: 'fas',
-    });
+    const overlayGroups = {
+        cityGroup: L.markerClusterGroup(),
+        beachCamsGroup: L.markerClusterGroup(),
+        trafficCamsGroup: L.markerClusterGroup(),
+        squareCamsGroup: L.markerClusterGroup(),
+        cityGroup: L.markerClusterGroup(),
+        mountainPOIGroup: L.markerClusterGroup(),
+        airportPOIGroup: L.markerClusterGroup(),
+        beachPOIGroup: L.markerClusterGroup(),
+        castlePOIGroup: L.markerClusterGroup(),
+        beachPOIGroup: L.markerClusterGroup(),
+        lakePOIGroup: L.markerClusterGroup(),
+    }
 
-    var squareMarker = L.ExtraMarkers.icon({
-        icon: 'fa-store',
-        markerColor: 'green',
-        shape: 'square',
-        prefix: 'fas',
-    });
-
-    var cityGroup = L.markerClusterGroup();
-    var beachCamsGroup = L.markerClusterGroup();
-    var trafficCamsGroup = L.markerClusterGroup();
-    var squareCamsGroup = L.markerClusterGroup();    
-    
-    var overlayMaps = {
-        "Cities": cityGroup,
-        "Webcams Beaches": beachCamsGroup,
-        "Webcams Traffic": trafficCamsGroup,
-        "Webcams City Center": squareCamsGroup
+    const overlayMaps = {
+        "Cities": overlayGroups.cityGroup,
+        "Webcams Beaches": overlayGroups.beachCamsGroup,
+        "Webcams Traffic": overlayGroups.trafficCamsGroup,
+        "Webcams City Center": overlayGroups.squareCamsGroup,
+        "POI Mountains": overlayGroups.mountainPOIGroup,
+        "POI Airports": overlayGroups.airportPOIGroup,
+        "POI Beaches": overlayGroups.beachPOIGroup,
+        "POI Castles": overlayGroups.castlePOIGroup,
+        "POI Lakes": overlayGroups.lakePOIGroup
     };
 
-    const displayCityMarkers = (data, clusterGroup, marker) => {
+    const getName = (data) => {
+        if (data.location.city) {
+            return data.location.city
+        } else if (data.location.town) {
+            return data.location.town
+        } else {
+            return "Name not avalible"
+        }
+    }
+
+    const displayMarkers = (data, clusterGroup, marker) => {
         $.each(data, (i,o)=> {
-            clusterGroup.addLayer(L.marker([o.latitude, o.longitude], {icon: marker}).bindPopup(`${o.city}`));
+
+            if (o.latitude && o.longitude) {
+                clusterGroup.addLayer(L.marker([o.latitude, o.longitude], {icon: marker}).on(
+                    "click", ()=> {
+                        $("#preloader").fadeIn("fast")
+                        getPopupInfo([o.latitude, o.longitude])
+                        .then((data)=> {
+                            L.popup().setLatLng([o.latitude, o.longitude]).setContent(`
+                            <div id="popup">
+                            <h1><span style="font-size: 30px; color: black;"><i class="fas fa-info-circle"></i></span>&nbsp${getName(data)}</h1>
+                            <table class="table">
+                                <tr>
+                                    <td>Road</td>
+                                    <td class="right-col">${data.location.road}</td>
+                                </tr>
+                                <tr>
+                                    <td>Suburb</td>
+                                    <td class="right-col">${data.location.suburb}</td>
+                                </tr>
+                                <tr>
+                                    <td>Postal Code</td>
+                                    <td class="right-col">${data.location.postcode}</td>
+                                </tr>
+                            </table>
+            
+                            <h2><span style="font-size: 20px; color: black;"><i class="fas fa-temperature-high"></i></span>&nbspWeather</h2>
+                            <table class="table">
+                                <tr>
+                                    <td>Today</td>
+                                    <td>Minimum ${data.weather.daily[0].temp.min}<sup>o</sup>C</td>
+                                    <td>Maximum ${data.weather.daily[0].temp.max}<sup>o</sup>C</td>
+                                    <td>Average ${data.weather.daily[0].temp.day}<sup>o</sup>C</td>
+                                </tr>
+                                <tr>
+                                    <td>Current</td>
+                                    <td>Temperture ${data.weather.current.temp}<sup>o</sup>C</td>
+                                    <td>${data.weather.current.weather[0].description}</td>
+                                    <td>${getImg(data.weather.current.weather[0].icon)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tomorrow</td>
+                                    <td>Average ${data.weather.daily[1].temp.day}<sup>o</sup>C</td>
+                                    <td>${data.weather.daily[1].weather[0].description}</td>
+                                    <td>${getImg(data.weather.daily[1].weather[0].icon)}</td>                     
+                                </tr>
+                            </table>
+                        </div>
+                            `).openOn(map);
+                        })
+                        .then(()=> $("#preloader").fadeOut("fast"))
+                        .catch((err)=> console.error(err));
+                    })
+                );
+            }
+
+            if (o.lat && o.lng) {
+                clusterGroup.addLayer(L.marker([o.lat, o.lng], {icon: marker}).on(
+                    "click", ()=> {
+                        $("#preloader").fadeIn("fast")
+                        getPopupInfo([o.lat, o.lng])
+                        .then((data)=> {
+                            L.popup().setLatLng([o.lat, o.lng]).setContent(`
+                            <div id="popup">
+                            <h1><span style="font-size: 30px; color: black;"><i class="fas fa-info-circle"></i></span>&nbsp${o.name}</h1>
+                            <table class="table">
+                                <tr>
+                                    <td>Road</td>
+                                    <td class="right-col">${data.location.road}</td>
+                                </tr>
+                                <tr>
+                                    <td>Suburb</td>
+                                    <td class="right-col">${data.location.suburb}</td>
+                                </tr>
+                                <tr>
+                                    <td>Postal Code</td>
+                                    <td class="right-col">${data.location.postcode}</td>
+                                </tr>
+                            </table>
+            
+                            <h2><span style="font-size: 20px; color: black;"><i class="fas fa-temperature-high"></i></span>&nbspWeather</h2>
+                            <table class="table">
+                                <tr>
+                                    <td>Today</td>
+                                    <td>Minimum ${data.weather.daily[0].temp.min}<sup>o</sup>C</td>
+                                    <td>Maximum ${data.weather.daily[0].temp.max}<sup>o</sup>C</td>
+                                    <td>Average ${data.weather.daily[0].temp.day}<sup>o</sup>C</td>
+                                </tr>
+                                <tr>
+                                    <td>Current</td>
+                                    <td>Temperture ${data.weather.current.temp}<sup>o</sup>C</td>
+                                    <td>${data.weather.current.weather[0].description}</td>
+                                    <td>${getImg(data.weather.current.weather[0].icon)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tomorrow</td>
+                                    <td>Average ${data.weather.daily[1].temp.day}<sup>o</sup>C</td>
+                                    <td>${data.weather.daily[1].weather[0].description}</td>
+                                    <td>${getImg(data.weather.daily[1].weather[0].icon)}</td>                     
+                                </tr>
+                            </table>
+                        </div>
+                            `).openOn(map);
+                        })
+                        .then(()=> $("#preloader").fadeOut("fast"))
+                        .catch((err)=> console.error(err));
+                    })
+                );
+            }
         })   
     }
 
     const displayWebCamMarkers = (data, clusterGroup, marker) => {
         $.each(data, (i,o)=> {
-            clusterGroup.addLayer(L.marker([o.location.latitude, o.location.longitude], {icon: marker}).on("click", ()=> {
-                $("#webCamContainer").removeClass("modalOff");
-                $("#webCamPlayer").append(`
-                    <div id="videoPlayer">
-                        <iframe src="${o.player.month.embed}style="width:100%"></iframe> 
-                    </div>
-                `);
-            }))
+
+            if (o.location.latitude && o.location.longitude) {
+                clusterGroup.addLayer(L.marker([o.location.latitude, o.location.longitude], {icon: marker}).on("click", ()=> {
+                    $("#preloader").fadeIn("fast")
+                    getPopupInfo([o.location.latitude, o.location.longitude])
+                        .then((data)=> {
+                            L.popup().setLatLng([o.location.latitude, o.location.longitude]).setContent(`
+                                <div id="popup">
+                                    <h1><span style="font-size: 30px; color: black;"><i class="fas fa-info-circle"></i></span>&nbsp${getName(data)}</h1>
+                                    <table class="table">
+                                        <tr>
+                                            <td>Road</td>
+                                            <td class="right-col">${data.location.road}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Suburb</td>
+                                            <td class="right-col">${data.location.suburb}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Postal Code</td>
+                                            <td class="right-col">${data.location.postcode}</td>
+                                        </tr>
+                                    </table>
+                                    <h2><span style="font-size: 20px; color: black;"><i class="fas fa-temperature-high"></i></span>&nbspWeather</h2>
+                                    <table class="table">
+                                        <tr>
+                                            <td>Today</td>
+                                            <td>Minimum ${data.weather.daily[0].temp.min}<sup>o</sup>C</td>
+                                            <td>Maximum ${data.weather.daily[0].temp.max}<sup>o</sup>C</td>
+                                            <td>Average ${data.weather.daily[0].temp.day}<sup>o</sup>C</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Current</td>
+                                            <td>Temperture ${data.weather.current.temp}<sup>o</sup>C</td>
+                                            <td>${data.weather.current.weather[0].description}</td>
+                                            <td>${getImg(data.weather.current.weather[0].icon)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tomorrow</td>
+                                            <td>Average ${data.weather.daily[1].temp.day}<sup>o</sup>C</td>
+                                            <td>${data.weather.daily[1].weather[0].description}</td>
+                                            <td>${getImg(data.weather.daily[1].weather[0].icon)}</td>                     
+                                        </tr>
+                                    </table>
+                                    <h2><span style="font-size: 20px; color: black;"><i class="fas fa-video"></i></span>&nbspWebcam</h2>
+                                    <div id="videoPlayer">
+                                        <iframe class="holds-the-iframe" src="${o.player.month.embed}style="width:100%"></iframe> 
+                                    </div>
+                                </div>
+                            `).openOn(map) 
+                        })
+                        .then(()=> $("#preloader").fadeOut("fast"))
+                        .catch((err)=> console.error(err));                  
+                }))
+            }
         })
         
     }
 
     const clearLayers = () => {
-        cityGroup.clearLayers();
-        beachCamsGroup.clearLayers();
-        trafficCamsGroup.clearLayers();
-        squareCamsGroup.clearLayers();
+        overlayGroups.cityGroup.clearLayers(),
+        overlayGroups.beachCamsGroup.clearLayers(),
+        overlayGroups.trafficCamsGroup.clearLayers(),
+        overlayGroups.squareCamsGroup.clearLayers(),
+        overlayGroups.cityGroup.clearLayers(),
+        overlayGroups.mountainPOIGroup.clearLayers(),
+        overlayGroups.airportPOIGroup.clearLayers(),
+        overlayGroups.beachPOIGroup.clearLayers(),
+        overlayGroups.castlePOIGroup.clearLayers(),
+        overlayGroups.beachPOIGroup.clearLayers(),
+        overlayGroups.lakePOIGroup.clearLayers()
     }
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-    /*--------------- 4.2 LOAD USER COUNTRY ---------------*/
 
     const ctryLayerGroup = L.layerGroup();
 
@@ -154,8 +384,8 @@ $(document).ready(()=> {
         return new Promise((resolve, reject)=> {
 
             navigator.geolocation.getCurrentPosition((pos)=> {
-                var crd = [pos.coords.latitude, pos.coords.longitude];
-                resolve(crd);
+                var latLng = [pos.coords.latitude, pos.coords.longitude];
+                resolve(latLng);
             }, (err)=> {
                 reject(err);
             }, options)
@@ -163,9 +393,7 @@ $(document).ready(()=> {
 
     }
 
-    const getUserCtry = (latLng) => {
-
-        let ctryInfo;
+    const getUserCtry = (latLngArr) => {
 
         return new Promise((resolve, reject)=> {
 
@@ -174,18 +402,98 @@ $(document).ready(()=> {
                 type: "post",
                 dataType: "json",
                 data: {
-                    lat: latLng[0],
-                    lng: latLng[1]
+                    lat: latLngArr[0],
+                    lng: latLngArr[1]
                 },
 
                 success: (res)=> {
-                    resolve(ctryInfo = {
-                        code: res.data
-                    })
+                    resolve(res.data)
                 },
 
                 error: (err)=> {
                     console.error(err);
+                }
+            })
+        })
+    }
+
+    const getOverlayInfo = (isoCodeA2) => {
+
+        let data;
+
+        return new Promise((resolve, reject)=> {
+
+            $.ajax({
+                url: "./php/getOverlayInfo.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    code: isoCodeA2
+                },
+
+                success: (res)=> {
+                    console.log(res.data)
+                    resolve(
+                        data = {
+                            overlays: res.data,
+                            code: isoCodeA2
+                        })
+                },
+
+                error: (err)=> {
+                    reject(err);
+                }
+            })
+        })
+    }
+
+    const loadOverlays = (data) => {
+
+       let something = true;
+
+        return new Promise((resolve, reject)=> {
+
+            displayWebCamMarkers(data.overlays.beachCams, overlayGroups.beachCamsGroup, markers.beachCam);
+            displayWebCamMarkers(data.overlays.trafficCams, overlayGroups.trafficCamsGroup, markers.trafficCam);
+            displayWebCamMarkers(data.overlays.squareCams, overlayGroups.squareCamsGroup, markers.squareCam);
+            displayMarkers(data.overlays.cities, overlayGroups.cityGroup, markers.city);
+            displayMarkers(data.overlays.mountainPOI, overlayGroups.mountainPOIGroup, markers.mountainPOI);
+            displayMarkers(data.overlays.airportPOI, overlayGroups.airportPOIGroup, markers.airportPOI);
+            displayMarkers(data.overlays.beachPOI, overlayGroups.beachPOIGroup, markers.beachPOI);
+            displayMarkers(data.overlays.castlePOI, overlayGroups.castlePOIGroup, markers.castlePOI);
+            displayMarkers(data.overlays.lakePOI, overlayGroups.lakePOIGroup, markers.lakePOI);
+
+            if (something) {
+                resolve(data.code)
+            } else {
+                reject("Overlays did not load!")
+            }
+        })
+    }
+
+    const getCountryInfo = (data) => {
+
+        const date = new Date();
+
+        return new Promise((resolve, reject)=> {
+
+            $.ajax({
+                url: "./php/getCountryInfo.php",
+                type: "post",
+                dataType: "json",
+                data: {
+                    code: data,
+                    year: date.getFullYear()
+                },
+
+                success: (res)=> {
+                    console.log(res.data)
+                    countryData = res.data;
+                    resolve(res.data)
+                },
+
+                error: (err)=> {
+                    reject(err);
                 }
             })
         })
@@ -229,99 +537,53 @@ $(document).ready(()=> {
             [crds.northeast.lat, crds.northeast.lng], [crds.southwest.lat, crds.southwest.lng]
         ]
         map.fitBounds(bounds)
+
+        return data;
     }
 
-    $("#preloader").fadeIn("fast")
-    
-    getUserLatLng()
-    .then((data)=> getUserCtry(data))
-    .then((data)=> getAllInfo(data))
-    
-    //$("#preloader").fadeOut("fast")
-    
+    const getCountryList = (iso) => {
 
-    const getCountryList = () => {
-        $.ajax({
-            url: "./php/getCountryList.php",
-            type: "post",
-            dataType: "json",
-            success: (res)=> {
-                if (res.status.name == "ok") {
-                    res.data.forEach((res) => {
-                        $("#countrySelector").append(
-                            $("<option>", {
-                                value: res.code,
-                                text: res.name,
-                            })
-                        );
-                    })
-                } else {
-                    console.error(`Error code: ${res.status.code}`)
+        let country = $("#countrySelector");
+
+        return new Promise((resolve, reject)=> {
+
+            $.ajax({
+                url: "./php/getCountryList.php",
+                type: "post",
+                dataType: "json",
+                success: (res)=> {
+                    if (res.status.name == "ok") {
+                        res.data.forEach((res) => {
+                            $("#countrySelector").append(
+                                $("<option>", {
+                                    value: res.code,
+                                    text: res.name,
+                                })
+                            );
+                        })
+
+                        for (let i=0; i<country[0].length; i++) {
+                            if (country[0][i].value === iso.toUpperCase()) {
+                                country[0][i].defaultSelected = true;
+                                resolve(iso)
+                            }
+                        }
+                    }
+                },
+                error: (err)=> {
+                    reject(err)
                 }
-            },
-            error: (err)=> {
-                console.error(err);
-            }
+            })
         })
+        
     };
 
-    getCountryList();
-
-    const getCountryInfo = (ctryInfo) => {
-
-        const date = new Date();
+    const getPopupInfo = (latLng) => {
 
         return new Promise((resolve, reject)=> {
 
             $.ajax({
-                url: "./php/getCountryInfo.php",
-                type: "post",
-                dataType: "json",
-                data: {
-                    code: ctryInfo.code,
-                    year: date.getFullYear()
-                },
-
-                success: (res)=> {
-                    resolve(res.data)
-                },
-
-                error: (err)=> {
-                    reject(err);
-                }
-            })
-        })
-    }
-
-    const getOverlayInfo = (isoCodeA2) => {
-
-        return new Promise((resolve, reject)=> {
-
-            $.ajax({
-                url: "./php/getOverlayInfo.php",
-                type: "post",
-                dataType: "json",
-                data: {
-                    code: isoCodeA2
-                },
-
-                success: (res)=> {
-                    resolve(res.data)
-                },
-
-                error: (err)=> {
-                    reject(err);
-                }
-            })
-        })
-    }
-
-    const getWeather = (latLng) => {
-
-        return new Promise((resolve, reject)=> {
-
-            $.ajax({
-                url: "./php/getWeather.php",
+                url: "./php/getPopupInfo.php",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -330,7 +592,8 @@ $(document).ready(()=> {
                 },
 
                 success: (res)=> {
-                    resolve(res)
+                    console.log(res.data)
+                    resolve(res.data)
                 },
 
                 error: (err)=> {
@@ -340,220 +603,164 @@ $(document).ready(()=> {
         })
     }
 
-    const ctryInfoModal = (data) => {
+    const getImg = (code) => {
 
-        console.log(data)
+        switch (code) {
+            case "01d":
+            case "01n":
+                return`<span style="font-size: 25px; color: black;"><i class="fas fa-sun"></i></span>`;
+            case "02d":
+            case "02n":
+                return`<span style="font-size: 25px; color: black;"><i class="fas fa-cloud-sun"></i></span>`;
+            case "03d":
+            case "03n":
+            case "04d":
+            case "04n":
+                return`<span style="font-size: 25px; color: black;"><i class="fas fa-cloud"></i></span>`;
+            case "09d":
+            case "09n":
+            case "10d":
+            case "10n":
+                return`<span style="font-size: 25px; color: black;"><i class="fas fa-cloud-rain"></i></span>`;
+            case "11d":
+            case "11n":
+                return`<span style="font-size: 25px; color: black;"><i class="fas fa-cloud-showers-heavy"></i></span>`;
+            case "13d":
+            case "13n":
+                return`<span style="font-size: 25px; color: black;"><i class="far fa-snowflake"></i></span>`;
+            case "50d":
+            case "50n":
+                return`<span style="font-size: 25px; color: black;"><i class="fas fa-smog"></i></span>`;
+        }
+    }
 
+    const reverseStr = (str) => {
+        let splitStr = str.split("-");
+        let revArr = splitStr.reverse();
+        let revStr = revArr.join("-");
+        return revStr;
+    }
 
-        const imgCheck = (img) => {
-            if (img) {
-                return img;
+    const indexRating = (key, val) => {
+
+        if (key === "crime_index" || key === "pollution_index" || key === "rent_index") {
+            
+            //Low is good
+            if (val <= 19.9) {
+                return "Very Low"
+            } else if (val <= 39.9) {
+                return "Low"
+            } else if (val <= 59.9) {
+                return "Medium"
+            } else if (val <= 79.9) {
+                return "High"
             } else {
-                return "./images/wildfireMarker.svg";
-            }
-        }
-
-        $("#ctryFlag").attr("src", data.restCtry.flag);
-        $("#ctryName").html(data.restCtry.name);
-
-        let areaSize = data.restCtry.area.toLocaleString();
-        let population = data.restCtry.population.toLocaleString();
-        $("#adminInfo").html("");
-        $("#adminInfo").append(`
-            <p><span>Region: </span><span>${data.restCtry.region}</span></p>
-            <p><span>Subregion: </span><span>${data.restCtry.subregion}</span></p>
-            <p><span>Area: </span><span>${areaSize}km<sup>2</sup></p>
-            <p><span>Population: </span><span>${population}</span></p>
-            <p><span>ISO Alpha 2 Ccode: </span><span>${data.restCtry.alpha2Code}</span></p>
-            <p><span>ISO Alpha 3 Ccode: </span><span>${data.restCtry.alpha3Code}</span></p>
-            <p><span>Capital City: </span><span>${data.restCtry.capital}</span></p>
-            <p><span>Dailing Code: </span><span>+${data.restCtry.callingCodes[0]}</span></p>
-        `);
-
-        $("#ctryLang").html("");
-        $.each(data.restCtry.languages, (i, obj)=> {
-            $("#ctryLang").append(`
-                <p>${obj.name}</p>
-            `)
-        })
-
-        $("#ctryTZ").html("");
-        $.each(data.restCtry.timezones, (i, tz)=> {
-            $("#ctryTZ").append(`
-                <p>${tz}</p>
-            `)
-        })
-
-        $("#wikiInfo").html("");
-        $.each(data.wiki.geonames, (i, obj)=> {
-            $("#wikiInfo").append(`
-                <br><img src="${imgCheck(obj.thumbnailImg)}">
-                <h3>${obj.title}</h3>
-                <p>${obj.summary} <a href="https://${obj.wikipediaUrl}" target="_blank">read more</a></p>
-                <br><hr>
-            `);
-        });
-
-        $("#curInfo").html("");
-        $("#curInfo").append(`
-            <p><span>Name: </span><span>${data.restCtry.currencies[0].name}</span></p>
-            <p><span>Code: </span><span>${data.restCtry.currencies[0].code}</span></p>
-            <p><span>Symbol: </span><span>${data.restCtry.currencies[0].symbol}</span></p>
-        `);
-
-        $("#exRateKeyVal").html("");
-        $.each(data.exRates, (i, obj)=> {
-            for (const [key, value] of Object.entries(obj)) {
-                $("#exRateKeyVal").append(`${key}: ${value}<br>`);
-            };
-        });
-
-        $("#borderingCtry").html("");
-        if (data.restCtry.borders.length > 0) {
-            $.each(data.restCtry.borders, (i, ctry)=> {
-                $("#borderingCtry").append(`
-                <p>${ctry}</p>
-                `);
-            });
-        } else {
-            $("#borderingCtry").html("No bordering countries.");
-        };
-
-        $("#ctryNews").html("");
-        $.each(data.news, (i, news)=> {
-            $("#ctryNews").append(`
-                <br>
-                <img src=${imgCheck(news.image.url)} alt="No Image!" onerror=this.src="./images/train.svg">
-                <p>${news.title}</p>
-                <p>${news.snippet}</p>
-                <a href="${news.url}" target="_blank">Read More</a>
-                <p>${news.datePublished.replace("T", " ")}</p>
-                <br>
-                <hr>
-            `)
-        });
-
-        $("#holidays").html("");
-        $.each(data.holidays, (i, obj)=> {
-            $("#holidays").append(`
-                <p><span>${obj.name}</span><span>${obj.date}</span></p>
-            `)
-        })
-
-        $("#imgGallery").html("");
-        $.each(data.images, (i, img)=> {
-            $("#imgGallery").append(`
-                <img id="img${i}" src=${img.thumb}>
-            `)
-        })
-
-        $("#driveInfo").html("");
-        $("#driveInfo").append(`
-            <p><span>Drive on: </span><span>${data.openCage.annotations.roadinfo.drive_on}</span></p>
-            <p><span>Speed in: </span><span>${data.openCage.annotations.roadinfo.speed_in}</span></p>
-        `)
-
-        //----------NUMBEO INDEX CHART
-
-        let idx = data.numbeoIndexs 
-        var charData = {
-            labels: ['Quality of Life', 'Crime', 'Safety', 'Cliamte', 'Rent', 'Health Care', 'Food(cost)', 'Pollution', 'Buying Power'],
-            series: [
-              [idx.quality_of_life_index, idx.crime_index, idx.safety_index, idx.climate_index, idx.rent_index, idx.health_care_index, idx.groceries_index, idx.pollution_index, idx.purchasing_power_incl_rent_index]
-            ]
-          };
-    
-        var charOptions = {
-            width: 500,
-            height: 400,
-            horizontalBars: true,
-            axisY: {
-                offset: 70
-              }
-        }
-          
-          new Chartist.Bar('.ct-chart', charData, charOptions);
-
-        //-----------------------
-
-        $("#curDisplay").html("");
-        $("#curDisplay").html(`<p><span>Prices displayed is: </span><span>${data.numbeoPrices.currency}</span></p>`)
-
-        let cur = data.restCtry.currencies[0].symbol;
-        const priceCheck = (price, obj) => {
-            if (price in obj) {
-                switch(price) {
-                    case "average_price":
-                        return cur + obj.average_price.toFixed(2);
-
-                    case "highest_price":
-                        return cur + obj.highest_price.toFixed(2);
-
-                    case "lowest_price":
-                        return cur + obj.lowest_price.toFixed(2);
-                }
+                return "Very High"
             }
 
-            return "Price not available."
-        };
-        $("#itemPrices").html("");
-        $.each(data.numbeoPrices.prices, (i, obj)=> {          
+        }
 
-            $("#itemPrices").append(`
-                <p><span>Item: </span><span>${obj.item_name}</span></p>
-                <p><span>Average Price: </span><span>${priceCheck("average_price", obj)}</span></p>
-                <p><span>Highest Price: </span><span>${priceCheck("highest_price", obj)}</span></p>
-                <p><span>Lowest Price: </span><span>${priceCheck("lowest_price", obj)}</span></p>
-                <hr>
-                
-            `)
+        if (key === "safety_index" || key === "health_care_index" || key === "purchasing_power_incl_rent_index") {
 
-        })
+            //High is good
+            if (val <= 19.9) {
+                return "Very Low"
+            } else if (val <= 39.9) {
+                return "Low"
+            } else if (val <= 59.9) {
+                return "Medium"
+            } else if (val <= 79.9) {
+                return "High"
+            } else {
+                return "Very High"
+            }
+
+        }
         
+        if (key === "groceries_index") {
 
+            //Low is good
+            if (val <= 24.9) {
+                return "Very Low"
+            } else if (val <= 49.9) {
+                return "Low"
+            } else if (val <= 99.9) {
+                return "Moderate"
+            } else if (val <= 124.9) {
+                return "High"
+            } else {
+                return "Very High"
+            }
 
-        $("#countryModal").removeClass("modalOff");
-        return data;
+        }
+
+        if (key === "quality_of_life_index") {
+
+            //High is good
+            if (val <= 39.9) {
+                return "Very Low"
+            } else if (val <= 79.9) {
+                return "Low"
+            } else if (val <= 119.9) {
+                return "Moderate"
+            } else if (val <= 159.9) {
+                return "High"
+            } else {
+                return "Very High"
+            }
+
+        }
+
 
     }
 
-    const getAllInfo = (data) => {
-        getCountryInfo(data)
-        .then((data)=> ctryInfoModal(data))
-        .then((data)=> getCtryBorders(data))
-        .then((data)=> addCtryLayer(data))
-        .then(()=> $("#preloader").fadeOut("fast"))
-        .catch((err)=> console.error(err));
+    const checkValue = (symbol, val) => {
+        if (val) {
+            return symbol + val.toFixed(2);
+        }
+
+        return "No data"
     }
+
+    let countryData;
+
+    //$("#preloader").fadeIn("fast")
+    //
+    //getUserLatLng()
+    //.then((data)=> getUserCtry(data))
+    //.then((data)=> getCountryList(data))
+    //.then((data)=> getOverlayInfo(data))
+    //.then((data)=> loadOverlays(data))
+    //.then((data)=> getCountryInfo(data))
+    //.then((data)=> ctryModal(data))
+    //.then((data)=> getCtryBorders(data))
+    //.then((data)=> addCtryLayer(data))
+    //.then(()=> $("#preloader").fadeOut("fast"))
+    //.catch((err)=> console.error(err));
+    
+    $("#preloader").fadeOut("fast")
+
+    $("#infoModal").show()//=================>REMOVE THIS
 
     $("#countrySelector").change(()=> {
+
+        $("#preloader").fadeIn("fast")
         
-        const info = {
-            code: $("#countrySelector").val(),
-            name: $("#countrySelector").find(":selected").text(),
-        }
+        let code = $("#countrySelector").val()
 
         ctryLayerGroup.clearLayers();
         clearLayers();
 
-        $("#preloader").fadeIn("fast")
-        getCountryInfo(info)
-        .then((data)=> getAllInfo(data))
-        //.then((data)=> ctryInfoModal(data))
-        //.then((data)=> getCtryBorders(data))
-        //.then((data)=> addCtryLayer(data))
-        //.then(()=> $("#preloader").fadeOut("fast"))
-        //.catch((err)=> console.error(err));
-
-        getOverlayInfo(info.code)
-        .then((data)=> {
-            console.log(data)
-            displayWebCamMarkers(data.beaches, beachCamsGroup, beachMarker)
-            displayWebCamMarkers(data.traffic, trafficCamsGroup, trafficMarker)
-            displayWebCamMarkers(data.squares, squareCamsGroup, squareMarker)
-            displayCityMarkers(data.cities, cityGroup, cityMarker)
-        })
+        getOverlayInfo(code)
+        .then((data)=> loadOverlays(data))
+        .then((data)=> getCountryInfo(data))
+        .then((data)=> ctryModal(data))
+        .then((data)=> getCtryBorders(data))
+        .then((data)=> addCtryLayer(data))
+        .then(()=> $("#preloader").fadeOut("fast"))
         .catch((err)=> console.error(err));
+
+        //$("#preloader").fadeOut("fast")
         
     })
 
@@ -566,9 +773,330 @@ $(document).ready(()=> {
         $("#webCamPlayer").html("");
     })
 
-    //let latlng = [51.2283, -2.3221];
-        //getWeather(latlng)
-        //.then((data)=> console.log(data))
-        //.catch((err)=> console.error(err));
+    $("#modalClsBtn").click(()=> {
+        $("#infoModal").hide()
+    })
 
+    $("#ctryBtn").click(()=> {
+        ctryModal(countryData);
+        
+    })
+
+    $("#exRatesBtn").click(()=> {
+        exRatesModal(countryData);        
+    })
+
+    $("#statsBtn").click(()=> {
+        statsModal(countryData);        
+    })
+
+    $("#newsBtn").click(()=> {
+        newsModal(countryData);        
+    })
+
+    $("#galleryBtn").click(()=> {
+        galleryModal(countryData);        
+    })
+
+    $("#wikiBtn").click(()=> {
+        wikiModal(countryData);        
+    })
+
+    const ctryModal = (data) => {
+
+        console.log(data)
+
+        $("#modalContent").html("")
+        $("#modalTitle").html(data.restCtry.name)
+
+        $("#infoModal").show()
+
+        let areaSize = data.restCtry.area.toLocaleString();
+        let population = data.restCtry.population.toLocaleString();
+
+        $("#modalContent").append(`
+            <div>
+                <img src="${data.restCtry.flag}" alt="${data.restCtry.name} Flag" style="width: 100%;">
+            </div>
+            <br>
+            <table id="ctryTable" class="table">
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="fas fa-info-circle"></i></span>  Official</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Native Name</td>
+                    <td class="right-col">${data.restCtry.nativeName}</td>
+                </tr>
+                <tr>
+                    <td>Region</td>
+                    <td class="right-col">${data.restCtry.region}</td>
+                </tr>
+                <tr>
+                    <td>Subregion</td>
+                    <td class="right-col">${data.restCtry.subregion}</td>
+                </tr>
+                <tr>
+                    <td>ISO Alpha-2</td>
+                    <td class="right-col">${data.restCtry.alpha2Code}</td>
+                </tr>
+                <tr>
+                    <td>ISO Alpha-3</td>
+                    <td class="right-col">${data.restCtry.alpha3Code}</td>
+                </tr>
+                <tr>
+                    <td>Area Size</td>
+                    <td class="right-col">${areaSize}km<sup>2</sup></td>
+                </tr>
+                <tr>
+                    <td>Population</td>
+                    <td class="right-col">${population}</td>
+                </tr>
+                <tr>
+                    <td>Capital City</td>
+                    <td class="right-col">${data.restCtry.capital}</td>
+                </tr>
+                <tr>
+                    <td>Dailing Code</td>
+                    <td class="right-col">+${data.restCtry.callingCodes[0]}</td>
+                </tr>
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="far fa-money-bill-alt"></i></span> Currency</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td class="right-col">${data.restCtry.currencies[0].name}</td>
+                </tr>
+                <tr>
+                    <td>Code</td>
+                    <td class="right-col">${data.restCtry.currencies[0].code}</td>
+                </tr>
+                <tr>
+                    <td>Symbol</td>
+                    <td class="right-col">${data.restCtry.currencies[0].symbol}</td>
+                </tr>
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="fas fa-road"></i></span> Driving</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Speed in</td>
+                    <td class="right-col">${data.openCage.annotations.roadinfo.speed_in}</td>
+                </tr>
+                <tr>
+                    <td>Drive on</td>
+                    <td class="right-col">${data.openCage.annotations.roadinfo.drive_on}</td>
+                </tr>
+                <tr>
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="fas fa-language"></i></span> Language</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Languages</td>
+                    <td id="langCon" class="right-col"></td>
+                </tr>
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="far fa-clock"></i></span> Timezone</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>Timezones</td>
+                    <td id="tzCon" class="right-col"></td>
+                </tr>
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="fas fa-glass-cheers"></i></span> Holidays</th>
+                    <th></th>
+                </tr>
+            </table>
+        `)
+
+        $.each(data.restCtry.languages, (i, obj)=> {
+            $("#langCon").append(`${obj.name}<br>`)
+        })
+
+        $.each(data.restCtry.timezones, (i, tz)=> {
+            $("#tzCon").append(`${tz}<br>`)
+        })
+
+        $.each(data.holidays, (i, holiday)=> {
+            $("#ctryTable").append(`
+                <tr>
+                    <td>${holiday.name}</td>
+                    <td>${reverseStr(holiday.date)}</span></td>
+                </tr>
+            `)
+        })
+
+        return data;
+        
+    }
+
+    const exRatesModal = (data) => {
+
+        $("#modalContent").html("")
+        $("#modalTitle").html(data.restCtry.name)
+
+        $("#infoModal").show()
+        $("#modalContent").append(`
+            <table id="exRatesTable" class="table">
+                <tr>
+                    <th class="table-headings"><span style="font-size: 30px; color: black;"><i class="fas fa-coins"></i></span> Exchange</th>
+                    <th></th>
+                </tr>
+            </table>
+        `)
+
+        $.each(data.exRates, (i, rate)=> {
+            for (const [key, value] of Object.entries(rate)) {
+                $("#exRatesTable").append(`
+                    <tr>
+                        <td><img src="./img/currencyFlags/${key}.png" onerror=this.src="./img/currencyFlags/flagPlaceHolder.png" alt="${key} Flag"></td>
+                        <td>${key} ${value}</td>
+                    </tr>
+                `);
+            };
+        });
+    }
+
+    const newsModal = (data) => {
+
+        $("#modalContent").html("")
+        $("#modalTitle").html(data.restCtry.name)
+
+        $("#infoModal").show()
+
+        $("#modalContent").append(`
+
+            <h4 class="table-headings"><span style="font-size: 30px; color: black;"><i class="far fa-newspaper"></i></span> News Headlines</h4>
+            <hr>
+        `)
+
+        $.each(data.news, (i, news)=> {
+            $("#modalContent").append(`
+                <div class="card w-100 p-3" style="width: 18rem;">
+                    <img src="${news.image.url}" class="card-img-top" alt="${news.title} picture" onerror=this.src="./img/newsPlaceholder.svg">
+                    <div class="card-body">
+                        <h5 class="card-title">${news.title}</h5>
+                        <p class="card-text">${news.description}</p>
+                        <a href="${news.url}" target="_blank" class="btn btn-dark">Read More</a>
+                    </div>
+                </div><br>
+            `)
+        })
+        
+    }
+
+    const statsModal = (data) => {
+
+        let symbol = data.restCtry.currencies[0].symbol;
+
+        $("#modalContent").html("")
+        $("#modalTitle").html(data.restCtry.name)
+
+        $("#infoModal").show()
+
+        $("#modalContent").append(`
+
+            <h4><span style="font-size: 30px; color: black;"><i class="fas fa-shopping-cart"></i> Item Prices</h4>
+
+            <table id="pricesTable" class="table">
+                <tr>
+                    <td colspan="4">Currency in ${data.prices.currency}</td>
+                </tr>
+                <tr>
+                    <th>Item</th>
+                    <th class="right-col">Low</th>
+                    <th class="right-col">High</th>
+                    <th class="right-col">Avg</th>
+                </tr>
+            </table>
+        `)
+
+        $.each(data.prices.prices, (i, obj)=> {
+
+            console.log(obj.lowest_price)
+            $("#pricesTable").append(`
+                <tr>
+                    <td>${obj.item_name}</td>
+                    <td class=" right-col">${checkValue(symbol, obj.lowest_price)}</td>
+                    <td class=" right-col">${checkValue(symbol, obj.highest_price)}</td>
+                    <td class=" right-col">${checkValue(symbol, obj.average_price)}</td>
+                </tr>
+                
+            `)
+        })
+
+    }
+
+    const galleryModal = (data) => {
+        
+        $("#modalContent").html("")
+        $("#modalTitle").html(data.restCtry.name)
+
+        $("#infoModal").show()
+
+        $("#modalContent").append(`
+
+            <h4><span style="font-size: 30px; color: black;"><i class="far fa-images"></i></span> Gallery</h4>
+            <hr>
+
+            <div id="imgGallery" class="carousel slide" data-bs-ride="carousel">
+                <div id="imgCarousel" class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                    <img src="${data.restCtry.flag}" class="d-block w-100" alt="${data.restCtry.name} Flag">
+                    </div>
+                </div>
+            </div>
+            
+
+        `)
+
+        $.each(data.images, (i, img)=> {
+            $("#imgCarousel").append(`
+                <div id="img${i}" class="carousel-item">
+                    <img src="${img.large}" class="d-block w-100" alt="Gallery Image">
+                </div>
+            `)
+        })
+
+        $("#imgCarousel").append(`
+            <a class="carousel-control-prev" href="#imgGallery" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#imgGallery" role="button" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        `)
+
+
+    }
+
+    const wikiModal = (data) => {
+
+        $("#modalContent").html("")
+        $("#modalTitle").html(data.restCtry.name)
+
+        $("#infoModal").show()
+
+        $("#modalContent").append(`
+
+            <h4 class="table-headings"><span style="font-size: 30px; color: black;"><i class="fab fa-wikipedia-w"></i></span> Wiki Articles</h4>
+            <hr>
+        `)
+
+        $.each(data.wiki, (i, wiki)=> {
+            $("#modalContent").append(`
+                <div class="card w-100 p-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">${wiki.title}</h5>
+                        <p class="card-text">${wiki.summary}</p>
+                        <a href="https://${wiki.wikipediaUrl}" target="_blank" class="btn btn-dark">Read More</a>
+                    </div>
+                </div><br>
+            `)
+        })
+        
+    }
 })

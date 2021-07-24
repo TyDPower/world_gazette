@@ -67,7 +67,7 @@
     $ch_6 = curl_init();
     $ch_7 = curl_init();
     $ch_8 = curl_init();
-    $ch_9 = curl_init();
+    //$ch_9 = curl_init();
 
     curl_setopt($ch_4, CURLOPT_URL, "https://v6.exchangerate-api.com/v6/247d6cf5bdadac21866fe380/latest/" . urlencode($CurCode));
     curl_setopt($ch_4, CURLOPT_SSL_VERIFYPEER, false);
@@ -100,9 +100,9 @@
     curl_setopt($ch_8, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch_8, CURLOPT_RETURNTRANSFER, true);
 
-    curl_setopt($ch_9, CURLOPT_URL, "https://www.numbeo.com/api/country_indices?api_key=wvlo2tz1pwdnha&country=" . urlencode($ctryName));
-    curl_setopt($ch_9, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch_9, CURLOPT_RETURNTRANSFER, true);
+    //curl_setopt($ch_9, CURLOPT_URL, "https://www.numbeo.com/api/country_indices?api_key=wvlo2tz1pwdnha&country=" . urlencode($ctryName));
+    //curl_setopt($ch_9, CURLOPT_SSL_VERIFYPEER, false);
+    //curl_setopt($ch_9, CURLOPT_RETURNTRANSFER, true);
 
     $mh = curl_multi_init();
 
@@ -111,7 +111,7 @@
     curl_multi_add_handle($mh,$ch_6);
     curl_multi_add_handle($mh,$ch_7);
     curl_multi_add_handle($mh,$ch_8);
-    curl_multi_add_handle($mh,$ch_9);
+    //curl_multi_add_handle($mh,$ch_9);
 
     do {
         $status = curl_multi_exec($mh, $active);
@@ -125,7 +125,7 @@
     curl_multi_remove_handle($mh, $ch_6);
     curl_multi_remove_handle($mh, $ch_7);
     curl_multi_remove_handle($mh, $ch_8);
-    curl_multi_remove_handle($mh, $ch_9);
+    //curl_multi_remove_handle($mh, $ch_9);
     curl_multi_close($mh);
 
     $exRates = curl_multi_getcontent($ch_4);
@@ -133,7 +133,7 @@
     $wiki = curl_multi_getcontent($ch_6);
     $Imgs = curl_multi_getcontent($ch_7);
     $numbeoPrice = curl_multi_getcontent($ch_8);
-    $numbeoIndex = curl_multi_getcontent($ch_9);
+    //$numbeoIndex = curl_multi_getcontent($ch_9);
 
     
     $endTime = microtime(true);
@@ -142,6 +142,7 @@
     $news = json_decode($news, true);
     $imgs = json_decode($Imgs, true);
     $exRates = json_decode($exRates, true);
+    $wiki = json_decode($wiki, true);
 
     $images = [];
     foreach ($imgs["hits"] as $img) {
@@ -170,11 +171,11 @@
     $output["data"]["holidays"] = $nationalHolidays;
     $output["data"]["openCage"] = $openCage["results"][0];
     $output["data"]["news"] = $news["value"];
-    $output["data"]["wiki"] = json_decode($wiki, true);
+    $output["data"]["wiki"] = $wiki["geonames"];
     $output["data"]["images"] = $images;
     $output["data"]["exRates"] = [$exRates["conversion_rates"]];
-    $output["data"]["numbeoPrices"] = json_decode($numbeoPrice, true);
-    $output["data"]["numbeoIndexs"] = json_decode($numbeoIndex, true);
+    $output["data"]["prices"] = json_decode($numbeoPrice, true);
+    //$output["data"]["numbeoIndex"] = json_decode($numbeoIndex, true);
     
 
     header("Content-Type: application/json; charset=UTF-8");

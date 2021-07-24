@@ -22,6 +22,7 @@
         <link rel="stylesheet" href="./css/MarkerCluster.css">
         <link rel="stylesheet" href="./css/MarkerCluster.Default.css">
         <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     </head>
 
@@ -33,84 +34,49 @@
         <select id="countrySelector">
         </select>
 
-        <div id="webCamContainer" class="modal modalOff">
-            <span id="webCamCloseBtn" class="closeBtn">&times;</span>
-            <div id="webCamPlayer" class="modalContent"></div>
-            
-        </div>
-
-        <div id="countryModal" class="modal modalOff">
-            <div class="modalContent">
-                <header>
-                    <div>
-                        <span id="ctryModalcloseBtn" class="closeBtn">&times;</span>
-                        <img id="ctryFlag">
-                    </div>
-                </header>
-                <h1 id="ctryName"></h1>
-                <section>
-                    <h3>Administrative Information</h3>
-                    <div id="adminInfo"></div>
-                    <details>
-                        <summary>Bordering Countries</summary>
-                        <div id="borderingCtry"></div>
-                    </details>
-                </section>
-                <section>
-                    <h3>Currency</h3>
-                    <div id="curInfo"></div>
-                    <details>
-                        <summary>Exchange Rates</summary>
-                        <div id="exRateKeyVal"></div>
-                    </details>
-                </section>
-                <section id="genInfo">
-                    <h3>General Info</h3>
-                    <p id="ctryPop"></p>
-                    <p id="incomeLevel"></p>
-                    <details>
-                        <summary>Timezones</summary>
-                        <div id="ctryTZ"></div>
-                    </details>
-                    <details>
-                        <summary>Living Standards</summary>
-                        <div class="ct-chart ct-perfect-fourth"></div>
-                    </details>
-                    <details>
-                        <summary>Driving Info</summary>
-                        <div id="driveInfo"></div>
-                    </details>
-                    <details>
-                        <summary>Country Prices</summary>
-                        <div id="curDisplay"></div>
-                        <div id="itemPrices"></div>
-                    </details>
-                    <details>
-                        <summary>Country Languages</summary>
-                        <div id="ctryLang"></div>
-                    </details>
-                    <details>
-                        <summary>National Holidays</summary>
-                        <div id="holidays"></div>
-                    </details>
-                    <details>
-                        <summary>News</summary>
-                        <div id=ctryNews></div>
-                    </details>
-                </section>
-                <details>
-                    <summary>Image Gallery</summary>
-                    <div id="imgGallery"></div>
-                </details>
-                <details>
-                    <summary>Wiki Info</summary>
-                    <section>
-                        <div id="wikiInfo"></div>
-                    </section>
-                </details>
-
+        <div id="navBtnCont">
+            <div id="ctryBtn">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div id="exRatesBtn">
+                <i class="fas fa-search-dollar"></i>
+            </div>
+            <div id="newsBtn">
+                <i class="far fa-newspaper"></i>
+            </div>
+            <div id="statsBtn">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div id="galleryBtn">
+                <i class="far fa-images"></i>
+            </div>
+            <div id="wikiBtn">
+                <i class="fab fa-wikipedia-w"></i>
             </div>
         </div>
+
+        <div id="infoModal" class="modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 id="modalTitle" class="modal-title">Country Information</h1>
+                  <div id="modalClsBtn"><i class="fas fa-times"></i></div>
+                </div>
+                <div id="modalContent" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <nav>
+                        <a href="*">Country Info |</a>
+                        <a href="*">Exchange Rates |</a>
+                        <a href="*">Statistics |</a>
+                        <a href="*">News |</a>
+                        <a href="*">Gallery |</a>
+                        <a href="*">Wiki Links</a>
+                    </nav>
+                </div>
+              </div>
+            </div>
+          </div>
 
         <!--------------- 5. APP WORLD MAP --------------->
         <div id="map"></div>
@@ -119,6 +85,8 @@
 
         <!--------------- 6. SCRIPTS --------------->
         <script src="./js/jquery-2.2.3.min.js"></script>
+        <script src="./js/popper.min.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
         <script src="./js/leaflet.js"></script>
         <script src="./js/leaflet.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
