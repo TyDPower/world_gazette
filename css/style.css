@@ -86,7 +86,7 @@ select {
     overflow-y: initial !important
 }
 .modal-body{
-    max-height: 72.5vh;
+    max-height: 53vh;
     overflow-y: auto;
 }
 
@@ -94,8 +94,9 @@ select {
     font-size: 12px;
 }
 
-#infoModal {
-    position: relative; 
+.modal-dialog {
+    position: absolute !important;
+    right: 10px;
 }
 
 

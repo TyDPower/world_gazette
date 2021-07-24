@@ -724,23 +724,23 @@ $(document).ready(()=> {
 
     let countryData;
 
-    //$("#preloader").fadeIn("fast")
-    //
-    //getUserLatLng()
-    //.then((data)=> getUserCtry(data))
-    //.then((data)=> getCountryList(data))
-    //.then((data)=> getOverlayInfo(data))
-    //.then((data)=> loadOverlays(data))
-    //.then((data)=> getCountryInfo(data))
-    //.then((data)=> ctryModal(data))
-    //.then((data)=> getCtryBorders(data))
-    //.then((data)=> addCtryLayer(data))
-    //.then(()=> $("#preloader").fadeOut("fast"))
-    //.catch((err)=> console.error(err));
+    $("#preloader").fadeIn("fast")
     
-    $("#preloader").fadeOut("fast")
-
-    $("#infoModal").show()//=================>REMOVE THIS
+    getUserLatLng()
+    .then((data)=> getUserCtry(data))
+    .then((data)=> getCountryList(data))
+    .then((data)=> getOverlayInfo(data))
+    .then((data)=> loadOverlays(data))
+    .then((data)=> getCountryInfo(data))
+    .then((data)=> ctryModal(data))
+    .then((data)=> getCtryBorders(data))
+    .then((data)=> addCtryLayer(data))
+    .then(()=> $("#preloader").fadeOut("fast"))
+    .catch((err)=> console.error(err));
+    
+    //$("#preloader").fadeOut("fast")
+    //
+    //$("#infoModal").show()//=================>REMOVE THIS
 
     $("#countrySelector").change(()=> {
 
@@ -815,6 +815,7 @@ $(document).ready(()=> {
         let population = data.restCtry.population.toLocaleString();
 
         $("#modalContent").append(`
+            
             <div>
                 <img src="${data.restCtry.flag}" alt="${data.restCtry.name} Flag" style="width: 100%;">
             </div>
