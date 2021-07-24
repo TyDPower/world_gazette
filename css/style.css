@@ -63,271 +63,109 @@
 
 /*--------------- 2. GENERAL ---------------*/
 
-* {
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    padding: 0;
-    margin: 0;
-}
-
 html, body, #map {
     height: 100%;
     width: 100vw;
 }
 
-header {
-    display: flex;
-    margin: 10px;
-}
-
 select {
-    width: 100%;
-}
-
-th, td {
-    border: 1px solid black;
+    position: fixed;
+    z-index: 1000;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /*--------------- 3. MODALS ---------------*/
 
-.modal {
-    position: fixed;
-    z-index: 900;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.75);
+#ctryModClsBtn:hover {
+    cursor: pointer;
 }
 
-.modalContent {
-    background-color: white;
-    margin: 15% auto;
-    padding: 50px;
-    width: 50%;
-    height: auto;
-    font-size: 30px;
-    border-radius: 15px;
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    max-height: 72.5vh;
+    overflow-y: auto;
 }
 
-.modalOff {
-    display: none;
+.modal-footer nav {
+    font-size: 12px;
 }
 
-/*---------------- 3.1 MODAL TABS -----------*/
-
-.modalTab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
+#infoModal {
+    position: relative; 
 }
 
-.modalTab button {
-    background-color: inherit;
-    float: left;
+
+/*--------------- POPUP ---------------*/
+
+td {
     border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
+}
+
+#popup h1 {
     text-align: center;
-}
-
-.modalTab button:hover {
-    background-color: #ddd;
-}
-
-.modalTab button.activeTab {
-    background-color: #ccc;
-}
-
-.modalTabContent {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-#countryModal  h6 {
-    margin: auto;
-    font-weight: normal;
-}
-
-#countryModal h5 {
-    display: inline;
-}
-
-#countryModal h3 {
-    text-decoration: underline;
-}
-
-.modalHeadersWithImg h4 {
-    text-align: justify;
-    margin: 0;
-}
-
-/*--------------- 4. CLOSE BUTTONS ---------------*/
-
-.closeBtn {
-    float: right;
-    font-size: 30px;
-    color: gray;
-    margin: 0;
-    padding: 0;
-}
-
-.closeBtn:hover {
-    cursor: pointer;
-    color: #000;
-}
-
-#countryName {
-    display: inline;
-}
-
-/*--------------- 5. TABLES ---------------*/
-
-#comparisonTable {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#comparisonTable td, #comparisonTable th {
-    border: 1px solid #aaa;
-    padding: 8px;
-}
-
-#comparisonTable tr:nth-child(even) {
-    background-color: #ddd;
-}
-
-#comparisonTable th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #04AA6D;
-    color: white;
-}
-
-/*--------------- 6. NAV ---------------*/
-
-#appNav {
-    position: fixed;
-    z-index: 1000;
-    right: 0;
-    margin-top: 5%;
-    padding: 5px 0;
-    background-color: white;
-    border-radius: 10px 0 0 10px;
-    display: none;
-}
-
-.navIcon {
-    width: 50px;
-    height: auto;
-    padding: 10px;
-    display: block;
-    opacity: 0.50;
-}
-
-.navIcon:hover {
-    opacity: 1;
-    cursor: pointer;
-}
-
-#appNavIcon {
-    position: fixed;
-    z-index: 1000;
-    right: 0;
-    margin-top: 13px;
-    padding: 5px 0;
-    padding: 10px;
-
-}
-
-#appNavIcon img {
-    width: 55px;
-}
-
-#appNavIcon img:hover {
-    cursor: pointer;
-}
-
-/*--------------- 7. OTHER ---------------*/
-
-.formInput {
-    width: 100%;
-}
-
-.italicBold {
-    font-style: italic;
+    font-size: 20px;
     font-weight: bold;
 }
 
-#contactHeader img {
-    width: 100px
+#popup h2 {
+    text-align: center;
+    font-size: 18px;
 }
 
-/*--------------- 8. RESPONSIVE ---------------*/
-
-@media only screen 
-  and (min-width: 320px) {
-
-    #appNav {
-        display: none;
-    }
-
-    #appNavIcon {
-        display: block;
-    }
-
-    .modal {
-        z-index: 5000;
-    }
-    
-    .modalContent {
-        width: auto;
-    }
-
-    .modalHeadersWithImg {
-        display: block;
-        text-align: center;
-    }
-
-    .modalHeadersWithImg img {
-        width: 100px;
-    }
-
+#popup img {
+    width: 100%;
 }
 
-
-@media only screen 
-  and (min-width: 900px) {
-
-    .modalHeadersWithImg {
-        display: inline-flex;
-    }
-
-    .modalContent {
-        width: 67%;
-    }
-
-
+.rightCol {
+    text-align: right;
+    color: darkorchid;
 }
 
-@media only screen 
-  and (min-width: 1224px) {
+/*---IFRAME---*/
+.holds-the-iframe {
+    background: url("../img/loading.gif") center center no-repeat;
+    background-size: 50%;
+}
 
-    #appNav {
-        display: block;
-    }
-    
-    #appNavIcon {
-        display: none;
-    }
+/*---NAV---*/
 
-    .modalContent {
-        width: 50%;
-    }
+#navBtnCont {
+    position: fixed;
+    z-index: 1000;
+    top: 265px;
+
+    transform: translate(0%, -50%);
+}
+
+#navBtnCont div {
+    font-size: 30px;
+    color: darkgray;
+    background-color: white;
+    border: 2px solid rgba(0,0,0,0.3);
+    border-radius: 5px;
+    padding: 2px 4px;
+    margin: 10px;
+}
+
+#navBtnCont div:hover {
+    cursor: pointer;
+}
+
+.fa-info-circle, .fa-search-dollar, .fa-chart-bar {
+    transform: translate(12%);
+}
+
+/*--CLOSE BTN--*/
+
+#modalClsBtn:hover {
+    cursor: pointer;
+}
+
+.table-headings {
+    font-size: 30px;
+    font-weight: normal;
 }
