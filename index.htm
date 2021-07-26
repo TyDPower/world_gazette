@@ -2,6 +2,9 @@
 <!--
     1. HEAD DATA
     2. PRELOADER
+    3. HTML BODY
+    4. APP WORLD MAP
+    5. SCRIPTS
 -->
 
 <!DOCTYPE html>
@@ -14,15 +17,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
         <title>World Gazette</title>
-        <link rel="icon" sizes="192x192" href="./images/">
-
+        <link rel="icon" sizes="192x192" href="./img/flavicon/worldwide.svg">
         <link rel="stylesheet" href="./css/nomalize.css">
         <link rel="stylesheet" href="./css/style.css">
-        <link rel="stylesheet" href="./css/leaflet.css">
-        <link rel="stylesheet" href="./css/MarkerCluster.css">
-        <link rel="stylesheet" href="./css/MarkerCluster.Default.css">
-        <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
-        <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" href="./css/vendors/leaflet/leaflet.css">
+        <link rel="stylesheet" href="./css/vendors/leaflet/MarkerCluster.css">
+        <link rel="stylesheet" href="./css/vendors/leaflet/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="./css/vendors/leaflet/leaflet.extra-markers.min.css">
+        <link rel="stylesheet" href="./css/vendors/bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     </head>
 
@@ -30,9 +32,8 @@
         <!--------------- 2. PRELOADER --------------->
         <div id="preloader"></div>
 
-        <!--TEST CODE-->
-        <select id="countrySelector">
-        </select>
+        <!--------------- 3. HTML BODY --------------->
+        <select id="countrySelector"></select>
 
         <div id="navBtnCont">
             <div id="ctryBtn">
@@ -66,33 +67,30 @@
                 </div>
                 <div class="modal-footer">
                     <nav>
-                        <a href="*">Country |</a>
-                        <a href="*">Ex-Rates |</a>
-                        <a href="*">Stats |</a>
-                        <a href="*">News |</a>
-                        <a href="*">Gallery |</a>
-                        <a href="*">Wiki</a>
+                        <a id="modNavInfo" class="modal-nav" type="button">Country |</a>
+                        <a id="modNavRate" class="modal-nav" type="button">Ex-Rates |</a>
+                        <a id="modNavStats" class="modal-nav" type="button">Stats |</a>
+                        <a id="modNavNews" class="modal-nav" type="button">News |</a>
+                        <a id="modNavGallery" class="modal-nav" type="button">Gallery |</a>
+                        <a id="modNavWiki" class="modal-nav" type="button">Wiki</a>
                     </nav>
                 </div>
               </div>
             </div>
-          </div>
+        </div>
 
-        <!--------------- 5. APP WORLD MAP --------------->
+        <!--------------- 4. APP WORLD MAP --------------->
         <div id="map"></div>
 
-        
-
-        <!--------------- 6. SCRIPTS --------------->
+        <!--------------- 5. SCRIPTS --------------->
         <script src="./js/jquery-2.2.3.min.js"></script>
-        <script src="./js/popper.min.js"></script>
-        <script src="./js/bootstrap.bundle.min.js"></script>
-        <script src="./js/leaflet.js"></script>
-        <script src="./js/leaflet.js"></script>
-        <script src="js/leaflet.markercluster.js"></script>
+        <script src="./js/vendors/popper/popper.min.js"></script>
+        <script src="./js/vendors/bootstrap/bootstrap.bundle.min.js"></script>
+        <script src="./js/vendors/leaflet/leaflet.js"></script>
+        <script src="./js/vendors/leaflet/leaflet.markercluster.js"></script>
         <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-        <script src="js/leaflet.extra-markers.min.js"></script>
-        <script src="./common/all.js"></script>
+        <script src="./js/vendors/leaflet/leaflet.extra-markers.min.js"></script>
+        <script src="./js/vendors/fontAwesome/all.js"></script>
         <script type="module" src="./js/main.js"></script>
 
     </body>

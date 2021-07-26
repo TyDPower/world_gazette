@@ -1,88 +1,74 @@
-export const compareIndex = (selectedCountryIndex, userCountryIndex) => {
-    
-    let res;
-    let value;
-    
-    let getComparisonValue = (selectedCountryIndex, userCountryIndex) => {
-
-        if (!selectedCountryIndex || !userCountryIndex) {
-            return "No data"
-        }
-
-        let x = selectedCountryIndex * 100
-        x = x / userCountryIndex
-        return x
-    } 
-    
-    let comparison = (value) => {
-
-        if (!value) {
-            return "No data"
-        }
-
-        if (value <= 100) {
-            let z = 100 - value
-            z = z.toFixed(2)
-            return `${z}% higher`
-        } else if (value > 100 && value < 1000) {
-            let a = value - 100
-            a = a.toFixed(2)
-            return `${a}% lower`
-        } else {
-            return `N/A`
-        }
-    }
-    
-    value = getComparisonValue(selectedCountryIndex, userCountryIndex);
-    res = comparison(value);
-
-    return res;
-};
-
-export const checkValidCurrency = (userCurrency) => {
-    if (!userCurrency) {
-        return "$"
-    } else {
-        return userCurrency
-    }
-};
-
-export const clearAllLayers = (countryObj, eventsObj, geoDataObj, worldTilesObj, mapObj) => {
-    $(".modal").addClass(" modalOff");
-    if (!eventsObj && !countryObj) {
-        geoDataObj.clusters.clearLayers();
-    } else if (!eventsObj) {
-        countryObj.utils.removeLayers(countryObj);
-        geoDataObj.clusters.clearLayers();
-    } else if (!countryObj) {
-        eventsObj.utils.removeLayers(eventsObj);
-        geoDataObj.clusters.clearLayers();
-    } else {
-        countryObj.utils.removeLayers(countryObj);
-        eventsObj.utils.removeLayers(eventsObj);
-        geoDataObj.clusters.clearLayers();
-    }
-    worldTilesObj.utils.removeOverlays();
-    mapObj.panTo([0, 0])
-    if (mapObj.getZoom() > 2) {
-        mapObj.setZoom(2);
-    }  
+export const reverseStr = (str) => {
+    let splitStr = str.split("-");
+    let revArr = splitStr.reverse();
+    let revStr = revArr.join("-");
+    return revStr;
 }
 
-export const validIndexCheck = (index) => {
-
-    if (!index) {
-        return "No data"
+export const checkValue = (symbol, val) => {
+    if (val) {
+        return symbol + val.toFixed(2);
     }
-    return index.toFixed(2);
+
+    return "No data"
 }
 
-export const preloader = (loaded) => {
-    if (!loaded) {
-        $("#preloader").fadeIn("fast")
-    }
+export const getCountryList = (iso) => {
 
-    if(loaded) {
-        $("#preloader").fadeOut("fast")
+    let country = $("#countrySelector");
+
+    return new Promise((resolve, reject)=> {
+
+        $.ajax({
+                url: "./php/getCountryList.php",
+                type: "post",
+                dataType: "json",
+                success: (res)=> {
+                    if (res.status.name == "ok") {
+                        res.data.forEach((res) => {
+                            $("#countrySelector").append(
+                                $("<option>", {
+                                    value: res.code,
+                                    text: res.name,
+                                })
+                            );
+                        })
+
+                        for (let i=0; i<country[0].length; i++) {
+                            if (country[0][i].value === iso.toUpperCase()) {
+                                country[0][i].defaultSelected = true;
+                                resolve(iso)
+                            }
+                        }
+                    }
+                },
+                error: (err)=> {
+                    reject(err)
+                }
+        })
+    })
+        
+}
+
+export const addCtryLayer = (data, ctryLayerGroup) => {
+
+    ctryLayerGroup.addLayer(L.geoJSON(data.borders)).addTo(map);
+
+    let crds = data.ctryInfo.openCage.bounds
+    let bounds = [
+            [crds.northeast.lat, crds.northeast.lng], [crds.southwest.lat, crds.southwest.lng]
+    ]
+    map.fitBounds(bounds)
+
+    return data;
+}
+
+export const getName = (data) => {
+    if (data.location.city) {
+        return data.location.city
+    } else if (data.location.town) {
+        return data.location.town
+    } else {
+        return "Name not avalible"
     }
 }

@@ -3,12 +3,11 @@
     1. PRELOADER
     2. GENERAL
     3. MODALS
-        3.1 MODAL TABS
     4. CLOSE BUTTONS
-    5. TABLES
-    6. NAV
-    7. OTHER
-    8. RESPONSIVE
+    5. POPUPS & TABLES
+    6. IFRAME
+    7. NAV
+    8. CLOSE BTNS
 */
 
 /*--------------- 1. PRELOADER ---------------*/
@@ -86,9 +85,28 @@ select {
     overflow-y: initial !important
 }
 .modal-body{
-    max-height: 53vh;
+    max-height: 55vh;
     overflow-y: auto;
 }
+
+@media only screen and (max-width: 600px) {
+
+    #infoModal h1 {
+        font-size: 30px;
+    }
+
+    .modal-body{
+        max-width: 99vh;
+        overflow-x: auto;
+        font-size: 12px;
+    }
+
+    .table-headings {
+        font-size: 20px;
+        font-weight: normal;
+    }
+    
+  }
 
 .modal-footer nav {
     font-size: 12px;
@@ -100,7 +118,7 @@ select {
 }
 
 
-/*--------------- POPUP ---------------*/
+/*--------------- 5. POPUPS & TABLES ---------------*/
 
 td {
     border: none;
@@ -126,19 +144,22 @@ td {
     color: darkorchid;
 }
 
-/*---IFRAME---*/
+/*--------------- 6. IFRAME --------------------*/
 .holds-the-iframe {
-    background: url("../img/loading.gif") center center no-repeat;
+    background: url("../img/imgPlaceholders/loading.gif") center center no-repeat;
     background-size: 50%;
 }
 
-/*---NAV---*/
+iframe {
+    width: 100%;
+}
+
+/*--------------- 7. NAV --------------------*/
 
 #navBtnCont {
     position: fixed;
-    z-index: 1000;
     top: 265px;
-
+    z-index: 500;
     transform: translate(0%, -50%);
 }
 
@@ -160,13 +181,13 @@ td {
     transform: translate(12%);
 }
 
-/*--CLOSE BTN--*/
+.modal-nav:hover {
+    cursor: pointer;
+}
+
+/*--------------- 8. CLOSE BTNS --------------------*/
 
 #modalClsBtn:hover {
     cursor: pointer;
 }
 
-.table-headings {
-    font-size: 30px;
-    font-weight: normal;
-}
