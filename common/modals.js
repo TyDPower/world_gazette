@@ -2,8 +2,6 @@ import * as utils from "./utilities.js";
 
 export const ctryInfo = (data) => {
 
-    console.log(data)
-
     $("#modalContent").html("")
     $("#modalTitle").html(data.restCtry.name)
 
@@ -202,26 +200,19 @@ export const stats = (data) => {
 
         <table id="pricesTable" class="table">
             <tr>
-                <td colspan="4">Currency in ${data.prices.currency}</td>
-            </tr>
-            <tr>
-                <th>Item</th>
-                <th class="right-col">Low</th>
-                <th class="right-col">High</th>
-                <th class="right-col">Avg</th>
+                <th>Items & Prices<span class="stats-currency-in"> (Currency in ${data.prices.currency})</span></th>
             </tr>
         </table>
     `)
 
     $.each(data.prices.prices, (i, obj)=> {
 
-        console.log(obj.lowest_price)
         $("#pricesTable").append(`
             <tr>
-                <td>${obj.item_name}</td>
-                <td class="right-col">${utils.checkValue(symbol, obj.lowest_price)}</td>
-                <td class="right-col">${utils.checkValue(symbol, obj.highest_price)}</td>
-                <td class="right-col">${utils.checkValue(symbol, obj.average_price)}</td>
+                <td>
+                    ${obj.item_name}<br>
+                    <class="right-col">Low: ${utils.checkValue(symbol, obj.lowest_price)} | High: ${utils.checkValue(symbol, obj.highest_price)} | Avg: ${utils.checkValue(symbol, obj.average_price)}
+                </td>
             </tr>
             
         `)
