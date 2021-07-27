@@ -87,6 +87,8 @@ select {
 .modal-body{
     max-height: 55vh;
     overflow-y: auto;
+    max-width: 99vh;
+    overflow-x: auto;   
 }
 
 @media only screen and (max-width: 600px) {
@@ -191,3 +193,9 @@ iframe {
     cursor: pointer;
 }
 
+/*--------------- 9. OTHER ----------------*/
+
+.stats-currency-in {
+    font-weight: normal;
+    font-style: italic;
+}
