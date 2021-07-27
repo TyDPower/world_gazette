@@ -13,7 +13,6 @@ export const getOverlayInfo = (isoCodeA2) => {
                 },
 
                 success: (res)=> {
-                    console.log(res.data)
                     resolve(
                         data = {
                             overlays: res.data,
@@ -96,7 +95,6 @@ export const getPopupInfo = (latLng) => {
                 },
 
                 success: (res)=> {
-                    console.log(res.data)
                     resolve(res.data)
                 },
 
