@@ -68,6 +68,8 @@ export const getName = (data) => {
         return data.location.city
     } else if (data.location.town) {
         return data.location.town
+    } else if (data.location.village) {
+        return data.location.village
     } else {
         return "Name not avalible"
     }
